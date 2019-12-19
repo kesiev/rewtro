@@ -1,0 +1,630 @@
+html, body {
+	padding:0;
+	margin:0;
+	border:0;
+	width:100%;
+	height:100%;
+	overflow: hidden;
+}
+
+.gameScreen:focus {
+    outline: none;
+}
+
+.GAMECONSOLE .playpanel {
+  user-select: none;  
+	font-family: sans-serif;
+	background-color: #00adb5;
+	position: absolute;
+	padding: 0;
+	margin: 0;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+	overflow: hidden;
+}
+
+.GAMECONSOLE .playpanel .inset {
+	position:absolute;
+	z-index: 110;
+	box-shadow: inset 5px 5px 10px rgba(0,0,0,0.4);
+	background-image: url(images/scanlines.png);
+	pointer-events: none;
+}
+
+.GAMECONSOLE .playpanel .screenFrame {
+	position:absolute;
+	z-index: 50;
+	background-color: #393e46;
+}
+
+.GAMECONSOLE .playpanel .darkBorder {
+	position:absolute;
+	z-index: 50;
+	background-color: #222831;
+}
+
+.GAMECONSOLE .playpanel .hole {
+	position:absolute;
+	z-index: 50;
+	background-color: #393e46;
+}
+
+.GAMECONSOLE .playpanel .shield {
+	position:absolute;
+	z-index: 30;
+	background-color: #eeeeee;
+	box-shadow: 0px 5px 10px #000;
+}
+
+.GAMECONSOLE .playpanel .label {
+	position:absolute;
+	z-index: 50;
+	border-top:2px solid #00adb5;
+	color: #eeeeee;
+	font-weight: bold;
+	font-style: italic;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+/*
+
+CONFIG PANEL
+
+*/
+
+.GAMECONSOLE .configpanel A {
+  color: #00adb5;
+}
+
+.GAMECONSOLE .configpanel {
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  user-select: none;
+	font-family: sans-serif;
+	font-size: 16px;	
+	color:#222831;
+	position:absolute;
+	padding:0;
+	margin:0;
+	overflow:hidden;
+	background-color:#f4f9f4;
+}
+
+.GAMECONSOLE .configpanel .iconsPanel {
+	position: absolute;
+	left:20px;
+	top:60px;
+	right:20px;
+	bottom:60px;
+	z-index: 50;
+	text-align: center;
+	overflow-x:hidden;
+	overflow-y: auto;
+}
+
+.GAMECONSOLE .configpanel .icon {
+	display: inline-block;
+	margin:20px 10px;
+	overflow: hidden;
+	height:180px;
+	width:100px;
+	position: relative;
+	transform: scale(0);
+	transition: 0.5s;
+	cursor: pointer;
+	transform: scale(0);
+}
+
+.GAMECONSOLE .configpanel .iconsPanel.loaded .icon {
+	transform: scale(1);
+}
+
+.GAMECONSOLE .configpanel .iconsPanel.loaded.disabled .icon {
+	opacity: 0.3;
+}
+
+.GAMECONSOLE .configpanel .iconimagedock {
+	position: absolute;	
+	height:100px;
+	width:100px;	
+	left:0;
+	top:0;
+}
+
+.GAMECONSOLE .configpanel .iconimage {
+	font-size:60px;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+	position: absolute;
+}
+
+
+.GAMECONSOLE .configpanel .iconlabel {
+	position: absolute;
+	top:110;
+	left:0;
+	right:0;
+}
+
+.GAMECONSOLE .configpanel .gotogame {
+	background-color:#00adb5;
+	position:absolute;
+	left:10px;
+	right:10px;
+	bottom:0;
+	height:50px;
+	text-align:center;
+	line-height:50px;
+	cursor:pointer;
+	border-radius:10px 10px 0 0;
+	z-index: 100;
+	overflow: hidden;
+	white-space: nowrap;
+	color:#eee;	
+}
+
+.GAMECONSOLE .configpanel .gotogame.disabled {
+	background-color: #222831;
+}
+
+.GAMECONSOLE .configpanel .iconpanel .disabled {
+	opacity: 0.3;
+}
+
+.GAMECONSOLE .configpanel .title {
+	position: absolute;
+	left:10px;
+	top:10px;
+	right:10px;
+	height:40px;
+	background-image:url(images/logo.png);	
+	background-repeat:no-repeat;
+	background-size:auto 35px;
+	border-bottom:2px solid #00adb5;
+	z-index: 100;
+}
+
+
+/*
+
+DIALOG
+
+*/
+
+.GAMECONSOLE .configpanel .dialog {
+	color:#eeeeee;
+	position: absolute;
+	left:0px;
+	top:0px;
+	right:0;
+	bottom:0px;
+	background-color: rgba(34,40,49,0.9);
+	z-index: 150;
+}
+
+.GAMECONSOLE .configpanel .hudbutton {
+	border-radius:5px;
+	padding:10px;
+	margin:10px;
+	white-space: nowrap;
+	font-weight: bold;
+	z-index:100;
+	cursor:pointer;
+	color:#222831;
+	display: inline-block;
+}
+
+.GAMECONSOLE .configpanel .alert .hudbutton {
+	background-color:#eeeeee;
+}
+
+.GAMECONSOLE .configpanel .alert {
+	text-align: center;
+	top:50%;
+	left:10px;
+	right:10px;
+	transform: translate(0,-50%);
+	position: absolute;
+	line-height: 20px;
+}
+
+.GAMECONSOLE .configpanel .alert .separator {
+	width:100%;
+	height:1px;
+	background-color: #eeeeee;
+	margin:10px 0;
+}
+
+/*
+
+OVERLAYS
+
+*/
+
+.GAMECONSOLE .configpanel .dialog .hudbutton {
+	color:#eeeeee;
+	background-color:rgba(34,40,49,0.9);
+}
+
+.GAMECONSOLE .configpanel .dialog .bottomoverlay {
+	position:absolute;
+	z-index:10;
+	right:10px;
+	bottom:10px;
+	left:10px;
+	text-align:center;
+	padding:10px;
+	border-radius:5px;
+	background-color:rgba(34,40,49,0.9);
+}
+
+/*
+
+WAVES
+
+*/
+
+.GAMECONSOLE .configpanel .wavebox {
+  position: fixed;
+  top: 0;
+  transform: rotate(80deg); 
+  left: 0;
+}
+
+.GAMECONSOLE .configpanel .wavebox .wave {
+  position: absolute;
+  opacity: .4;
+  width: 1500px;
+  height: 1300px;
+  margin-left: -150px;
+  margin-top: -250px;
+  border-radius: 43%;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  from { transform: rotate(360deg); }
+}
+
+.GAMECONSOLE .configpanel .wave.one {
+  animation: rotate 28000ms infinite linear;
+  opacity: .1;
+  background: #f38181;
+}
+
+.GAMECONSOLE .configpanel .wave.two {
+  animation: rotate 12000ms infinite linear;
+  opacity: .1;
+  background: black;
+}
+
+.GAMECONSOLE .configpanel .wave.three {
+  animation: rotate 18000ms infinite linear;
+  background-color: #fce38a;
+}
+
+/*
+
+CART LOADER
+
+*/
+
+.GAMECONSOLE .configpanel .qrcode-last { color:#00adb5; }
+.GAMECONSOLE .configpanel .qrcode-ready { color:#eeeeee; }
+.GAMECONSOLE .configpanel .qrcode-missing { color:#5B6068; }
+
+/*
+
+QR VIEWER
+
+*/
+
+.GAMECONSOLE .configpanel .qrviewer {
+	position:absolute;
+	left:10px;
+	right:10px;
+	top:80px;
+	bottom:80px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.GAMECONSOLE .configpanel .qrviewerfooterbar {
+	position: absolute;
+	left:10px;
+	right: 10px;
+	bottom:10px;
+	text-align: center;
+}
+
+.GAMECONSOLE .configpanel .qrviewertopbar {
+	position: absolute;
+	left:10px;
+	right: 10px;
+	top:10px;
+	text-align: center;
+}
+
+.GAMECONSOLE .configpanel .hudbutton.selected {
+	background-color:#eeeeee;
+	color:#222831;
+}
+
+/*
+
+ANIMATIONS
+
+*/
+
+@-webkit-keyframes wrench {
+  0% {
+    -webkit-transform: rotate(-12deg);
+    transform: rotate(-12deg);
+  }
+
+  8% {
+    -webkit-transform: rotate(12deg);
+    transform: rotate(12deg);
+  }
+
+  10% {
+    -webkit-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  18% {
+    -webkit-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  20% {
+    -webkit-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  28% {
+    -webkit-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  30% {
+    -webkit-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  38% {
+    -webkit-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  40% {
+    -webkit-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  48% {
+    -webkit-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  50% {
+    -webkit-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  58% {
+    -webkit-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  60% {
+    -webkit-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  68% {
+    -webkit-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  75% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes wrench {
+  0% {
+    -webkit-transform: rotate(-12deg);
+    -ms-transform: rotate(-12deg);
+    transform: rotate(-12deg);
+  }
+
+  8% {
+    -webkit-transform: rotate(12deg);
+    -ms-transform: rotate(12deg);
+    transform: rotate(12deg);
+  }
+
+  10% {
+    -webkit-transform: rotate(24deg);
+    -ms-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  18% {
+    -webkit-transform: rotate(-24deg);
+    -ms-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  20% {
+    -webkit-transform: rotate(-24deg);
+    -ms-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  28% {
+    -webkit-transform: rotate(24deg);
+    -ms-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  30% {
+    -webkit-transform: rotate(24deg);
+    -ms-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  38% {
+    -webkit-transform: rotate(-24deg);
+    -ms-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  40% {
+    -webkit-transform: rotate(-24deg);
+    -ms-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  48% {
+    -webkit-transform: rotate(24deg);
+    -ms-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  50% {
+    -webkit-transform: rotate(24deg);
+    -ms-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  58% {
+    -webkit-transform: rotate(-24deg);
+    -ms-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  60% {
+    -webkit-transform: rotate(-24deg);
+    -ms-transform: rotate(-24deg);
+    transform: rotate(-24deg);
+  }
+
+  68% {
+    -webkit-transform: rotate(24deg);
+    -ms-transform: rotate(24deg);
+    transform: rotate(24deg);
+  }
+
+  75% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+.faa-wrench.animated,
+.faa-wrench.animated-hover:hover,
+.faa-parent.animated-hover:hover > .faa-wrench {
+  -webkit-animation: wrench 2.5s ease infinite;
+  animation: wrench 2.5s ease infinite;
+  transform-origin-x: 90%;
+  transform-origin-y: 35%;
+  transform-origin-z: initial;
+}
+
+
+@-webkit-keyframes pulse {
+  0% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  50% {
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+  }
+
+  100% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  50% {
+    -webkit-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    transform: scale(0.8);
+  }
+
+  100% {
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+}
+
+.faa-pulse.animated,
+.faa-pulse.animated-hover:hover,
+.faa-parent.animated-hover:hover > .faa-pulse {
+  -webkit-animation: pulse 1s linear infinite;
+  animation: pulse 1s linear infinite;
+}
+
+
+@-webkit-keyframes bounce {
+  0%, 10%, 20%, 50%, 80%, 100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  40% {
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+
+  60% {
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes bounce {
+  0%, 10%, 20%, 50%, 80%, 100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  40% {
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+
+  60% {
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+
+.faa-bounce.animated,
+.faa-bounce.animated-hover:hover,
+.faa-parent.animated-hover:hover > .faa-bounce {
+  -webkit-animation: bounce 2s ease infinite;
+  animation: bounce 2s ease infinite;
+}
+

@@ -1,0 +1,17 @@
+{
+	"tilemaps":[
+		{"map":["A"],"playAudio":{"_placeholder":"playAudio"}}
+	],
+	"sprites":[
+		{
+			"id":"A",
+			"text":{"_placeholder":"text"},
+			"x":76,"y":{"_placeholder":"y"},
+			"textColor":{"_placeholder":"textColor"},
+			"textAlignment":"center"
+		}
+	],
+	"code":[
+		{"when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],"then":[{"runScene":[{"_":{"_placeholder":"runScene"}}]}]}
+	]
+}

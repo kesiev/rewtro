@@ -1,0 +1,49 @@
+<html><head>
+	<script src="../../libs/binary.js"></script>
+	<script src="../../libs/system.js"></script>
+</head><body onload="onl()">
+	<h1>System fonts</h1>
+	<p>Use this tool to add system fonts to a system.</p>
+	<textarea id="json" cols=80 rows=25></textarea>
+	<hr>
+	Paste in <tt>system.js</tt>, into the <tt>this.DEFAULTS.FONT</tt> section.
+</body><script>
+
+var system;
+
+function dumpFonts(fonts,out){
+	if (!out) out=[];
+
+	if (fonts.length) {
+
+		var image=fonts.pop();
+
+		var img = new Image();
+	    img.onload = function () {		
+	        out.unshift([image,Encode.string.bitStream([0,Encode.binary.image(0,{data:img,format:"monocolor"})],system.FONTENCODER)]);
+	        dumpFonts(fonts,out);
+	    };
+	    img.src = "fonts/"+image;
+
+	} else {
+		var json="FONT:[\n";
+		out.forEach(font=>json+="\t// "+font[0]+"\n\t\""+font[1]+"\",\n");
+		json=json.substr(0,json.length-2)+"\n]";
+		document.getElementById("json").value=json;
+	}
+
+}
+
+
+function onl() {
+	system=new System.versions["0.2"].constructor();
+	dumpFonts([
+		"default.png",
+		"spectrum.png",
+		"c64.png",
+		"gameboy.png",
+		"arcade.png"
+	]);
+}
+
+</script></html>

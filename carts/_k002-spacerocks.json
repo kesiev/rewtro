@@ -1,0 +1,152 @@
+{
+	"metadata":{
+		"title":"K002 - Space Rocks",
+		"centerTitle":"SPACE ROCKS",
+		"legalText":"(c)2019 by KesieV - www.kesiev.com/rewtro"
+	},
+	"systemVersion":"0.1",
+	"systemConfiguration":[{"controllerModel":2}],
+	"data":[
+		{
+			"id":"A",
+			"images":[
+				{"id":"graphics","image":{"data":{"_file":"graphics/spacerocks.png"},"format":"monocolor"}}
+			],
+			"sounds":[
+				{"id":"A","_file":"sounds/instruments/8bit-guitar.json"},
+				{"id":"B","_file":"sounds/instruments/8bit-beat.json"},
+				{"id":"X","_file":"sounds/effects/8bit-explosion.json"},
+				{"id":"Y","_file":"sounds/effects/8bit-thrust.json"},
+				{"id":"Z","_file":"sounds/effects/8bit-laser.json"},
+				{"id":"W","_file":"sounds/effects/8bit-gun.json"},
+				{"id":"K","_file":"sounds/effects/8bit-spawn.json"}
+			],
+			"music":[
+				{
+					"_file":"songs/solitude-music.json",
+					"_replace":{
+						"instruments":"AB"
+					}
+				}
+			],
+			"songs":[
+				{"id":"A","_file":"songs/solitude-song.json","_replace":{"tempo":5}}
+			],
+			"_file":"scenes/arcade-title.json",
+			"_replace":{
+				"song":"A",
+				"titleX":58,
+				"titleY":37,
+				"titleWidth":44,
+				"titleHeight":24,
+				"titleScale":2,
+				"graphicsX":40,
+				"graphicsY":0,
+				"backgroundColor":0,
+				"blinkColors":[9,2,4,8,4,2],
+				"blinkColorsCount":6,
+				"blinkSpeed":4,
+				"titlePrefix":"~~~~~~~~~- HIGH SCORE -~",
+				"titleSuffix":"~~~(C)2019 KESIEV",
+				"textColor":8,
+				"runScene":"G1",
+				"startingLives":3
+			}
+		},
+		{
+			"id":"D",
+			"_file":"scenes/arcade-debriefing.json",
+			"_replace":{
+				"gameOverText":"** GAME OVER **",
+				"noHiScoreText":"BETTER LUCK~NEXT TIME!",
+				"hiScoreText":"WELL DONE!~A NEW HIGH SCORE!",
+				"scoreText":"SCORE: ",
+				"hiScoreBlinkSpeed":8,
+				"hiScoreColor":7,
+				"gameOverColor":5,
+				"scoreColor":8,
+				"backgroundColor":0,
+				"runScene":"A",
+				"closeSound":"X",
+				"hiScoreSound":"K"
+			}
+		},
+		{
+			"id":"G",
+			"_file":"gameplay/asteroid-game.json",
+			"_replace":{
+				"gameOverScene":"D",
+				"thrustPlayAudio":"Y",
+				"firePlayAudio":"Z",
+				"breakPlayAudio":"W",
+				"deathPlayAudio":"X",
+				"spawnPlayAudio":"K"
+			}
+		},
+		{
+			"id":"1",
+			"tilemaps":[{
+			"tileWidth":23,"tileHeight":20,
+			"map":[
+				"      ",
+				" B    ",
+				"      ",
+				"      ",
+				"      ",
+				"     C"
+			],"set":[{"value2":2,"value6":"G2"}]}]
+		},
+		{
+			"id":"2",
+			"tilemaps":[{
+			"tileWidth":23,"tileHeight":20,
+			"map":[
+				"      ",
+				" B   C",
+				"      ",
+				"      ",
+				"      ",
+				" C   B"
+			],"set":[{"value2":4,"value6":"G3"}]}]
+		},
+		{
+			"id":"3",
+			"tilemaps":[{
+			"tileWidth":23,"tileHeight":20,
+			"map":[
+				"      ",
+				" D   B",
+				"      ",
+				"      ",
+				"      ",
+				" B   B"
+			],"set":[{"value2":5,"value6":"G4"}]}]
+		},
+		{
+			"id":"4",
+			"tilemaps":[{
+			"tileWidth":23,"tileHeight":20,
+			"map":[
+				"      ",
+				" D   C",
+				"      ",
+				"      ",
+				"      ",
+				" B   D"
+			],"set":[{"value2":6,"value6":"G5"}]}]
+		},
+		{
+			"id":"5",
+			"tilemaps":[{
+			"tileWidth":23,"tileHeight":20,
+			"map":[
+				"      ",
+				" D   D",
+				"      ",
+				"      ",
+				"      ",
+				" D   D"
+			],"set":[{"value2":7,"value6":"G1"}]}]
+		}
+	]
+}

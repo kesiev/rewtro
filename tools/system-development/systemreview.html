@@ -1,0 +1,107 @@
+<html><head>
+	<script src="../../libs/system.js"></script>
+	<script src="../../libs/binary.js"></script>
+</head><body onload="onl()">Open the browser console for the full system report.</body><script>
+
+var system,ranking={},typeRankings={},ids={};
+
+function addToRanking(ranking,id,score) {	
+	if (!ranking[score]) ranking[score]=[];
+	ranking[score].push(id);
+}
+
+function review(part,history,done) {
+	var log;
+	if (!done) done=[];
+	if (!history) history=".";	
+	if (part.key) {
+		for (var k in part)
+			if ((k!="key")&&(k!="values")&&(k!="defaultValue")) addToRanking(typeRankings,history+"["+part.key+"]",k);
+		if (part.values||part.value||part.gridValue||part.string||part.gridString||part.character) {
+			var check=part.values||part.value||part.gridValue||part.string||part.gridString||part.character;
+			// Review values size in bits
+			var bits=Stream.listBits(check);
+			var max=Math.pow(2,bits);
+			var spare=Math.pow(2,bits-1);
+			if (max != check.length) {
+				var remove=check.length-spare;
+				if (remove<5)
+					log="warn";
+				else
+					log="log";
+				console[log](history,"["+part.key+"]","have",max-check.length,"unused values to reach",max,". Save 1 bit for removing",check.length-spare,"elements.");
+			}
+			if (part.values) {
+				var ids={};
+				part.values.forEach(item=>{
+					if (ids[item.key]) console.error("Duplicate key",ids[item.key],"and in in",item);
+					else ids[item.key]=item;
+				});
+			}
+		} else if (part.integer||part.float||part.listNumbers||part.gridNumbers) {
+			var range=part.integer||part.float||part.listNumbers||part.gridNumbers;
+			var fakedata={};
+			if (part.listNumbers) {
+				cut=17; // 9+8 bits for list length
+				fakedata[part.key]=[range[1]];
+			} else if (part.gridNumbers) {
+				cut=25; // 9+8+8 bits for list length
+				fakedata[part.key]=[[range[1]]];
+			} else {
+				cut=9;
+				fakedata[part.key]=range[1];
+			}
+			var enc=Encode.binary.structure(fakedata,system,[part],{});
+			var max=enc.substr(cut);
+			var maxShould=enc.substr(0,cut);
+			for (var i=0;i<max.length;i++) maxShould+="1";
+			var maxValue=Decode.binary.structure([0,maxShould],system,[part],{})[0][part.key];
+			
+			if (part.listNumbers) fakedata[part.key]=[range[0]];
+			else if (part.gridNumbers) fakedata[part.key]=[[range[0]]];
+			else fakedata[part.key]=range[0];
+
+			var enc=Encode.binary.structure(fakedata,system,[part],{});
+			var min=enc.substr(cut);
+			var minShould=enc.substr(0,cut);
+			for (var i=0;i<min.length;i++) minShould+="1";
+			var minValue=Decode.binary.structure([0,minShould],system,[part],{})[0][part.key];
+
+			if (max.indexOf("0")!=-1) console.warn(history,"["+part.key+"]","have unused digits:",max,". Max should be",maxValue,"instead of",range[1]);
+			if (min.indexOf("1")!=-1) console.warn(history,"["+part.key+"]","have unused digits:",min,". Min should be",minValue,"instead of",range[0]);
+
+			addToRanking(ranking,history+"["+part.key+"]",max.length);
+			
+		} else if (part.unused||part.image) {
+			// No checks
+		} else if (part.bool) {
+			addToRanking(ranking,history+"["+part.key+"]",1);
+		} else if (part.flag) {
+			addToRanking(ranking,history+"["+part.key+"]",0);
+		} else console.warn("Unknown entry:",part);
+	}
+	for (var a in part) {		
+		if (typeof part[a] == "object") {
+			if (done.indexOf(part[a])==-1) {
+				done.push(part[a]);
+				review(part[a],history+"."+a,done);
+			}
+		}
+	}
+}
+
+function onl() {
+	system=System.constructSystem("0.2",true);
+	console.log("SYSTEM VERSION",system.VERSION);
+	console.log("--- SYSTEM PROTOCOL");
+	review(system.SYSTEMPROTOCOL,"SYSTEMPROTOCOL");
+	console.log("--- DATA PROTOCOL");
+	review(system.DATAPROTOCOL,"DATAPROTOCOL");
+	console.log("---");
+	console.log("Data grouped by byte sizes:");
+	console.log(ranking);
+	console.log("Data grouped by type:");
+	console.log(typeRankings);
+}
+
+</script></html>

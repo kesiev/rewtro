@@ -1,0 +1,143 @@
+{
+	"systemConfiguration":[{"fontModel":1}],
+	"systemVersion":"0.1",
+	"data":[
+		{
+			"id":"A",
+			"images":[
+				{"id":"graphics","image":{"data":{"_file":"graphics/cannons.png"},"format":"monocolor"}}
+			],
+			"sounds":[
+				{"_placeholder":"instrument"},
+				{"id":"B","_file":"sounds/instruments/8bit-beat.json"},
+				{"id":"X","wave":"square","attack":2,"decay":22,"frequency":0},
+				{"id":"Y","wave":"whitenoise","attack":2,"decay":12,"release":43,"frequency":25},
+				{"id":"W","wave":"whitenoise","attack":2,"decay":12,"release":86,"frequency":75},
+				{"id":"Z","wave":"whitenoise","attack":2,"decay":12,"release":234,"frequency":255},
+				{"id":"1","wave":"saw","attack":2,"decay":12,"release":201,"frequency":33,"frequencyJump1onset":33,"frequencyJump1amount":193},
+				{"id":"2","wave":"triangle","attack":2,"decay":12,"release":201,"frequency":33,"frequencyJump1onset":33,"frequencyJump1amount":193}
+			],
+			"music":[
+				{
+					"id":"T",
+					"notes":[
+						["C3-","   ","   ","A3-","G3-","A3-","   ","C3-","   ","C3-","   "],
+						["C4-","   ","   ","A4-","G4-","A4-","   ","C4-","   ","C4-","   "],
+						["C4-","   ","G7-","   ","C4-","C4-","G7-","   ","C4-","   ","G7-"]
+					],
+					"instruments":"AAB"
+				},
+				{
+					"id":"H",
+					"notes":[
+						["A3-","G3-","   ","A3-","   "],
+						["A4-","G4-","   ","A4-","   "],
+						["   ","C4-","   ","G7-","G7-"]
+					],
+					"instruments":"AAB"
+				},
+				{
+					"id":"E",
+					"notes":[
+						["E3-","F3-","   ","G3-","   "],
+						["E4-","F4-","   ","G4-","   "],
+						["   ","C4-","   ","G7-","G7-"]
+					],
+					"instruments":"AAB"
+				}
+			],
+			"songs":[{
+				"id":"T","music":"THTE","loopTo":0,"tempo":4
+			}],
+			"sprites":[{
+				"id":"C","width":4,"height":4,"backgroundColor":4,"graphicsX":2,"graphicsY":132,"flags":"W"
+			},{
+			"id":"B",
+			"x":76,"y":20,"text":{"_placeholder":"titleText"},
+			"textColor":8,"textAlignment":"center"
+		}],
+			"tilemaps":[{
+				"tileWidth":4,"tileHeight":4,
+				"x":6,"y":34,
+				"song":"T",
+				"map":[
+					"BCCC  CC  C   C C   C  CC  C   C  CCC",
+					"CC   CC C CC  C CC  C CC C CC  C CC  ",
+					"CC   CC C CCC C CCC C CC C CCC C CC  ",
+					"CC   CCCC CC CC CC CC CC C CC CC  CC ",
+					"CC   CC C CC  C CC  C CC C CC  C   CC",
+					"CC   CC C CC  C CC  C CC C CC  C   CC",
+					" CCC CC C CC  C CC  C  CC  CC  C CCC "
+				]
+			}],
+			"code":[{
+				"when":[{
+					"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]
+				}],
+				"then":[{"as":"game","set":[{"value4":[{"_":{"_placeholder":"goesFirst"}}]}]},{
+					"runScene":[
+
+						{"_":"G"}
+					]
+				}]
+			},{
+				"when":[
+					{"as":"songRow","attribute":"M1","if":[{"is":"existing"}]},
+					{"as":"songRow","attribute":"M1","if":[{"is":"!=","_":"   "}]}
+				],
+				"then":[{
+					"randomize":true,
+					"id":"C","set":[{"backgroundColor":[{"list":[2,3,4,5,6,7,8],"randomValue":true}]}]
+				}]
+			}]
+		},
+		{
+			"id":"E",
+			"sprites":[
+			{
+				"id":"A","x":0,"y":0,"width":160,"height":144,"backgroundColor":8,
+				"value0":2,"zIndex":1
+			},{
+				"id":"D","x":76,"y":68,"height":8,"textAlignment":"center"
+			}],
+			"tilemaps":[{"map":["AD"]}],
+			"code":[
+				{
+					"when":[{"as":"game","if":[{"itsAttribute":"value0","is":"==","_":1}]}],
+					"then":[{"id":"D","set":[{"textColor":[{"_":5}]}]}],
+					"else":[{"id":"D","set":[{"textColor":[{"_":2}]}]}]
+				},{
+					"when":[{"id":"A","if":[{"itsAttribute":"value0","is":">","_":0}]}],
+					"then":[
+						{"id":"D","set":[{"text":[{"as":"game","attribute":"value0","prefix":"PLAYER ","suffix":" WON!"}]}]},
+						{"subtract":[{"value0":[{"_":1}]}]
+					}],
+					"else":[
+						{"id":"A","remove":true},
+						{
+							"code":[{
+								"when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],
+								"then":[{"runScene":[{"_":"A"}]}]
+							}]
+						}
+					]
+				}
+			]
+		},
+		{
+			"id":"G",
+			"_file":"gameplay/cannons-game.json",
+			"_replace":{
+				"gameOverScene":"E",
+				"aimPlayAudio":"X",
+				"breakPlayAudio":"Y",
+				"diePlayAudio":"Z",
+				"firePlayAudio":"W",
+				"turn1PlayAudio":"1",
+				"turn2PlayAudio":"2",
+				"blockForeColor":{"_placeholder":"blockForeColor"},
+				"blockBackgroundColor":{"_placeholder":"blockBackgroundColor"}
+			}
+		}
+	]
+}

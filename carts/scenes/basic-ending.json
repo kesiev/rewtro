@@ -1,0 +1,31 @@
+{
+	"tilemaps":[
+		{"map":["BBBBBBBBA"],"song":{"_placeholder":"song"}}
+	],
+	"sprites":[
+		{"id":"B","width":16,"height":16,"graphicsX":0,"graphicsY":48,"y":250},
+		{"id":"A","text":{"_placeholder":"text"},"x":76,"y":{"_placeholder":"y"},"textColor":{"_placeholder":"textColor"},"textAlignment":"center","zIndex":10}
+	],"code":[{
+		"when":[{"id":"B"}],
+		"then":[{
+			"code":[{
+					"when":[{"if":[{"itsAttribute":"y","is":">","_":144}]}],
+					"then":[{
+						"randomize":true,
+						"set":[{
+							"graphicsX":[{"list":{"_placeholder":"frames"},"randomValue":true}],
+							"graphicsY":[{"list":{"_placeholder":"colors"},"randomValue":true}],
+							"flipX":[{"list":[0,1],"randomValue":true}],
+							"y":[{"_":-16}],
+							"x":[{"list":[0,144],"randomNumber":true}],
+							"speedY":[{"list":[1,2,3,4],"randomValue":true}]
+						}],
+						"multiply":[{
+							"graphicsX":[{"_":16}],
+							"graphicsY":[{"_":16}]
+						}]
+					}]
+				}]
+		}]
+	}]
+}

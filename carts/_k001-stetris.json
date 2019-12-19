@@ -1,0 +1,165 @@
+{
+	"metadata":{
+		"title":"K001 - Stetris",
+		"centerTitle":"STETRIS",
+		"legalText":"(c)2019 by KesieV - www.kesiev.com/rewtro"
+	},
+	"systemVersion":"0.1",
+	"systemConfiguration":[{"paletteModel":1,"controllerModel":1,"fontModel":3}],
+	"data":[
+		{
+			"id":"A",
+			"images":[{"id":"graphics","image":{"data":{"_file":"graphics/stetris.png"},"format":"monocolor"}}],
+			"sounds":[
+				{"id":"A","wave":"square","attack":2,"sustain":7,"limit":22,"decay":178,"release":255,"frequency":122},
+				{"id":"B","_file":"sounds/instruments/8bit-beat.json"},
+				{"id":"X","_file":"sounds/effects/8bit-explosion.json"},
+				{"id":"Y","wave":"square","attack":1,"sustain":22,"decay":43,"release":25,"frequency":38,"frequencyJump1onset":132,"frequencyJump1amount":160},				
+				{"id":"W","wave":"square","decay":7,"release":10},
+				{"id":"0","wave":"whitenoise","attack":2,"sustain":7,"decay":25,"release":20,"frequency":25,"pitch":0},
+				{"id":"1","wave":"saw","attack":10,"sustain":12,"decay":33,"release":127,"tremoloFrequency":63,"tremoloDepth":201,"pitch":165},
+				{"id":"2","wave":"saw","attack":10,"sustain":12,"decay":33,"release":127,"frequency":153,"tremoloFrequency":63,"tremoloDepth":201,"pitch":165},
+				{"id":"3","wave":"saw","attack":10,"sustain":12,"decay":33,"release":127,"frequency":175,"tremoloFrequency":63,"tremoloDepth":201,"pitch":165},
+				{"id":"4","wave":"saw","sustain":255,"decay":17,"release":28,"frequency":135,"tremoloFrequency":15,"tremoloDepth":201,"frequencyJump1onset":30,"frequencyJump1amount":63,"frequencyJump2onset":147,"frequencyJump2amount":191}
+			],			
+			"tilemaps":[
+				{
+					"map":["AB"]
+				}
+			],
+			"music":[
+				{
+					"_file":"songs/stetris-music.json",
+					"_replace":{
+						"instruments":"AB"
+					}
+				}
+			],
+			"songs":[
+				{"id":"A","_file":"songs/stetris-song.json","_replace":{"tempo":5}}
+			],
+			"sprites":[
+			{
+
+				"id":"A",
+				"width":43,"height":8,
+				"graphicsX":64,"graphicsY":16,"scale":2,
+				"x":58,
+				"y":36
+			},
+			{
+					"id":"B",
+					"x":76,"y":20,
+					"textColor":2,"textAlignment":"center"
+				},
+				{
+					"id":"C",
+					"graphicsX":0,"graphicsY":24,"width":8,"height":8,"backgroundColor":2
+				}
+			],
+			"code":[{
+				"when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"==","_":0}]}],
+				"then":[
+					{"inArea":[{
+						"x":[{"_":0}],"y":[{"_":0}],
+						"width":[{"_":16}],"height":[{"_":144}]
+					}],"fillAreaWithPattern":["C"]},
+					{"inArea":[{
+						"x":[{"_":144}],"y":[{"_":0}],
+						"width":[{"_":16}],"height":[{"_":144}]
+					}],"fillAreaWithPattern":["C"]},
+					{
+						"id":"B",
+						"set":[{"text":[{"as":"game","attribute":"value2","prefix":"TINY~~~~~~~~~- HIGH SCORE -~","suffix":"~~~(C)2019 KESIEV"}]}]
+					}
+				]
+			},{
+					"when":[{
+						"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]
+					}],
+					"then":[{
+						"playAudio":[{"_":"Y"}],
+						"runScene":[{"_":"G"}]
+					}]
+			}]
+		},		
+		{
+			"id":"G",
+			"_file":"gameplay/block-game.json",
+			"_replace":{
+				"failPlayAudio":"X",
+				"rotatePlayAudio":"Y",
+				"movePlayAudio":"W",
+				"runSceneGameOver":"D"
+			}
+		},{
+			"id":"D",
+			"sprites":[
+				{
+					"id":"C",
+					"graphicsX":0,"graphicsY":24,"width":8,"height":8,"backgroundColor":2
+				},
+				{
+						"id":"Q","textColor":1,
+						"zIndex":10,"x":0,"y":40,"width":8,"height":8,"textAlignment":"center","width":160,
+						"text":"-- GAME OVER --","backgroundColor":2
+					},
+					{
+						"id":"S","textColor":1,
+						"zIndex":10,"x":0,"y":56,"width":8,"height":8,"textAlignment":"center","width":160
+						
+					},
+					{
+						"id":"T","textColor":1,
+						"zIndex":10,"x":0,"y":72,"width":8,"height":8,"textAlignment":"center","width":160
+						
+					},
+					{
+						"id":"U","textColor":1,
+						"zIndex":10,"x":0,"y":88,"width":8,"height":16,"textAlignment":"center","width":160
+						,"text":"BETTER LUCK~NEXT TIME!"
+					}
+			],
+			"tilemaps":[
+				{
+					"map":["QSTU"]
+				}
+			],
+			"code":[{
+						"when":[{"as":"game","if":[{"itsAttribute":"value1","is":">","as":"game","attribute":"value2"}]}],
+						"then":[
+							{"as":"game","set":[{"value2":[{"attribute":"value1"}]}]},
+							{"id":"U","set":[{"text":[{"_":"WELL DONE!~A NEW HIGH SCORE!"}],"value0":[{"_":1}]}]}
+						]
+					},{
+						"when":[
+							{"id":"U","if":[{"itsAttribute":"value0","is":"==","_":1}]},
+							{"id":"U","if":[{"itsAttribute":"timer","is":"%%","_":8}]}
+						],
+						"then":[
+							{"set":[{"visible":[{"attribute":"visible","negate":true}]}]}
+							
+						]
+					},{
+				"when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"==","_":0}]}],
+				"then":[
+					{"id":"S","set":[{"text":[{"as":"game","attribute":"value0","prefix":"LINES: "}]}]},
+					{"id":"T","set":[{"text":[{"as":"game","attribute":"value1","prefix":"SCORE: "}]}]},
+					{"inArea":[{
+						"x":[{"_":0}],"y":[{"_":0}],
+						"width":[{"_":160}],"height":[{"_":144}]
+					}],"fillAreaWithPattern":["C"]}
+				]
+			},{
+					"when":[{
+						"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]
+					}],
+					"then":[{
+						"playAudio":[{"_":"Y"}],
+						"runScene":[{"_":"A"}]
+					}]
+			}]
+		}
+
+	]
+}

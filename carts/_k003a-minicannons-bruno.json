@@ -1,0 +1,18 @@
+{
+	"metadata":{
+		"title":"K003A - Mini Cannons (Bruno ed.)",
+		"upperTitle":"MINI",
+		"centerTitle":"CANNONS",
+		"lowerTitle":"Bruno edition",		
+		"legalText":"(c)2019 by KesieV - www.kesiev.com/rewtro"
+	},
+	"_file":"games/minicannons-game.json",
+	"_replace":{
+		"title":"K003A - Mini Cannons (Bruno ed.)",
+		"titleText":"MINI~~~~~~~* BRUNO EDITION *~~~~~(C)2018 WRIGHT MAG.~(C)2019 BY KESIEV",
+		"instrument":{"id":"A","wave":"triangle","attack":7,"sustain":10,"decay":30,"release":127},
+		"goesFirst":1,
+		"blockForeColor":10,
+		"blockBackgroundColor":3
+	}
+}

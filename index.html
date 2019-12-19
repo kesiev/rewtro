@@ -1,0 +1,78 @@
+<html><head>
+	<!-- Installer -->
+	<link rel="manifest" href="manifest.json">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="application-name" content="Rewtro">
+	<meta name="apple-mobile-web-app-title" content="Rewtro">
+	<meta name="msapplication-starturl" content="index.html">
+	<link rel="icon" type="image/png" sizes="128x128" href="icons/icon-128x128.png">
+	<link rel="icon" type="image/png" sizes="144x144" href="icons/icon-144x144.png">
+	<link rel="icon" type="image/png" sizes="152x152" href="icons/icon-152x152.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="384x384" href="icons/icon-384x384.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png">
+	<link rel="icon" type="image/png" sizes="72x72" href="icons/icon-72x72.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="icons/icon-96x96.png">
+
+	<!-- System -->
+	<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- External -->
+	<link rel="stylesheet" type="text/css" href="libs/gameconsole.css">
+	<link rel="stylesheet" type="text/css" href="libs/external/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" type="text/css" href="libs/external/fontawesome/css/solid.min.css">
+	<script src="libs/external/jszip.js"></script>
+	<script src="libs/external/instascan.min.js"></script>
+	<script src="libs/external/qrcode.min.js"></script>
+	<!-- Libs -->
+	<script src="libs/locale.js"></script>
+	<script src="libs/audio.js"></script>
+	<script src="libs/system.js"></script>
+	<script src="libs/binary.js"></script>
+	<script src="libs/hardware.js"></script>
+	<script src="libs/rewtro.js"></script>
+	<script src="libs/qrcart.js"></script>
+	<script src="libs/gameconsole.js"></script>
+	<!-- Game console module -->
+	<script src="libs/modules/credits.js"></script>
+	<script src="libs/modules/loadfromqr.js"></script>
+	<script src="libs/modules/generateqr.js"></script>
+	<script src="libs/modules/playlastplayedgame.js"></script>	
+	<script src="libs/modules/fullscreen.js"></script>
+	<script src="libs/modules/language.js"></script>	
+	<script src="libs/modules/installer.js"></script>	
+
+</head><body onload="onl()"><div id="console" style="position:absolute;left:0;top:0;bottom:0;right:0"></div></body><script>
+
+var CONSOLE,LOC=new LocaleManager();
+
+function onl() {
+	
+	var qrcart=new QRCart({QRCOUNT:4});
+
+	CONSOLE=new GameConsole(document.getElementById("console"),{
+		title:"Rewtro 0.1b",
+		consoleLabel:"GAME WITH DOT MATRIX SCREEN",
+		audioEnabled:true,
+		options:[
+			//ModuleLoadFromQR([{label:LOC._("qrcart_load"," jsscanner"),icon:"<i class='fas fa-camera'></i>"}],"jsscanner", qrcart),
+			//ModuleLoadFromQR([{label:LOC._("qrcart_load"," zxing"),icon:"<i class='fas fa-camera'></i>"}],"zxing", qrcart),
+			//ModuleLoadFromQR([{label:LOC._("qrcart_load"," (jsqr)"),icon:"<i class='fas fa-camera'></i>"}],"jsqr", qrcart),
+			//ModuleLoadFromQR([{label:LOC._("qrcart_load"," (instascanng)"),icon:"<i class='fas fa-camera'></i>"}],"instascanng", qrcart),
+			ModuleLoadFromQR([{label:LOC._("qrcart_load"),icon:"<i class='fas fa-camera'></i>"}],"instascanng", qrcart),
+			ModuleGenerateQR([{label:LOC._("qrcart_datasette"),icon:"<i class='fas fa-tape'></i>"}], qrcart),
+			ModulePlayLastPlayedGame([
+				{label:LOC._("lastplayed_run"),icon:"<i class='fas fa-history'></i>"},
+				{label:LOC._("lastplayed_discard"),icon:"<i class='fas fa-trash-alt'></i>"}
+			]),
+			ModuleFullscreen([{label:LOC._("fullscreen_toggle"),icon:"<i class='fas fa-expand'></i>"}]),
+			ModuleLanguage([{label:LOC._("language_change"),icon:"<i class='fas fa-language'></i>"}]),
+			ModuleInstaller([{label:LOC._("installer_install"),icon:"<i class='fas fa-download'></i>"}]),
+			ModuleCredits([{label:LOC._("credits"),icon:"<i class='fas fa-trophy'></i>"}])
+		]
+	});
+
+}
+
+</script></html>

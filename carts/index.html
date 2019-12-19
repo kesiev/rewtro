@@ -1,0 +1,728 @@
+<html><head>
+	<title>Rewtro Dev Console</title>
+	<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<script src="../libs/external/qrcode.min.js"></script>
+	<script src="../libs/external/jszip.js"></script>
+	<script src="../libs/external/gif.js"></script>
+	<script src="../libs/system.js"></script>
+	<script src="../libs/binary.js"></script>
+	<script src="../libs/hardware.js"></script>
+	<script src="../libs/rewtro.js"></script>
+	<script src="../libs/qrcart.js"></script>
+	<script src="../libs/audio.js"></script>
+	<link rel="stylesheet" type="text/css" href="../libs/external/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../libs/external/fontawesome/css/solid.min.css">
+	<style>
+	BODY {
+		background-color: #222831;
+		color:#eeeeee;
+		font-family: sans-serif;
+		padding:10px;
+	}
+
+	.header {
+		border-bottom:1px solid #eeeeee;
+		padding-bottom: 10px;
+		margin-bottom: 10px;
+	}
+
+	.filerow {
+		padding:10px 0;
+		border-bottom:1px solid #eeeeee;
+	}
+
+	.buttonbar {
+		border-bottom:1px solid #eeeeee;
+		padding-bottom: 10px;
+	}
+
+	.filename {
+		font-family: monospace;		
+	}
+
+	.actions .button, .buttonbar .button {
+		margin-top:10px;
+		border-radius:5px;
+		padding:10px;
+		margin-right: 10px;
+		white-space: nowrap;
+		z-index:100;
+		cursor:pointer;
+		background-color: #393e46;
+		display: inline-block;
+		user-select: none;
+	}
+
+	.controller.button {
+		display: inline-block;
+		padding:5px;
+		border-radius: 5px;
+		margin-right: 10px;
+		border: 2px solid #393e46;
+	}
+
+	.header .button {
+		display: inline-block;
+		cursor:pointer;
+		margin-right: 10px;
+		font-size: 25px;
+	}
+	.code {
+		font-family: monospace;
+		padding:5px;
+		background-color:#eeeeee;
+		color:#222831;
+		margin:10px 0;
+	}
+	.resolutionsample {
+		background-color: #eeeeee;
+		color:#222831;
+		font-size: 12px;
+		overflow:hidden;
+	}
+	.debug {
+		font-family: monospace;	
+		white-space: nowrap;
+	}
+
+	.gameScreen:focus {
+	    outline: none;
+	}
+
+	.error {
+		color:#f99;
+		text-decoration: underline;
+	}
+	</style>
+</head><body onload="onl()"></body><script>
+
+var SYSTEMVERSION="0.2";
+system=System.constructSystem(SYSTEMVERSION);
+system.configure();
+
+var listing,engine;
+function onl() {
+	selected(window.localStorage["_REWTRODEV_OPTION"], window.localStorage["_REWTRODEV_FILE"]);
+}
+
+function header() {
+	return "<div class='header'><div class='button' onclick=\"selected('home',0,true)\"><i class='fas fa-home'></i></div><img src='qrcart/logo.png'> "+system.VERSION+" - Dev console</div>";
+}
+
+function selected(option,file,isclick) {
+	if (isclick) AudioEngine.request();
+	if (!option) option="home";
+	window.localStorage["_REWTRODEV_OPTION"]=option;
+	window.localStorage["_REWTRODEV_FILE"]=file;
+	if (document.getElementById("qrcount")) window.localStorage["_REWTRODEV_QRCOUNT"] = document.getElementById("qrcount").value;
+	if (document.getElementById("cellSize")) window.localStorage["_REWTRODEV_CELLSIZE"] = document.getElementById("cellSize").value;
+	if (document.getElementById("printmode")) window.localStorage["_REWTRODEV_PRINTMODE"] = document.getElementById("printmode").value;
+	var qrcount=(window.localStorage["_REWTRODEV_QRCOUNT"]*1||undefined);
+	var cellSize=(window.localStorage["_REWTRODEV_CELLSIZE"]*1||undefined);
+	var printMode=(window.localStorage["_REWTRODEV_PRINTMODE"]*1||0);
+	switch (option) {
+		case "home":{
+			if (engine) {
+				engine.stop();
+				engine=0;
+			}
+			cartSelector();
+			break;
+		}
+		case "debug":{
+			var qrcart=new QRCart({ QRCOUNT: qrcount });
+			document.body.innerHTML=header()+"<div class='filerow' id='game'></div><div class='filerow debug' id='debug'></div><div class='filerow debug' id='stats'></div>";
+
+			compile(file,compressed=>{
+				var lastdebug,qrmode=qrcart.suggestConfiguration(compressed.data);
+				System.unpack(compressed.data,cart=>{
+					document.getElementById('stats').innerHTML=
+							"<i class='fas fa-cog'></i> "+compressed.metadata.title+" (Rewtro "+cart.system.VERSION+" using "+cart.system.ENGINE+")<br>"+
+							"<i class='fas fa-expand'></i> "+cart.system.RESOLUTION.screenWidth+" &times; "+cart.system.RESOLUTION.screenHeight+" ("+cart.system.RESOLUTION.renderWidth+" &times; "+cart.system.RESOLUTION.renderHeight+") @ "+cart.system.FPS+"fps. "+cart.system.PALETTE.length+" colors.<br>"+
+							"<i class='fas fa-qrcode'></i> <span class='"+(qrmode.carts>3?"error":"")+"'>&times;"+qrmode.carts+"</span> <span class='"+(qrmode.type>17?"error":"")+"'>Lv."+qrmode.type+"</span> Correction: "+qrmode.correctionLevel+"<br>"+
+							"<i class='fas fa-compress'></i> "+compressed.bestMethod.label+": "+compressed.data.length+" byte(s)<br>"+
+							"<i class='fas fa-save'></i> "+qrmode.occupied+"/"+qrmode.fullSpace+" byte(s) - "+qrmode.free+"/"+qrmode.chunkSize+" bytes free ("+Math.floor((qrmode.free/qrmode.chunkSize)*100)+"%)";
+					if (cart.cart&&cart.cart.data) {
+						cart.cart.data.forEach(block=>{
+							if (block.images) {
+								block.images.forEach(image=>{
+									var box=document.createElement("div");
+									box.className="filerow debug";
+									document.body.appendChild(box);
+									var label=document.createElement("div");
+									label.innerHTML="<i class='fas fa-image'></i> "+image.id+" ("+image.image.data.width+"&times;"+image.image.data.height+") <i class='fas fa-compress'></i> "+image.image.format+"<br><br>";
+									box.appendChild(label);
+									box.appendChild(image.image.data);
+								})
+							}
+						})
+					}
+					engine=window[cart.system.ENGINE](document.getElementById('game'),{
+						model:cart,
+						audioEnabled:true,
+						scale:1,
+						debugger:function(sprites,songrow,lastblocks,lastsong,scene,game) {
+							var debug="";
+							debug+="<i class='fas fa-save'></i> <i class='fas fa-cog'></i> "+lastblocks+" <i class='fas fa-music'></i> "+lastsong+"<br>";
+							debug+="<i class='fas fa-image'></i> &times;"+sprites.length+"<br>";
+							debug+="<i class='fas fa-cog'></i> @ "+Math.floor(scene.x*1000)/1000+","+Math.floor(scene.y*1000)/1000+" | ";
+							for (var i=0;i<10;i++) debug+="V"+i+"="+scene["value"+i]+" | ";
+							debug+="<br>";
+							debug+="<i class='fas fa-cog'></i> ";
+							for (var i=0;i<10;i++) debug+="G"+i+"="+game["value"+i]+" | ";
+							debug+="<br>";
+							debug+="<i class='fas fa-music'></i> ";
+							for (var i=0;i<5;i++) {
+								var note=songrow["M"+i]||"";
+								while (note.length<4) note+=" ";
+								debug+="M"+i+":&nbsp;"+note.replace(/ /g,"&nbsp;")+"&nbsp;|&nbsp;";
+							}
+							if (debug!=lastdebug) {
+								lastdebug=debug;
+								document.getElementById('debug').innerHTML=debug;
+							}
+						}
+					});							
+				});
+			});			
+			
+			break;
+		}
+		case "svg":{
+			var template={media:"svg"};
+			for (var k in printModes[printMode].config)
+				template[k]=printModes[printMode].config[k];
+
+			var qrcart = new QRCart({ QRCOUNT: qrcount });
+			document.body.innerHTML=header()+"Preparing SVG...";
+			compile(file,compressed=>{
+				for (var k in compressed.metadata)
+					template[k]=compressed.metadata[k];
+				if (!template.sizeData) {
+					var size=(compressed.data.length)/1024;
+					size=Math.round(size * 10) / 10;
+					template.sizeData=size+"kb";
+				}
+				qrcart.createQRCart(template,compressed.data,qrcart=>{
+					qrcart.download();
+					selected();
+				});
+			});
+			break;
+		}
+		case "gif":{
+			var template={media:"gif",cellSize:cellSize};
+			
+
+			var qrcart = new QRCart({ QRCOUNT: qrcount });
+			document.body.innerHTML=header()+"Preparing GIF...";
+			compile(file,compressed=>{
+				for (var k in compressed.metadata)
+					template[k]=compressed.metadata[k];
+				qrcart.createQRCart(template,compressed.data,qrcart=>{
+					qrcart.download();
+					selected();
+				});
+			});
+			break;
+		}
+		case "torewtro":{
+			document.body.innerHTML=header()+"Sending to Rewtro console...";
+			compile(file,compressed=>{
+				window.localStorage["_CRT_LASTGAME"]=compressed.data;
+				selected();
+			});
+			break;
+		}
+		case "palette":{
+			document.body.innerHTML=header()+"<div class='filerow'>System palettes</div>";			
+			system.DEFAULTS.PALETTE.forEach((palette,id)=>{
+				var box=document.createElement("div");
+				box.className="filerow";
+				document.body.appendChild(box);
+				var label=document.createElement("div");
+				label.innerHTML="{\"systemConfiguration\":[{\"paletteModel\":"+id+"}]}";
+				label.className="code";
+				box.appendChild(label);
+				var canvas=document.createElement("canvas");
+				canvas.style.border="1px dashed black";
+				canvas.width=200;
+				canvas.height=palette.length*20;
+				var ctx=canvas.getContext("2d");
+				ctx.textBaseline = "middle";
+	            ctx.font = "10px Helvetica";	            
+				palette.forEach((color,row)=>{
+					ctx.fillStyle="rgb("+color[0]+","+color[1]+","+color[2]+","+color[3]+")";
+					ctx.fillRect(0,row*20,200,20);
+					ctx.fillStyle="#000000";
+		            ctx.textAlign = "left";
+					ctx.fillText(row, 10,row*20+10);
+					ctx.fillStyle="#ffffff";
+		            ctx.textAlign = "right";
+					ctx.fillText(row, 190,row*20+10);
+				});
+				box.appendChild(canvas);				
+			});
+			break;
+		}
+		case "fonts":{
+			document.body.innerHTML=header()+"<div class='filerow'>System fonts</div>";			
+			system.DEFAULTS.FONT.forEach((fontData,id)=>{
+				var box=document.createElement("div");
+				box.className="filerow";
+				document.body.appendChild(box);
+				var label=document.createElement("div");
+				label.innerHTML="{\"systemConfiguration\":[{\"fontModel\":"+id+"}]}";
+				label.className="code";
+				box.appendChild(label);
+				var fontBinary=Decode.string.bitStream([0,fontData],system.FONTENCODER);		
+				var canvas=Decode.binary.image([0,fontBinary],system)[0].data;
+				canvas.style.border="1px dashed black";
+				box.appendChild(canvas);
+			})
+			break;
+		}
+		case "resolutions":{
+			document.body.innerHTML=header()+"<div class='filerow'>System resolutions</div>";			
+			system.DEFAULTS.RESOLUTION.forEach((resolution,id)=>{
+				var box=document.createElement("div");
+				box.className="filerow";
+				document.body.appendChild(box);
+				var label=document.createElement("div");
+				label.innerHTML="{\"systemConfiguration\":[{\"resolutionModel\":"+id+"}]}";
+				label.className="code";
+				box.appendChild(label);
+				var example=document.createElement("div");
+				example.className="resolutionsample";
+				example.style.width=resolution.renderWidth+"px";
+				example.style.height=resolution.renderHeight+"px";
+				example.innerHTML=
+					resolution.renderWidth+(resolution.screenWidth!=resolution.renderWidth?" ("+resolution.screenWidth+")":"")+" &times; "+
+					resolution.renderHeight+(resolution.screenHeight!=resolution.renderHeight?" ("+resolution.screenHeight+")":"");
+				box.appendChild(example);
+			})
+			break;
+		}
+		case "controllers":{
+			document.body.innerHTML=header()+"<div class='filerow'>System controllers</div>";			
+			system.DEFAULTS.CONTROLLER.forEach((buttons,id)=>{
+				var box=document.createElement("div");
+				box.className="filerow";
+				document.body.appendChild(box);
+				var label=document.createElement("div");
+				label.innerHTML="{\"systemConfiguration\":[{\"controllerModel\":"+id+"}]}";
+				label.className="code";
+				box.appendChild(label);
+				var example=document.createElement("div");
+				buttons.forEach(button=>example.innerHTML+="<div class='controller button'>"+button+"</div>");
+				box.appendChild(example);
+			})
+			break;
+		}
+		case "noisemaker":{
+			noiseMaker();
+			break;
+		}
+		default:{
+			selected("home");
+			break;
+		}
+	}
+}
+
+function getListing(cb) {
+	Stream.getFile("listing.php?"+Math.random(),list=>{
+		var list=JSON.parse(list);
+		cb(list);
+	});
+}
+
+function compile(file,cb) {
+	Stream.getFile(file+"?"+Math.random(),content=>{
+		System.pack(JSON.parse(content),"./",compressed=>{
+			cb(compressed);
+		});			
+	});	
+}
+
+var printModes=[
+	{name:"Default",config:{}},
+	{name:"Name + Cart + Label",config:{hideInstructions:true}},
+	{name:"Cart + Label",config:{hideInstructions:true,hideName:true}},
+	{name:"Name + Cart",config:{hideInstructions:true,hideDefaultCover:true}},
+	{name:"Cart",config:{hideInstructions:true,hideName:true,hideDefaultCover:true}},
+]
+
+function cartSelector() {
+	document.body.innerHTML=header()+"Wait...";
+	getListing(list=>{
+		var html=header();
+		html+="<div class='buttonbar'>";
+		html+="<div class='button' onclick=\"selected('fonts',0,true)\"><i class='fas fa-font'></i></div>";
+		html+="<div class='button' onclick=\"selected('palette',0,true)\"><i class='fas fa-palette'></i></div>";
+		html+="<div class='button' onclick=\"selected('resolutions',0,true)\"><i class='fas fa-expand'></i></div>";
+		html+="<div class='button' onclick=\"selected('controllers',0,true)\"><i class='fas fa-gamepad'></i></div>";
+		html+="&nbsp;";
+		html+="<div class='button' onclick=\"selected('noisemaker',0,true)\"><i class='fas fa-music'></i></div>";
+		html+="</div><div class='filerow'>";
+		html+="<i class='fas fa-qrcode'></i> &times;";
+		html+=" <select id='qrcount'><option value='0'>Default</option>";
+		for (var i=1;i<8;i++) html+="<option value='"+i+"' "+(i== window.localStorage["_REWTRODEV_QRCOUNT"]?"selected":"")+">"+i+"</option>";
+		html+="</select>";
+		html+=" @ <select id='cellSize'><option value='0'>Default</option>";
+		for (var i=1;i<8;i++) html+="<option value='"+i+"' "+(i== window.localStorage["_REWTRODEV_CELLSIZE"]?"selected":"")+">"+i+"px</option>";
+		html+="</select> ";
+		html+="<i class='fas fa-print'></i>";
+		html+=" <select id='printmode'>";
+		printModes.forEach((mode,id)=>html+="<option "+(window.localStorage["_REWTRODEV_PRINTMODE"]==id?"selected":"")+" value='"+id+"'>"+mode.name+"</option>");
+		html+="</select></div>";
+		list.forEach((file,pos)=>{
+			html+="<div class='filerow'><div class='filename'>"+file+"</div><div class='actions'>";
+			html+="<div class='button' onclick=\"selected('debug','"+file+"',true)\"><i class='fas fa-bug'></i></div>";
+			html+="<div class='button' onclick=\"selected('svg','"+file+"',true)\"><i class='fas fa-print'></i></div>";
+			html+="<div class='button' onclick=\"selected('gif','"+file+"',true)\"><i class='fas fa-images'></i></div>";
+			html+="<div class='button' onclick=\"selected('torewtro','"+file+"',true)\"><i class='fas fa-gamepad'></i></div>";
+			html+="</div></div>";
+		});
+		document.body.innerHTML=html;
+	});
+}
+
+// --- NOISEMAKER (hacked from Wright :) )
+
+// ---
+
+var octave=4,pianoChannel=0;
+
+function setOctave(oct) {
+	octave+=oct;
+	if (octave<=system.OCTAVES[0]) octave=system.OCTAVES[0]+1;
+	if (octave>=system.OCTAVES[1]) octave=system.OCTAVES[1]-1;
+	document.getElementById("currentOctave").innerHTML=octave;
+}
+
+var keyboard = {
+
+	/* 2 */
+	50: 'C#,-1',
+	
+	/* 3 */
+	51: 'D#,-1',
+	
+	/* 5 */
+	53: 'F#,-1',
+	
+	/* 6 */
+	54: 'G#,-1',
+	
+	/* 7 */
+	55: 'A#,-1',
+	
+	/* 9 */
+	57: 'C#,0',
+	
+	/* 0 */
+	48: 'D#,0',
+	
+	/* + */
+	187: 'F#,0',
+	61: 'F#,0',
+	
+	/* Q */
+	81: 'C,-1',
+	
+	/* W */
+	87: 'D,-1',
+	
+	/* E */
+	69: 'E,-1',
+	
+	/* R */
+	82: 'F,-1',
+	
+	/* T */
+	84: 'G,-1',
+	
+	/* Y */
+	89: 'A,-1',
+	
+	/* U */
+	85: 'B,-1',
+	
+	/* I */
+	73: 'C,0',
+	
+	/* O */
+	79: 'D,0',
+	
+	/* P */
+	80: 'E,0',
+	
+	/* [ */
+	219: 'F,0',
+	
+	/* ] */
+	221: 'G,0',
+
+	/* A */
+	65: 'G#,0',
+
+	/* S */
+	83: 'A#,0',
+	
+	/* F */
+	70: 'C#,1',
+
+	/* G */
+	71: 'D#,1',
+
+	/* J */
+	74: 'F#,1',
+
+	/* K */
+	75: 'G#,1',
+
+	/* L */
+	76: 'A#,1',
+
+	/* Z */
+	90: 'A,0',
+
+	/* X */
+	88: 'B,0',
+
+	/* C */
+	67: 'C,1',
+
+	/* V */
+	86: 'D,1',
+
+	/* B */
+	66: 'E,1',
+
+	/* N */
+	78: 'F,1',
+
+	/* M */
+	77: 'G,1',
+	
+	/* , */
+	188: 'A,1',
+	
+	/* . */
+	190: 'B,1'
+};
+
+var _NOTES={'C':261.63,'C#':277.18,'D':293.66,'D#':311.13,'E':329.63,'F':349.23,'F#':369.99,'G':392.00,'G#':415.30,'A':440.00,'A#':466.16,'B':493.88};
+var NOTES={},NOTESLIST=["   ","---"];
+for (var oct=2;oct<8;oct++)
+	for (var note in _NOTES) {
+		var noteid=note[0]+oct+(note[1]||"-");
+		NOTES[noteid]=_NOTES[note] * Math.pow(2,oct-4);
+		NOTESLIST.push(noteid);
+	}
+
+var AUDIORANGE=[0,255];
+
+var _DOMTOVALUE={
+	"attack":{node:"attack",key:"attack"},
+	"sustain":{node:"sustain",key:"sustain"},
+	"limit":{node:"limit",key:"limit"},
+	"decay":{node:"decay",key:"decay"},
+	"release":{node:"release",key:"release"},
+	"frequency":{node:"frequency",key:"frequency"},
+	"tremoloFrequency":{node:"tremoloFrequency",key:"tremoloFrequency"},
+	"tremoloDepth":{node:"tremoloDepth",key:"tremoloDepth"},
+	"pitch":{node:"pitch",key:"pitch"},
+	"frequencyJump1onset":{node:"jump1onset",key:"frequencyJump1onset"},
+	"frequencyJump1amount":{node:"jump1amount",key:"frequencyJump1amount"},
+	"frequencyJump2onset":{node:"jump2onset",key:"frequencyJump2onset"},
+	"frequencyJump2amount":{node:"jump2amount",key:"frequencyJump2amount"},
+	"bitCrush":{node:"bitcrush",key:"bitCrush",isInt:true},
+	"bitCrushSweep":{node:"bitcrushsweep",key:"bitCrushSweep",isInt:true},
+}
+
+var source;
+function play(note) {
+	AudioEngine.request();
+	drawWave();
+	var data={ "wave":document.getElementById("wave").value };
+	var redata={ wave:data.wave }
+	var codedata={ wave:data.wave }
+	var value;
+	for (var k in _DOMTOVALUE) {
+		value=niceround(document.getElementById(_DOMTOVALUE[k].node).value,system.NOISERANGES[k][0],system.NOISERANGES[k][1],system.NOISEDEFAULTS[k],_DOMTOVALUE[k].isInt);
+		if (value!==undefined) {
+			codedata[k]=value;
+			data[k]=Math.floor(((value-system.NOISERANGES[k][0])/(system.NOISERANGES[k][1]-system.NOISERANGES[k][0]))*AUDIORANGE[1]);
+			redata[k]=system.NOISERANGES[k][0]+((data[k]/AUDIORANGE[1])*(system.NOISERANGES[k][1]-system.NOISERANGES[k][0]));
+		}
+	}
+
+	for (var a in system.NOISEDEFAULTS) if (codedata[a]==undefined) codedata[a]=system.NOISEDEFAULTS[a];
+
+	document.getElementById("file").value=JSON.stringify(data);
+	document.getElementById("fileraw").value=JSON.stringify(codedata);
+
+	for (var a in system.NOISEDEFAULTS) if (redata[a]==undefined) redata[a]=system.NOISEDEFAULTS[a];
+
+	var audio=AudioEngine.generateNoise(redata,note?NOTES[note]:undefined);
+	AudioEngine.playAudio(pianoChannel,audio,"piano");
+	drawBuffer(audio.buffer);
+	if (source) source.stop();
+}
+
+var notesBook;
+
+function niceround(a,base,value,defaultvalue,isint) {
+	var ret= Math.round((base+(a/100*(value-base)))*10000)/10000;
+	if (isint) ret=Math.floor(ret);
+	if (ret==defaultvalue) return undefined; else return ret;
+}
+
+function drawWave() {
+	var wf=AudioEngine.NOISEWAVES[document.getElementById("wave").value];
+	var cnv=document.getElementById("wavedraw");
+	cnv.height=cnv.height;
+	var ctx=cnv.getContext("2d");
+	var value=.9;
+	var cl=0;
+	ctx.moveTo(0,20);
+	for (var i=0;i<300;i++) {
+		if (i%30==0) {
+			cl=(cl+1)%2;
+			ctx.strokeStyle=cl?"#f00":"#00f";
+			ctx.stroke();
+			ctx.beginPath();
+		}
+		value=wf(value,i,30 );
+		ctx.lineTo(i, 20-(value*10));
+	}
+	ctx.stroke();
+}
+
+function drawBuffer(buf) {
+	var cnv=document.getElementById("outwav");
+	cnv.height=cnv.height;
+	if (buf) {
+		var buffer=buf.getChannelData(0);
+		var wf=AudioEngine.NOISEWAVES[document.getElementById("outwav").value];
+		var ctx=cnv.getContext("2d");
+		ctx.strokeStyle="#0f0";
+		var prop=600/buffer.length;
+		ctx.moveTo(0,40);
+		for (var i=0;i<buffer.length;i++) {
+			ctx.lineTo (i*prop, 40-(buffer[i]*40));
+		}
+		ctx.stroke();
+	}
+}
+
+function random() {
+	if (!document.getElementById("lockwave").checked) document.getElementById("wave").selectedIndex=Math.floor(Math.random()*8);
+	if (!document.getElementById("lockattack").checked) document.getElementById("attack").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("locksustain").checked) document.getElementById("sustain").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("locklimit").checked) document.getElementById("limit").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockdecay").checked) document.getElementById("decay").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockrelease").checked) document.getElementById("release").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockfrequency").checked) document.getElementById("frequency").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("locktremolof").checked) document.getElementById("tremoloFrequency").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("locktremolod").checked) document.getElementById("tremoloDepth").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockpitch").checked) document.getElementById("pitch").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockjump1onset").checked) document.getElementById("jump1onset").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockjump1amount").checked) document.getElementById("jump1amount").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockjump2onset").checked) document.getElementById("jump2onset").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockjump2amount").checked) document.getElementById("jump2amount").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockbitcrush").checked) document.getElementById("bitcrush").value=Math.floor(Math.random()*100);
+	if (!document.getElementById("lockbitcrushsweep").checked) document.getElementById("bitcrushsweep").value=Math.floor(Math.random()*100);
+	play();
+}
+
+function noiseMaker() {
+
+	if (!pianoChannel) pianoChannel=AudioEngine.createAudioChannel(0.9);
+
+	var html=header();	
+	html+='<div class="filerow"><table><tr><td><input id="lockwave" type="checkbox"> Wave</td><td><select id="wave" onchange="play()">';
+	html+='<option value="sine">Sine</option>';
+	html+='<option value="saw">Saw</option>';
+	html+='<option value="square">Square</option>';
+	html+='<option value="triangle">Triangle</option>';
+	html+='<option value="tangent">Tangent</option>';
+	html+='<option value="whistle">Whistle</option>';
+	html+='<option value="breaker">Breaker</option>';
+	html+='<option value="whitenoise">White noise</option>';
+	html+='</select></td></tr><tr><td colspan=2><canvas id="wavedraw" width=300 height=40 style="border:1px solid #fefefe"></canvas></td></tr>';
+	html+='<tr><td><input id="lockattack" type="checkbox"> Attack time</td>';
+	html+='<td><input type="range" min="0" max="100" id="attack" style="width:300px" onchange="play()"></td></tr>';
+	html+='<tr><td><input id="lockdecay" type="checkbox"> Decay time</td>';
+	html+='<td><input type="range" min="0" max="100" id="decay" style="width:300px" onchange="play()"></td></tr>';
+	html+='<tr><td><input id="locksustain" type="checkbox"> Sustain time</td>';
+	html+='<td><input type="range" min="0" max="100" id="sustain" style="width:300px" onchange="play()"></td></tr>';
+	html+='<tr><td><input id="lockrelease" type="checkbox"> Release time</td>';
+	html+='<td><input type="range" min="0" max="100" id="release" style="width:300px" onchange="play()"></td></tr>';
+	html+='<tr><td><input id="lockfrequency" type="checkbox"> Frequency</td>';
+	html+='<td><input type="range" min="0" max="100" id="frequency" style="width:300px" onchange="play()"></td></tr>';
+	html+='<tr><td><input id="locklimit" type="checkbox" checked> Limit</td>';
+	html+='<td><input type="range" min="0" max="100" value="100" id="limit" style="width:300px" onchange="play()"></td></tr>';
+	html+='<tr><td><input id="locktremolof" type="checkbox" checked> Tremolo frequency</td>';
+	html+='<td><input type="range" min="0" max="100" value="0" id="tremoloFrequency" style="width:300px" onchange="play()"></td></tr>';
+	html+='<tr><td><input id="locktremolod" type="checkbox" checked> Tremolo depth</td>';
+	html+='<td><input type="range" min="0" max="100"  value="0" id="tremoloDepth" style="width:300px" onchange="play()"></td></tr>';
+	html+='<tr><td><input id="lockpitch" type="checkbox" checked> Pitch</td>';
+	html+='<td><input type="range" min="0" max="100" id="pitch" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'pitch\').value=50;play()" value="Reset"></td></tr>';
+	html+='<tr><td><input id="lockjump1onset" type="checkbox" checked> Jump 1 onset</td>';
+	html+='<td><input type="range" min="0" max="100" value="0" id="jump1onset" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'jump1onset\').value=0;play()" value="Reset"></td></tr>';
+	html+='<tr><td><input id="lockjump1amount" type="checkbox" checked> Jump 1 amount</td>';
+	html+='<td><input type="range" min="0" max="100" id="jump1amount" style="width:300px" onchange="play()"><td><input type="button" onclick="document.getElementById(\'jump1amount\').value=50;play()" value="Reset"></td></td></tr>';
+	html+='<tr><td><input id="lockjump2onset" type="checkbox" checked> Jump 2 onset</td>';
+	html+='<td><input type="range" min="0" max="100" value="0" id="jump2onset" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'jump2onset\').value=0;play()" value="Reset"></td></tr>';
+	html+='<tr><td><input id="lockjump2amount" type="checkbox" checked> Jump 2 amount</td>';
+	html+='<td><input type="range" min="0" max="100" id="jump2amount" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'jump2amount\').value=50;play()" value="Reset"></td></tr>';
+	html+='<tr><td><input id="lockbitcrush" type="checkbox" checked> Bitcrush</td>';
+	html+='<td><input type="range" min="0" max="100" id="bitcrush" style="width:300px" onchange="play()" value="0"></td><td><input type="button" onclick="document.getElementById(\'bitcrush\').value=0;play()" value="Reset"></td></tr>';
+	html+='<tr><td><input id="lockbitcrushsweep" type="checkbox" checked> Bitcrush sweep</td>';
+	html+='<td><input type="range" min="0" max="100" id="bitcrushsweep" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'bitcrushsweep\').value=50;play()" value="Reset"></td></tr>';
+	html+='</table>';
+	html+='</div><div class="filerow">';
+	html+='<input type="button" value="Play" onclick="play()"> | <input type="button" value="Play Note C4" onclick="play(\'C4-\')"> | <input type="button" value="Randomize" onclick="random()"></div>';
+	html+='</div><div class="filerow">';
+	html+='Piano: <input type="text" id="piano" style="width:50px"> Octave: <input type="button" onclick="setOctave(-1)" value="-"> <span id="currentOctave"></span> <input type="button" onclick="setOctave(1)" value="+"><br>Notes book:<br>';
+	html+='<textarea type="text" id="notesBook" style="font-family:monospace" cols=80 rows=4></textarea>';
+	html+='</div><div class="filerow">';
+	html+='<canvas id="outwav" width=600 height=80 style="border:1px solid #fefefe"></canvas><br>';
+	html+='</div><div class="filerow">';
+	html+='Paste this in your resource loader:<br>';
+	html+='<textarea type="text" id="file" style="font-family:monospace" cols=80 rows=4></textarea>';
+	html+='</div><div class="filerow">';
+	html+='Paste this in code:<br>';
+	html+='<textarea type="text" id="fileraw" style="font-family:monospace" cols=80 rows=4></textarea>';
+	html+="</div>"
+
+	document.body.innerHTML=html;
+
+	notesBook=[];
+	var pianoObj=document.getElementById("piano");
+	pianoObj.onkeydown=function(e) {
+		var pressed=keyboard[e.keyCode],note="";
+		if (pressed) {
+			pressed=pressed.split(",");
+			note=pressed[0][0]+(octave+(pressed[1]*1))+(pressed[0][1]||"-");
+			play(note);
+			if (notesBook.length>20)
+				notesBook=notesBook.slice(notesBook.length-20,notesBook.length);
+			notesBook.push(note);
+			document.getElementById("notesBook").value=JSON.stringify(notesBook);
+		}
+		pianoObj.value=note;
+		e.preventDefault();
+		return false;
+	}
+	setOctave(0);
+	drawWave();
+}
+
+</script></html>
+
+

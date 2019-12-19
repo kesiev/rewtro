@@ -1,0 +1,6 @@
+[
+	{"id":"A","notes":[["C3-","---","---","C3-","E3-","---","---","E3-","F3-","---","---"],["C4-","   ","G6-","   ","C4-","   ","G6-","   ","C4-","   ","G6-"]],"instruments":{"_placeholder":"instruments"}},
+	{"id":"B","notes":[["F3-","F3-","G3-","---","---"],["   ","C4-","G6-","G6-","   "]],"instruments":{"_placeholder":"instruments"}},
+	{"id":"C","notes":[["F3-","G3-","F3-","---","---"],["   ","C4-","G6-","G6-","   "]],"instruments":{"_placeholder":"instruments"}},
+	{"id":"D","notes":[["G3-","G3-","---","D3-","D3-","---","G3-","---","C3-","---","---","---","---"],["C4-","   ","G6-","   ","C4-","   ","G6-","   ","G6-","---","G6-","G6-","G6-"]],"instruments":{"_placeholder":"instruments"}}
+]

@@ -1,0 +1,18 @@
+{
+	"metadata":{
+		"title":"K003B - Mini Cannons (Taddo ed.)",
+		"upperTitle":"MINI",
+		"centerTitle":"CANNONS",
+		"lowerTitle":"Taddo edition",		
+		"legalText":"(c)2019 by KesieV - www.kesiev.com/rewtro"
+	},
+	"_file":"games/minicannons-game.json",
+	"_replace":{
+		"title":"K003B - Mini Cannons (Taddo ed.)",
+		"titleText":"MINI~~~~~~~* TADDO EDITION *~~~~~(C)2018 WRIGHT MAG.~(C)2019 BY KESIEV",
+		"instrument":{"id":"A","wave":"saw","sustain":2,"decay":12,"release":56},
+		"goesFirst":0,
+		"blockForeColor":11,
+		"blockBackgroundColor":4
+	}
+}
