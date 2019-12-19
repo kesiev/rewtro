@@ -18,7 +18,7 @@
     <p><img src="markdown/rewtro-console.png"></p>
 </div>
 
-...that works offline and loads games from [origami game cartridges](https://www.kesiev.com/rewtro/game-k001-stetris.pdf)...
+...that works offline and loads games from [origami game cartridges](markdown/game-k001-stetris.pdf)...
 
 <div align="center" style="margin:60px 0">
     <p><img src="markdown/photo-origami.png"></p>
