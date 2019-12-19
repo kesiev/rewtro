@@ -71,9 +71,9 @@ But what you are going to use the most is the game debugger...
 
 It's Christmas time, I needed some greeting cards and decided to make some original ones this year. I liked the idea of hiding the actual greetings at the end of a customized videogame but implementing a browser game lacked the _perishability_ of a greeting card: you want to keep them because it contains _the whole experience_, that is the stock message _and_ the handwritten message. Moreover, the game itself _is part of the message_ so why keeping that _outside the greeting card_?
 
-Moreover, building physical retro games for specific persons and hiding messages in them gives you that (Petscop's Rainer)[https://en.wikipedia.org/wiki/Creepypasta#Petscop] chill that's both cool and frightening.
+Moreover, building physical retro games for specific persons and hiding messages in them gives you that [Petscop's Rainer](https://en.wikipedia.org/wiki/Creepypasta#Petscop) chill that's both cool and frightening.
 
-You can also use these paper cartridges as hints in treasure hunts, put them in (geocaches)(https://en.wikipedia.org/wiki/Geocaching), spread its parts as collectible stickers, on video advertising, for fancy business cards, etc.
+You can also use these paper cartridges as hints in treasure hunts, put them in [geocaches](https://en.wikipedia.org/wiki/Geocaching), spread its parts as collectible stickers, on video advertising, for fancy business cards, etc.
 
 Rewtro QR-Carts are cheap to print and contains the _whole_ game data, are _physically shareable_, fun to copy and can be easily unique. Take the best of that.
 
