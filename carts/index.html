@@ -158,7 +158,7 @@ function selected(option,file,isclick) {
 							}
 						})
 					}
-					engine=window[cart.system.ENGINE](document.getElementById('game'),{
+					engine=new window[cart.system.ENGINE](document.getElementById('game'),{
 						model:cart,
 						audioEnabled:true,
 						scale:1,
