@@ -30,7 +30,7 @@
     <p><img src="markdown/game-k004-eatman.gif"></p>
 </div>
 
-All the game data (graphic, sound, music, and code) is encoded _into the QR-Codes_ and no data is stored online - and the same goes for the game console code too, once installed - so scrap the paper cartridge and the game is _gone_. But hey... you can produce _your game cartridges_ using just a plain printer and you can _still pirate games_ using a copy machine like we used to do with cassette duplicator in the 80s. I hope it will bring back that retro vibes.
+All the game data (graphic, sound, music, and code) is encoded _into the QR-Codes_ and no data is stored online - and the same goes for the game console code too, once installed - so scrap the paper cartridge and the game is _gone_. But hey... you can produce _your game cartridges_ using just a plain printer and you can _still pirate games_ using a copy machine like we used to do with cassette duplicators in the 80s. I hope it will bring back that retro vibes.
 
 ## The game engine
 
@@ -45,7 +45,7 @@ The game engine implements:
   * Some commands for doing the math and basic logic
   * Some tilemap handling commands
   * Several custom graphics encoder/decoders
-  * Some data packers, from zipping for to custom algorithms suited for small data
+  * Some data packers, from old good zipping for to custom algorithms suited for small data
 
 And that's all. No game-specific code has been coded inside the engine. Making an actual game with these few things it's up to you.
 
@@ -71,7 +71,7 @@ But what you are going to use the most is the game debugger...
 
 It's Christmas time, I needed some greeting cards and decided to make some original ones this year. I liked the idea of hiding the actual greetings at the end of a customized videogame but implementing a browser game lacked the _perishability_ of a greeting card: you want to keep them because it contains _the whole experience_, that is the stock message _and_ the handwritten message. Moreover, the game itself _is part of the message_ so why keeping that _outside the greeting card_?
 
-Moreover, building physical retro games for specific persons and hiding messages in them gives you that [Petscop's Rainer](https://en.wikipedia.org/wiki/Creepypasta#Petscop) chill that's both cool and frightening.
+Then, building physical retro games for specific persons and hiding messages in them gives you that [Petscop's Rainer](https://en.wikipedia.org/wiki/Creepypasta#Petscop) chills that's both cool and frightening.
 
 You can also use these paper cartridges as hints in treasure hunts, put them in [geocaches](https://en.wikipedia.org/wiki/Geocaching), spread its parts as collectible stickers, on video advertising, for fancy business cards, etc.
 
@@ -81,7 +81,7 @@ Rewtro QR-Carts are cheap to print and contains the _whole_ game data, are _phys
 
 *Q: Can I run a QR-Cart on a desktop computer?*
 
-A: While it's quite hard to frame a tiny QR-Code printed on paper or on a mobile display with a desktop cam, I managed to load a game easily running the Datasette on a tablet displaying the code full screen (hit the buttons on top of the Datasette screen).
+A: While it's quite hard to frame a tiny QR-Code printed on paper or displayed on a mobile with a desktop cam, I managed to load a game easily running the Datasette on a tablet and displaying the code full screen (hit the buttons on top of the Datasette screen).
 
 *Q: I've created an SVG cartridge but it looks like I'm missing a font...*
 
