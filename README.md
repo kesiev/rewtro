@@ -12,22 +12,28 @@
 
 ---
 
-**Rewtro** is a weird retro game engine inspired by fantasy consoles and [code golfing](https://en.wikipedia.org/wiki/Code_golf) that runs games encoded in a very small amount of data (2kb/3kb). This way is possible to share games using exoteric and usually data inefficient ways: i.e. sticking some PWA magic and a QR-Code reader to [the engine](https://www.kesiev.com/rewtro/) I've made a fake gaming console...
+**Rewtro** is a weird retro game engine inspired by fantasy consoles and [code golfing](https://en.wikipedia.org/wiki/Code_golf) that runs games encoded in a very small amount of data (2kb/3kb). This way is possible to share games using exoteric and usually data inefficient ways: i.e. sticking some PWA magic and a QR-Code reader to [the engine](https://www.kesiev.com/rewtro/) I've made a fake gaming console for mobile devices...
 
 <div align="center" style="margin:60px 0">
     <p><img src="markdown/rewtro-console.png"></p>
 </div>
 
-...that works offline and loads games from [origami game cartridges](markdown/game-k001-stetris.pdf)...
+...that loads games from [origami game cartridges](markdown/game-k001-stetris.pdf)...
 
 <div align="center" style="margin:60px 0">
     <p><img src="markdown/photo-origami.png"></p>
 </div>
 
-... or animated GIFs you can _slowly load_ (~4sec) simply framing them...
+...or animated GIFs...
 
 <div align="center" style="margin:60px 0">
     <p><img src="markdown/game-k004-eatman.gif"></p>
+</div>
+
+...simply framing them!
+
+<div align="center" style="margin:60px 0">
+    <p><img src="markdown/rewtro-scan.gif"></p>
 </div>
 
 All the game data (graphic, sound, music, and code) is encoded _into the QR-Codes_ and no data is stored online - and the same goes for the game console code too, once installed - so scrap the paper cartridge and the game is _gone_. But hey... you can produce _your game cartridges_ using just a plain printer and you can _still pirate games_ using a copy machine like we used to do with cassette duplicators in the 80s. I hope it will bring back that retro vibes.
