@@ -317,7 +317,6 @@
      inkscape:label="QR-Codes"
      style="display:inline">
     <image
-       style="display:inline;stroke-width:0.890764"
        y="77.490852"
        x="144.10156"
        id="qr-right"
@@ -325,6 +324,7 @@
        preserveAspectRatio="none"
        height="60"
        width="60"
+       style="display:inline;stroke-width:0.890764"
        inkscape:label="#image1905" />
     <image
        y="77.485008"
@@ -2447,7 +2447,7 @@
        height="66.816711"
        width="65.694527"
        id="rect1862"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.30500001;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.61000004, 0.30500002;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.30500001;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
        transform="scale(-1)" />
     <rect
        style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.30500001;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:15.11811066;stroke-opacity:1;paint-order:markers fill stroke"

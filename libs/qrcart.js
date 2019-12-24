@@ -77,9 +77,16 @@ var QRCart=function(cfg){
 
     function replaceImage(content,id,data) {
   		if (data) {
-  			content=content.replace(new RegExp("id=\""+id+"\"([^link:href]*)xlink:href=\"[^\"]*\"","s"),function(a,b){
-  				return "id=\""+id+"\""+b+"xlink:href=\""+data+"\"";
-  			});
+  			content=content.replace(new RegExp("<image[^id]*id=\""+id+"\"[^>]*>","s"),function(a,b){
+          var parts=a.split("\n");
+          var map={};
+          parts.forEach(row=>{
+            row=row.trim().split("=");
+            if (row[1]) map[row[0]]=row[1].substr(1,row[1].length-2);
+          });
+          var svg=createQRSvg(data,map.x*1,map.y*1,map.width,map.height);
+          return svg;
+        });
   		} else {
   			content=content.replace(new RegExp("<image[^id]*id=\""+id+"\"[^>]*>","s"),function(a,b){
   				return "";
@@ -88,11 +95,35 @@ var QRCart=function(cfg){
   		return content
   	}
 
+    function createQRSvg(qr,x,y,width,height) {      
+      var mc,mr;
+      var moduleCount=qr.getModuleCount();
+      var cells=moduleCount+8;
+      var cellSize=Math.min(width/cells,height/cells);
+      var margin = cellSize*4;
+      var rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+      var qrSvg = '<path d="';
+
+      for (r = 0; r < moduleCount; r += 1) {
+        mr = y+(r * cellSize + margin);
+        for (c = 0; c < moduleCount; c += 1) {
+          if (qr.isDark(r, c) ) {
+            mc = x+(c*cellSize+margin);
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>'
+      return qrSvg;
+    }
+
   	function createSVG(qrs,gencfg,cb){
       getCache(cache=>{
-        var content=replaceImage(cache.svg,"qr-right",qrs[0]?qrs[0].createDataURL():0);
-        content=replaceImage(content,"qr-left",qrs[1]?qrs[1].createDataURL():0);
-        content=replaceImage(content,"qr-bottom",qrs[2]?qrs[2].createDataURL():0);
+        var content=replaceImage(cache.svg,"qr-right",qrs[0]?qrs[0]:0);
+        content=replaceImage(content,"qr-left",qrs[1]?qrs[1]:0);
+        content=replaceImage(content,"qr-bottom",qrs[2]?qrs[2]:0);
         content=content.replace(/>Cart name</g,">"+gencfg.title+"<");
         content=content.replace(/>Upper Title</g,">"+(gencfg.upperTitle||"")+"<");
         content=content.replace(/>Center Title</g,">"+(gencfg.centerTitle||"")+"<");
