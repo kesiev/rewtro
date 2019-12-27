@@ -1,0 +1,19 @@
+{
+	"_file":"games/picking-game.json",
+	"_replace":{
+		"title":"V - PICK - Basic",
+		"titleBackgroundColor":10,
+		"wallColor":10,
+		"stageColor":10,
+		"graphics":"graphics/picking-garden.png",		
+		"endingMusic":"songs/jinglebells-music.json",
+		"endingSong":"songs/jinglebells-song.json",
+		"endingSongTempo":5,
+		"textTitle":"SUPER~~~~~~~~PLACE HERE~A MESSAGE FOR~THE TITLE~SCREEN!~~(C)2019 BY KESIEV",
+		"textBriefing":"THIS IS THE~BRIEFING SCREEN.~~YOU CAN EXPLAIN~THE GAME RULES,~THE CONTROLS OR~TELL THE FIRST~PART OF YOUR~MESSAGE.~~HIT BUTTON TO~CONTINUE.",
+		"textEnding":"THIS IS THE~ENDING SCREEN.~~YOU CAN THANK THE~PLAYER FOR~PLAYING BUT~YOU'LL MOSTLY WANT~TO SHOW YOUR~FINAL MESSAGE.~~REMEMBER TO ADD~YOUR NAME!",
+		"goalPrefix":" FLOWERS: ",
+		"goalSuffix":"/10",
+		"goalPickToGo":10
+	}
+}

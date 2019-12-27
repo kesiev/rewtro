@@ -1,0 +1,43 @@
+{
+	"_file":"games/maze-game.json",
+	"_replace":{
+		"title":"V - MAZE - Basic",
+		"graphics":"graphics/pretztail-romance.png",		
+		"endingMusic":"songs/jinglebells-music.json",
+		"endingSong":"songs/jinglebells-song.json",
+		"endingSongTempo":5,
+		"textTitle":"SUPER~~~~~~~~PLACE HERE~A MESSAGE FOR~THE TITLE~SCREEN!~~(C)2019 BY KESIEV",
+		"textBriefing":"THIS IS THE~BRIEFING SCREEN.~~YOU CAN EXPLAIN~THE GAME RULES,~THE CONTROLS OR~TELL THE FIRST~PART OF YOUR~MESSAGE.~~HIT BUTTON TO~CONTINUE.",
+		"textEnding":"THIS IS THE~ENDING SCREEN.~~YOU CAN THANK THE~PLAYER FOR~PLAYING BUT~YOU'LL MOSTLY WANT~TO SHOW YOUR~FINAL MESSAGE.~~REMEMBER TO ADD~YOUR NAME!",
+		"goalPrefix":" COINS: ",
+		"popupText":"~COME AND~GET ME!",
+		"playerColor":5,
+		"rescueColor":6,
+		"backgroundColor1":13,
+		"backgroundColor2":12,
+		"piano":"sounds/instruments/8bit-piano.json",
+		"map":[
+			"XXXXXXXXXXXXXXXXXXXXXX",
+			"X           W        X",
+			"X       O   W        X",
+			"X   X   W   O    X   X",
+			"X   X   W        X   X",
+			"X    XXXXXXXXXXXXW   X",
+			"X Z  X          X    X",
+			"X     X              X",
+			"X     X  X  X     O  X",
+			"X  R  X        X     X",
+			"X     X        X W   X",
+			"X  XXX X Z    X XXX  X",
+			"XXX    X      X    XXX",
+			"X       X  O         X",
+			"X  P    X        O   X",
+			"X        X  X        X",
+			"X  ZZZ   X  X ZZ     X",
+			"X        WXX     O   X",
+			"X   OO           O   X",
+			"X           W        X",
+			"XXXXXXXXXXXXXXXXXXXXXX"
+		]
+	}
+}

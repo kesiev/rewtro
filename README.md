@@ -73,6 +73,17 @@ But what you are going to use the most is the game debugger...
 
 ...and the game compiler and packager, that generates a foldable cartridge in SVG format to be customized and printed or an animated GIF you can show anywhere you want. Sorry for the _thin_ toolchain: I survived with that but I'm going to improve it if there is some kind of interest.
 
+While both the game console and the SDK tools run client-side, I've added a pinch of PHP for reading the games file list to be displayed on SDK main screen. Feel free to replace that PHP with any alternative you can think about (or suggest one).
+
+## Released games
+
+In the <tt>carts/</tt> folder, you'll find the SDK and all the games I've developed for Rewtro till now. I've made 2 series of games, split by its initial:
+
+  * The <tt>V-</tt> series contains customizable greeting card games: they include a title screen, a briefing screen, a short and relatively easy gameplay, and a debriefing screen displayed once the game is cleared. Games are customizable in text, gameplay parameters, graphics and - if you feel brave - music and sounds. You can make your cartridges making a copy and renaming a <tt>V-</tt> series JSON file into the same folder, changing the data as you want with any text editor and testing and printing the games within the SDK. That's what I did in November/December 2019.
+  * The <tt>K-</tt> series contains short but more complete games, mostly inspired by classics. They are harder to change but you can print them as-is and customize the printed cartridge writing a dedication or a silly doodle on the front, more like a classic greeting card.
+
+Remember that a QR-Cart contains _the whole game code, music, graphics, AND customizations_ so, once the game is printed, you can't change _anything_. If you want to update your game, fixing a bug or a typo, you've to _print the cartridge again_. The previous one will be a _rare bugged version_ of your game to be collected jealously. Welcome to the 80s!
+
 ## Why?
 
 It's Christmas time, I needed some greeting cards and decided to make some original ones this year. I liked the idea of hiding the actual greetings at the end of a customized videogame but implementing a browser game lacked the _perishability_ of a greeting card: you want to keep them because it contains _the whole experience_, that is the stock message _and_ the handwritten message. Moreover, the game itself _is part of the message_ so why keeping that _outside the greeting card_?
@@ -81,7 +92,7 @@ Then, building physical retro games for specific persons and hiding messages in 
 
 You can also use these paper cartridges as hints in treasure hunts, put them in [geocaches](https://en.wikipedia.org/wiki/Geocaching), spread its parts as collectible stickers, on video advertising, for fancy business cards, etc.
 
-Rewtro QR-Carts are cheap to print and contains the _whole_ game data, are _physically shareable_, fun to copy and can be easily unique. Take the best of that.
+Rewtro QR-Carts are cheap to print and contain the _whole_ game data, are _physically shareable_, fun to copy and can be easily unique. Take the best of that.
 
 ## FAQs
 
@@ -93,9 +104,13 @@ A: While it's quite hard to frame a tiny QR-Code printed on paper or displayed o
 
 A: I've used the [Jost](https://indestructibletype.com/Jost.html) free font (Jost-500-Medium.otf). Download, install, restart your favorite vector editor and open the SVG again.
 
-*Q: Are you going to release other games?*
+*Q: I received a QR-Cart from a friend but I've lost/ruined it. Can I reprint that exact copy using these source files?*
 
-A: Yes, probably. Most of the games I've built are Christmas greeting cards and are a surprise for friends and parents... so I can't release them publicly before Christmas. Feel free to contact me if you want me to share one of my games before that _deadline_.
+A: Probably not, sorry. QR-Carts are not a reference to a database of games or customizations: they contain the _full game data_ so, if they are lost, they can't be recovered anymore. You may try asking your friend if he can print the cartridge again... it's a great reason to meet him again!
+
+*Q: Why the <tt>V-PESCOP-Basic</tt> game looks glitched, features quite disturbing graphics and has cryptic gameplay?*
+
+A: If you know what [Petscop](https://en.wikipedia.org/wiki/Creepypasta#Petscop) is, you already have your answer.
 
 ## Disclaimer
 

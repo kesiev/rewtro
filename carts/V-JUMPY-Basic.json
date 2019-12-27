@@ -1,0 +1,18 @@
+{
+	"_file":"games/jumpy-game.json",
+	"_replace":{
+		"title":"V - JUMPY - Basic",
+		"graphics":"graphics/jumpy-star.png",
+		"endingMusic":"songs/jinglebells-music.json",
+		"endingSong":"songs/jinglebells-song.json",
+		"endingSongTempo":5,
+		"textTitle":"SUPER~~~~~~~~PLACE HERE~A MESSAGE FOR~THE TITLE~SCREEN!~~(C)2019 BY KESIEV",
+		"textBriefing":"THIS IS THE~BRIEFING SCREEN.~~YOU CAN EXPLAIN~THE GAME RULES,~THE CONTROLS OR~TELL THE FIRST~PART OF YOUR~MESSAGE.~~HIT BUTTON TO~CONTINUE.",
+		"textEnding":"THIS IS THE~ENDING SCREEN.~~YOU CAN THANK THE~PLAYER FOR~PLAYING BUT~YOU'LL MOSTLY WANT~TO SHOW YOUR~FINAL MESSAGE.~~REMEMBER TO ADD~YOUR NAME!",
+		"goalPrefix":" EGGS: ",
+		"goalSuffix":"/10",
+		"goalPickToGo":10,
+		"holePositions":[0,5],
+		"holeHeight":48
+	}
+}

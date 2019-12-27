@@ -1,0 +1,29 @@
+{
+	"_file":"games/platform-game.json",
+	"_replace":{
+		"title":"V - GIANA - Basic",
+		"graphics":"graphics/rosy-1bit.png",
+		"graphics0":"graphics/rosy-color.png",
+		"endingMusic":"songs/jinglebells-music.json",
+		"endingSong":"songs/jinglebells-song.json",
+		"endingSongTempo":5,
+		"textIntro":"GIANA~SISTERS",
+		"textTitle":"THE GREAT~~~~~~~~PLACE HERE~A MESSAGE FOR~THE TITLE~SCREEN!~~(C)2019 BY KESIEV",
+		"textBriefing":"THIS IS THE~BRIEFING SCREEN.~~YOU CAN EXPLAIN~THE GAME RULES,~THE CONTROLS OR~TELL THE FIRST~PART OF YOUR~MESSAGE.~~HIT BUTTON TO~CONTINUE.",
+		"textEnding":"THIS IS THE~ENDING SCREEN.~~YOU CAN THANK THE~PLAYER FOR~PLAYING BUT~YOU'LL MOSTLY WANT~TO SHOW YOUR~FINAL MESSAGE.~~REMEMBER TO ADD~YOUR NAME!",
+		"goalPrefix":" DIAMONDS: ",
+		"goalSuffix":"/25",
+		"goalPickToGo":25,
+		"map":[
+			"XS                                                                      UU    L ",
+			"X       UU      O UU     UU      UU   UU         UU  O O          OO            ",
+			"X              XXX    UU      OO           U UU      XLX    UU  LXXLLX   UU     ",
+			"X                            XXXX                                             X ",
+			"X                                  II        OO       O                      OOO",
+			"X             XLXLLX     XX        XX              X  X  X      LXXL X       LLL",
+			"X                        XX   OO   XX   OO        XX  X  XX                   O ",
+			"X  JJ A J JJ         JJ  XX      J XXJJ      II  XXX  X  XXX JJ       JJ      O ",
+			"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXIIXXXXXXXX  XXXXXXXXXX  X  XXXXXXXXXXXXXXXX    XXX"
+		]
+	}
+}

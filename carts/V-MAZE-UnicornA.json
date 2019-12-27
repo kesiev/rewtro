@@ -1,0 +1,43 @@
+{
+	"_file":"games/maze-game.json",
+	"_replace":{
+		"title":"V - MAZE - Unicorn A",
+		"graphics":"graphics/unicorn-love.png",		
+		"endingMusic":"songs/jinglebells-music.json",
+		"endingSong":"songs/jinglebells-song.json",
+		"endingSongTempo":5,
+		"textTitle":"SUPER~~~~~~~~PLACE HERE~A MESSAGE FOR~THE TITLE~SCREEN!~~(C)2019 BY KESIEV",
+		"textBriefing":"THIS IS THE~BRIEFING SCREEN.~~YOU CAN EXPLAIN~THE GAME RULES,~THE CONTROLS OR~TELL THE FIRST~PART OF YOUR~MESSAGE.~~HIT BUTTON TO~CONTINUE.",
+		"textEnding":"THIS IS THE~ENDING SCREEN.~~YOU CAN THANK THE~PLAYER FOR~PLAYING BUT~YOU'LL MOSTLY WANT~TO SHOW YOUR~FINAL MESSAGE.~~REMEMBER TO ADD~YOUR NAME!",
+		"goalPrefix":" COINS: ",
+		"popupText":"~COME AND~GET ME!",
+		"playerColor":6,
+		"rescueColor":2,
+		"backgroundColor1":10,
+		"backgroundColor2":11,
+		"piano":"sounds/instruments/8bit-guitar.json",
+		"map":[
+			"XXXXXXXXXXXXXXXXXXXXXX",
+			"X         X     X    X",
+			"X    OO   O  O  X  R X",
+			"X         O     X    X",
+			"XZ        X  O  XZ   X",
+			"X         X          X",
+			"X    OO   X  O O O O X",
+			"X         X          X",
+			"X        ZXXXXXXXXXXXX",
+			"X         X          X",
+			"X    OO   X          X",
+			"X         X          X",
+			"XXXX OO XXXXXX OO XXXX",
+			"X         W          X",
+			"X                    X",
+			"X                 O  X",
+			"XXXXXXXXXXXXXXXX O O X",
+			"X                 O  X",
+			"X  P O O O O O O O O X",
+			"X                    X",
+			"XXXXXXXXXXXXXXXXXXXXXX"
+		]
+	}
+}

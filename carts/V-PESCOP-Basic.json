@@ -1,0 +1,21 @@
+{
+	"_file":"games/pescop-game.json",
+	"_replace":{
+		"title":"V - PESCOP - Basic",
+		"graphics":"graphics/pescop.png",
+		"messageFound1":"I AM 1.~YOU HAVE FOUND~ME! WELL DONE!",
+		"messageNotFound2":"I AM 2.~SORRY BUT~IS NOT MY TURN!",
+		"messageFound2":"I AM 2.~YOU HAVE FOUND~ME! WELL DONE!",
+		"messageNotFound3":"I AM 3.~SORRY BUT~IS NOT MY TURN!",
+		"messageFound3":"I AM 3.~YOU HAVE FOUND~ME! WELL DONE!",
+		"messageNotFound4":"I AM 4.~SORRY BUT~IS NOT MY TURN!",
+		"messageFound4":"I AM 4.~YOU HAVE FOUND~ME! WELL DONE!",
+		"messageNotFound5":"I AM 5.~SORRY BUT~IS NOT MY TURN!",
+		"messageFound5":"I AM 5.~YOU HAVE FOUND~ME! WELL DONE!",
+		"caughtText":"CAUGHT",
+		"creditsText":"GARANILA",
+		"textName":"PESCOP",
+		"textTitle":"MINI~~~~~~~~~A MESSAGE FOR~THE TITLE~SCREEN!~~(C)2019 BY GARANILA",
+		"textEnding":"THIS IS THE~ENDING SCREEN.~~SHOW YOUR~FINAL MESSAGE.~~REMEMBER TO ADD~YOUR NAME!"
+	}
+}

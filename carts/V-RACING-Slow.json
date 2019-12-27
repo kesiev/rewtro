@@ -1,0 +1,23 @@
+{
+	"_file":"games/racing-game.json",
+	"_replace":{
+		"title":"V - RACING - Slow",
+		"graphics":"graphics/racing-turboracing.png",
+		"endingMusic":"songs/jinglebells-music.json",
+		"endingSong":"songs/jinglebells-song.json",
+		"endingSongTempo":5,
+		"textTitle":"SUPER~~~~~~~~PLACE HERE~A MESSAGE FOR~THE TITLE~SCREEN!~~(C)2019 BY KESIEV",
+		"textBriefing":"THIS IS THE~BRIEFING SCREEN.~~YOU CAN EXPLAIN~THE GAME RULES,~THE CONTROLS OR~TELL THE FIRST~PART OF YOUR~MESSAGE.~~HIT BUTTON TO~CONTINUE.",
+		"textEnding":"THIS IS THE~ENDING SCREEN.~~YOU CAN THANK THE~PLAYER FOR~PLAYING BUT~YOU'LL MOSTLY WANT~TO SHOW YOUR~FINAL MESSAGE.~~REMEMBER TO ADD~YOUR NAME!",		
+		"goalPrefix":" FLAGS: ",
+		"goalSuffix":"/5",
+		"goalPickToGo":5,
+		"carSpeed":0.5,
+		"difficulty":[-3,-1],
+		"titleBackgroundColor":0,
+		"sideColors":[15,8],
+		"carColor":5,
+		"flagColor":3,
+		"roadSize":130
+	}
+}
