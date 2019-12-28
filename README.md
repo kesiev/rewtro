@@ -36,7 +36,7 @@
     <p><img src="markdown/rewtro-scan.gif"></p>
 </div>
 
-All the game data (graphic, sound, music, and code) is encoded _into the QR-Codes_ and no data is stored online - and the same goes for the game console code too, once installed - so scrap the paper cartridge and the game is _gone_. But hey... you can produce _your game cartridges_ using just a plain printer and you can _still pirate games_ using a copy machine like we used to do with cassette duplicators in the 80s. I hope it will bring back that retro vibes.
+All the game data (graphic, sound, music, and code) is encoded _into the QR-Codes_ and no data is stored online - and the same goes for the game console code too, once installed on your device - so scrap the paper cartridge and the game is _gone_. But hey... you can produce _your game cartridges_ using just a plain printer and you can _still pirate games_ using a copy machine like we used to do with cassette duplicators in the 80s. I hope it will bring back that retro vibes.
 
 ## The game engine
 
@@ -51,7 +51,7 @@ The game engine implements:
   * Some commands for doing the math and basic logic
   * Some tilemap handling commands
   * Several custom graphics encoder/decoders
-  * Some data packers, from old good zipping for to custom algorithms suited for small data
+  * Some data packers, from old good zipping to custom algorithms suited for small data
 
 And that's all. No game-specific code has been coded inside the engine. Making an actual game with these few things it's up to you.
 
