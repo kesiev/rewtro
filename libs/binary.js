@@ -8,6 +8,7 @@ var Stream={
 			/iPad|iPhone|iPod/.test(navigator.platform) ||
 			(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 		) && !window.MSStream;
+		this.DETECT.firefox=/firefox/i.test(navigator.userAgent);
 		for (var i=0;i<256;i++) this.BYTEENCODER+=String.fromCharCode(i);
 	},
 	slice:function(stream,piece) {

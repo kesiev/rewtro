@@ -157,6 +157,7 @@ ModuleLoadFromQR.instascanng={
 		videoElement.setAttribute("playsinline",true);
 		return {
 			iOS:Stream.DETECT.iOS,
+			firefox:Stream.DETECT.firefox,
 			running:true,
 			instascan:new Instascan.Scanner({ video: videoElement, continuous:false, backgroundScan:false, captureImage:false }),
 			canvasElement:canvasElement,
@@ -167,6 +168,7 @@ ModuleLoadFromQR.instascanng={
 	},
 	toggleTorch:function(scanner,to,callback) {
 		if ( scanner.stream ) {
+			if (window.ImageCapture) {
 			const track =scanner.stream.getVideoTracks()[0];
 		      const imageCapture = new ImageCapture(track)
 		      const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
@@ -176,16 +178,25 @@ ModuleLoadFromQR.instascanng={
 						.catch(e => {})
 				} catch (e) {}
 		      });
+		  }
 		}
 	},
 	waitForCameras:function(scanner,callback) {
-	      var constraints;
+	      var constraints,self=this;
 	      if (scanner.iOS) callback(0,1,"Fake camera");
 	      else {
 	        navigator.mediaDevices.enumerateDevices().then(function(devices) {
-	            var deviceIds = [];
+	        	var deviceIds = [];
 	            devices.forEach(function(device) { if (device.kind === 'videoinput') deviceIds.push(device.deviceId) });
+	            if (scanner.firefox	&& (deviceIds.length==0) && !scanner.firefoxOk) {
+		      		scanner.firefoxOk=true;
+		      		navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(function(){
+		      			self.waitForCameras(scanner,callback);
+		      		}).catch(function(){console.log("ko")});
+	            }
 	            deviceIds.forEach((camera,id)=>{ callback(id,deviceIds.length,camera); })
+	         }).catch(function(){
+	         	console.log("Error")
 	         }); 
 	      }    
 	},

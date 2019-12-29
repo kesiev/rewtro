@@ -77,7 +77,7 @@ var QRCart=function(cfg){
 
     function replaceImage(content,id,data) {
   		if (data) {
-  			content=content.replace(new RegExp("<image[^id]*id=\""+id+"\"[^>]*>","s"),function(a,b){
+  			content=content.replace(new RegExp("<image[^id]*id=\""+id+"\"[^>]*>","m"),function(a,b){
           var parts=a.split("\n");
           var map={};
           parts.forEach(row=>{
@@ -88,7 +88,7 @@ var QRCart=function(cfg){
           return svg;
         });
   		} else {
-  			content=content.replace(new RegExp("<image[^id]*id=\""+id+"\"[^>]*>","s"),function(a,b){
+  			content=content.replace(new RegExp("<image[^id]*id=\""+id+"\"[^>]*>","m"),function(a,b){
   				return "";
   			});
   		}
@@ -130,13 +130,13 @@ var QRCart=function(cfg){
         content=content.replace(/>Lower Title</g,">"+(gencfg.lowerTitle||"")+"<");
         content=content.replace(/>Legal Text</g,">"+(gencfg.legalText||"")+"<");
         content=content.replace(/>Sz_DT</g,">"+(gencfg.sizeData||"")+"<");
-        content=content.replace(/label="Default cover"([^style]*)style="display:([^"]+)"/s,function(m,a){ //=
+        content=content.replace(/label="Default cover"([^style]*)style="display:([^"]+)"/m,function(m,a){ //=
           return "label=\"Default Cover\""+a+"style=\"display:"+(gencfg.hideDefaultCover?"none":"inline")+"\"";
         });
-        content=content.replace(/label="Instructions"([^style]*)style="display:([^"]+)"/s,function(m,a){ //=
+        content=content.replace(/label="Instructions"([^style]*)style="display:([^"]+)"/m,function(m,a){ //=
           return "label=\"Instructions\""+a+"style=\"display:"+(gencfg.hideInstructions?"none":"inline")+"\"";
         });
-        content=content.replace(/label="Cartridge name"([^style]*)style="display:([^"]+)"/s,function(m,a){ //=
+        content=content.replace(/label="Cartridge name"([^style]*)style="display:([^"]+)"/m,function(m,a){ //=
           return "label=\"Cartridge name\""+a+"style=\"display:"+(gencfg.hideName?"none":"inline")+"\"";
         });
         cb(content);
