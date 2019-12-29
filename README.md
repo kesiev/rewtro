@@ -96,6 +96,10 @@ Rewtro QR-Carts are cheap to print and contain the _whole_ game data, are _physi
 
 ## FAQs
 
+*Q: Which browser I can use for running Rewtro games?*
+
+A: On mobile, you can use Safari on iOS and Firefox or Chrome on Android. I just have an old iMac and a Windows 10 laptop and everything seems working on both Firefox and Chrome...
+
 *Q: Can I run a QR-Cart on a desktop computer?*
 
 A: While it's quite hard to frame a tiny QR-Code printed on paper or displayed on a mobile with a desktop cam, I managed to load a game easily running the Datasette on a tablet and displaying the code full screen (hit the buttons on top of the Datasette screen).
@@ -107,6 +111,10 @@ A: I've used the [Jost](https://indestructibletype.com/Jost.html) free font (Jos
 *Q: I received a QR-Cart from a friend but I've lost/ruined it. Can I reprint that exact copy using these source files?*
 
 A: Probably not, sorry. QR-Carts are not a reference to a database of games or customizations: they contain the _full game data_ so, if they are lost, they can't be recovered anymore. You may try asking your friend if he can print the cartridge again... it's a great reason to meet him again!
+
+*Q: Can Rewtro load games just from a binary file?*
+
+A: Yes, it's doable, game files should be _very small_ and this way you could make larger games but no, I don't think that the feature fits the project. Rewtro tries to store tiny games in the smallest amount of data possible (at least, that's what I tried to do) and, for that very reason, it has a limited number of commands that are thought to be _easy to be encoded_ instead of being _easy to use_. This self-limitation was key to make something that loads games fast from offline low-storage systems, like QR-Codes and - maybe in the future - audio. Other fantasy consoles and game engines don't have such limitations and, for this reason, are easier to code, they can load larger games from the internet or files. For these reasons, they can handle more complex games. So: if you have a reason to share tiny games using files, feel free to tell me your idea. Otherwise, if you want something that shares larger games in a _digital way_, there are several easier alternatives out there!
 
 *Q: Why the <tt>V-PESCOP-Basic</tt> game looks glitched, features quite disturbing graphics and has cryptic gameplay?*
 
