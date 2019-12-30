@@ -18,10 +18,10 @@
     <p><img src="markdown/rewtro-console.png"></p>
 </div>
 
-...that loads games from [origami game cartridges](markdown/game-k001-stetris.pdf)...
+...that loads games from [papercraft game cartridges](markdown/game-k001-stetris.pdf)...
 
 <div align="center" style="margin:60px 0">
-    <p><img src="markdown/photo-origami.png"></p>
+    <p><img src="markdown/photo-papercraft.png"></p>
 </div>
 
 ...or animated GIFs...
@@ -129,6 +129,13 @@ A: If you know what [Petscop](https://en.wikipedia.org/wiki/Creepypasta#Petscop)
 ## Disclaimer
 
 Consider Rewtro in beta _right now_. I've not so much time to work on pet projects but I'll try to evolve the game engine a little more without breaking it. There is some kind of engine version tracking in the Rewtro code and encoded in cartridges but, If you want to be extra cautious, make a snapshot of the engine and host it elsewhere - there is no URL encoded in game cartridges so you're safe.
+
+## Neat ideas for the future
+
+  * A manual :)
+  * A building system for the Rewtro console (minify, static PWA etc.)
+  * Implement multiple papercraft templates. An alternative model has been suggested.
+    * _tyingq from Hacker News_: I'd switch to this pattern to make the cube: http://www.mathematische-basteleien.de/origam16.gif Sturdier, less cutting, and would be more "true oragami". Though maybe the folds would make it harder to scan along the face edges.
 
 ## Credits
 
