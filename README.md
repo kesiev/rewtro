@@ -75,6 +75,8 @@ But what you are going to use the most is the game debugger...
 
 While both the game console and the SDK tools run client-side, I've added a pinch of PHP for reading the games file list to be displayed on SDK main screen. Feel free to replace that PHP with any alternative you can think about (or suggest one).
 
+You can have a look at a read-only version of the SDK [here](https://www.kesiev.com/rewtro/carts). Hit random buttons, test games, generate SVGs, etc. To play games in debugger use arrow keys and Z/X/C/V as action buttons.
+
 ## Released games
 
 In the <tt>carts/</tt> folder, you'll find the SDK and all the games I've developed for Rewtro till now. I've made 2 series of games, split by its initial:
@@ -95,6 +97,10 @@ You can also use these paper cartridges as hints in treasure hunts, put them in 
 Rewtro QR-Carts are cheap to print and contain the _whole_ game data, are _physically shareable_, fun to copy and can be easily unique. Take the best of that.
 
 ## FAQs
+
+*Q: I want to make a Rewtro game too!*
+
+A: Ok! Well... the SDK has been rushed to make some games working for my 2019 Christmas greeting cards but you can try to learn how to use it by yourself! You need an Apache server with PHP support and writing access to the `carts/` directory. Then have a look to the JSON files (I suggest you to start with `K-005-sdong.json` which is a self-contained mini-Pong clone) and get inspired. If there is some kind of interest around this POC I'll try to publish a programmer's guide but, in the meanwhile... good luck!
 
 *Q: Which browser I can use for running Rewtro games?*
 
