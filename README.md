@@ -77,6 +77,10 @@ While both the game console and the SDK tools run client-side, I've added a pinc
 
 You can have a look at a read-only version of the SDK [here](https://www.kesiev.com/rewtro/carts). Hit random buttons, test games, generate SVGs, etc. To play games in debugger use arrow keys and Z/X/C/V as action buttons.
 
+## The developer manual
+
+I'm slowly putting together a developer manual, which can be found [here](manual/).
+
 ## Released games
 
 In the <tt>carts/</tt> folder, you'll find the SDK and all the games I've developed for Rewtro till now. I've made 2 series of games, split by its initial:
@@ -134,8 +138,10 @@ Consider Rewtro in beta _right now_. I've not so much time to work on pet projec
 
   * A manual :)
   * A building system for the Rewtro console (minify, static PWA etc.)
-  * Implement multiple papercraft templates. An alternative model has been suggested.
+  * Implement multiple papercraft templates. Solid models are probably more fragile than flat models but are undoubtly _cooler_ an may offer more storage. An alternative model has been suggested.
     * _tyingq from Hacker News_: I'd switch to this pattern to make the cube: http://www.mathematische-basteleien.de/origam16.gif Sturdier, less cutting, and would be more "true oragami". Though maybe the folds would make it harder to scan along the face edges.
+  * Use alternative _barcodes_ to encode games, like [HCCB](https://en.wikipedia.org/wiki/High_Capacity_Color_Barcode). It can help making better games in the same amount of paper space. Need a JavaScript encoder/decoder to give it a shot.
+    * _PostOnce  from Hacker News_: If you ever do a successor format, color triangle barcodes can store 3x as much information per square inch -- so you could either have just one scannable code on the back of the cart, or have 3x as much game with the current method.
 
 ## Credits
 
