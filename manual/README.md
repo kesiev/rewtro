@@ -34,7 +34,7 @@ Which displays a boring blank screen and a controller with a single button.
 
 ## Hello, World!
 
-First of all, we need the mandatory unexplained _Hello World!_ every manual features:
+First of all, we need mandatory unexplained _Hello World!_ every manual feature:
 
 ```
 {
@@ -58,7 +58,7 @@ This cartridge displays just this:
 
 Even if it's quite straightforward what's going on, I'll explain what's happening in that [data block](datablocks.md) later but, for now, let's accept this _Hello, World!_ as it is.
 
-Rewtro system can be configured to have different default fonts, screen resolution, and mor. I'd like to explain you how to do that changing this _Hello, World!_ a little. I promise to add few screenshots, okay?
+Rewtro system can be configured to have different default fonts, screen resolution, and more. I'd like to explain to you how to do that changing this _Hello, World!_ a little. I promise to add a few screenshots, okay?
 
 ## System configuration
 
@@ -77,18 +77,18 @@ You can configure the Rewtro adding a `systemConfiguration` to your JSON root, l
 }
 ```
 
-In our working blank cartridge this key wasn't there. All of the system configuration have nice defaults, so you don't have to worry about that. But if you want to personalize your game system a bit, you can do it here.
+In our working blank cartridge, this key wasn't there. All of the system configurations have nice defaults, so you don't have to worry about that. But if you want to personalize your game system a bit, you can do it here.
 
 ### Screen resolution
 
-Rewtro virtual screen have a _screen resolution_ which is the usual screen size that's used to place stuff on the screen and a _render resolution_ which basically stretches the _screen resolution_ to any other size when rendered. This way you can use larger and smaller resolutions for your games and, with some creativity, you can easily recreate some _resolution weirdness_ from systems of the past.
+Rewtro virtual screen has a _screen resolution_ which is the usual screen size that's used to place stuff on the screen and a _render resolution_ which stretches the _screen resolution_ to any other size when rendered. This way you can use larger and smaller resolutions for your games and, with some creativity, you can easily recreate some _resolution weirdness_ from systems of the past.
 
-  * `screenWidth` and `screenHeight` changes the _screen resolution_. You can set any value from 0 to 2047.
-  * `renderWidth` and `renderHeight` changes the _render resolution_. You can set any value from 0 to 2047.
+  * `screenWidth` and `screenHeight` change the _screen resolution_. You can set any value from 0 to 2047.
+  * `renderWidth` and `renderHeight` change the _render resolution_. You can set any value from 0 to 2047.
 
 If you want an unstretched screen just remember to set the same values for the _screen resolution_ and the _render resolution_.
 
-Example time! Let's try simulating the [VIC-20](https://en.wikipedia.org/wiki/Commodore_VIC-20) screen resolution. Wikipedia says that _"At startup the screen showed 176×184 pixels, with a fixed-color border to the edges of the screen. Since a PAL or NTSC screen has a 4:3 width-to-height ratio, each VIC pixel was much wider than it was high."_ So, we can double the _render resolution width_ to obtain a similar effect:
+Example time! Let's try emulating the [VIC-20](https://en.wikipedia.org/wiki/Commodore_VIC-20) screen resolution. Wikipedia says that _"At startup the screen showed 176×184 pixels, with a fixed-color border to the edges of the screen. Since a PAL or NTSC screen has a 4:3 width-to-height ratio, each VIC pixel was much wider than it was high."_ So, we can double the _render resolution width_ to obtain a similar effect:
 
 ```
 {
@@ -122,7 +122,7 @@ It looks a little like the original VIC-20 screen, right?
     <p><img src="images/helloworld-vic20-original.png"></p>
 </div>
 
-Rewtro also supports up to 127 standard resolutions, inspired to classic systems, that you can select just using the single `resolutionModel` key. You can see the complete list from the SDK home screen, hitting the _corners_ button.
+Rewtro also supports up to 127 standard resolutions, inspired to classic systems, that you can select just using the single `resolutionModel` key. Only a few of them are available right now: you can see the complete list from the SDK home screen, hitting the _corners_ button.
 
 ```
 {
