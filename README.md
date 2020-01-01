@@ -79,7 +79,7 @@ You can have a look at a read-only version of the SDK [here](https://www.kesiev.
 
 ## The developer manual
 
-I'm slowly putting together a developer manual, which can be found [here](manual/).
+I'm slowly putting together a developer manual, which can be found [here](manual/README.md).
 
 ## Released games
 
