@@ -16,7 +16,7 @@ Let's start making an _empty cartridge_.
 
   * Rewtro supports multiple _versions_ which are a combination of a game engine and its configuration. Right now the latest version of Rewtro is `0.2`, which uses the custom `RewtroEngine` with extended commands set.
   * Then there is a `metadata` section, which includes several extra details of your game. This part is never encoded in cartridges data but is useful to configure text printed on QR-Carts and more. The only mandatory key of `metadata` is your game name, which is used as file name in exports and displayed by the debugger.
-  * There is the `data` section, which is the content of your game and, unsurprisingly, it's mandatory too. Since we're creating a minimal cartridge, let's keep that empty.
+  * There is a `data` section, which holds all your game contents grouped in [data blocks](datablocks.md). Unsurprisingly enough, it's a mandatory section too. Since we're creating a minimal cartridge, let's keep that empty.
 
 That's all. Our minimal cartridge is this one:
 
@@ -30,4 +30,115 @@ That's all. Our minimal cartridge is this one:
 }
 ```
 
-Which displays a blank screen and a controller with a single button.
+Which displays a boring blank screen and a controller with a single button.
+
+## Hello, World!
+
+First of all, we need the mandatory unexplained _Hello World!_ every manual features:
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A","text":"HELLO,~WORLD!","textColor":3,"backgroundColor":2,"width":50,"height":16}],
+      "tilemaps":[{"map":["A"]}]
+   }]
+}
+```
+
+This cartridge displays just this:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/helloworld-basic.png"></p>
+</div>
+
+Even if it's quite straightforward what's going on, I'll explain what's happening in that [data block](datablocks.md) later but, for now, let's accept this _Hello, World!_ as it is.
+
+Rewtro system can be configured to have different default fonts, screen resolution, and mor. I'd like to explain you how to do that changing this _Hello, World!_ a little. I promise to add few screenshots, okay?
+
+## System configuration
+
+You can configure the Rewtro adding a `systemConfiguration` to your JSON root, like this.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "systemConfiguration":[{
+      <your configuration here>
+   }],
+   "data":[]
+}
+```
+
+In our working blank cartridge this key wasn't there. All of the system configuration have nice defaults, so you don't have to worry about that. But if you want to personalize your game system a bit, you can do it here.
+
+### Screen resolution
+
+Rewtro virtual screen have a _screen resolution_ which is the usual screen size that's used to place stuff on the screen and a _render resolution_ which basically stretches the _screen resolution_ to any other size when rendered. This way you can use larger and smaller resolutions for your games and, with some creativity, you can easily recreate some _resolution weirdness_ from systems of the past.
+
+  * `screenWidth` and `screenHeight` changes the _screen resolution_. You can set any value from 0 to 2047.
+  * `renderWidth` and `renderHeight` changes the _render resolution_. You can set any value from 0 to 2047.
+
+If you want an unstretched screen just remember to set the same values for the _screen resolution_ and the _render resolution_.
+
+Example time! Let's try simulating the [VIC-20](https://en.wikipedia.org/wiki/Commodore_VIC-20) screen resolution. Wikipedia says that _"At startup the screen showed 176×184 pixels, with a fixed-color border to the edges of the screen. Since a PAL or NTSC screen has a 4:3 width-to-height ratio, each VIC pixel was much wider than it was high."_ So, we can double the _render resolution width_ to obtain a similar effect:
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "systemConfiguration":[{
+      "screenWidth":176,
+      "screenHeight":184,
+      "renderWidth":352,
+      "renderHeight":184
+   }],
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A","text":"HELLO,~WORLD!","textColor":3,"backgroundColor":2,"width":50,"height":16}],
+      "tilemaps":[{"map":["A"]}]
+   }]
+}
+```
+
+This cartridge displays:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/helloworld-vic20.png"></p>
+</div>
+
+It looks a little like the original VIC-20 screen, right?
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/helloworld-vic20-original.png"></p>
+</div>
+
+Rewtro also supports up to 127 standard resolutions, inspired to classic systems, that you can select just using the single `resolutionModel` key. You can see the complete list from the SDK home screen, hitting the _corners_ button.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "systemConfiguration":[{
+      "resolutionModel":2
+   }],
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A","text":"HELLO,~WORLD!","textColor":3,"backgroundColor":2,"width":50,"height":16}],
+      "tilemaps":[{"map":["A"]}]
+   }]
+}
+```
+
+This cartridge uses the 320x200 resolution of my beloved [Commodore 64](https://en.wikipedia.org/wiki/Commodore_64#Graphics). I don't think you need a screenshot here.
