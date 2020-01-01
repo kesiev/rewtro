@@ -10,7 +10,7 @@ When Rewtro loads a game, it repeats the process in reverse: the data is loaded 
 
 I'm not going to dwell into this nerdy protocol part: what I'd like you to know is that to make a Rewtro game you're going to put together a JSON file and that very file _is run mainly as-is by the Rewtro engine_. The compile, compress, encode part is up to the Rewtro compiler and is done just for the sake of data transfer, so you're not going to fiddle with bit and bytes. _Probably._
 
-## The JSON backbone.
+## The JSON backbone
 
 Let's start making an _empty cartridge_.
 
