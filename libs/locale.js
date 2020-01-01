@@ -150,9 +150,9 @@ LocaleManager.languages.IT={
 LocaleManager.languages.FR={
 	LABEL:"French",
 	// --- Credits
-	credits:"Crédit",
-	credits_techs:"Rewtro existe grâce à ces technologies :",
-	credits_people:"...et grâce au support de ces personnes :",
+	credits:"Cr&eacute;dit",
+	credits_techs:"Rewtro existe gr&acirc;ce à ces technologies :",
+	credits_people:"...et gr&acirc;ce au support de ces personnes :",
 	// --- Global
 	button_ok:"<i class='fas fa-thumbs-up'></i> OK",
 	button_close:"<i class='fas fa-times-circle'></i> Fermer",
@@ -163,13 +163,13 @@ LocaleManager.languages.FR={
 	qrcart_datasette:"Datasette",
 	lastplayed_run:"Rejouer avec le dernier jeu",
 	lastplayed_discard:"Annuler l'ancien jeu",
-	fullscreen_toggle:"Plein écran",
-	label_sharedgame:"Jeu partagé",
+	fullscreen_toggle:"Plein &eacute;cran",
+	label_sharedgame:"Jeu partag&eacute;",
 	// --- Last played management
 	lastplayed_discard_confirm:"Voulez-vous jeter ce jeu?<br>Pour y rejouer, vous allez devoir le recharger depuis un QR-code ou par un autre moyen.",
 	button_yesdiscard:"<i class='fas fa-trash-alt'></i> Oui, effacer le jeu.",
 	button_nokeep:"<i class='fas fa-undo'></i> Non, le garder.",
-	lastplayed_discard_discarded:"Le jeu sauvegardé est effacé.",
+	lastplayed_discard_discarded:"Le jeu sauvegard&eacute; est effac&eacute;.",
 	// --- QR-Cart scanner
 	button_lightonoff:"<i class='fas fa-lightbulb'></i> ON/OFF",
 	button_cameraid:"<i class='fas fa-camera'></i> CAM {1}",
@@ -179,7 +179,7 @@ LocaleManager.languages.FR={
 	// --- Installer
 	installer_install:"Installer Rewtro",
 	// --- Datasette
-	datasette_tutorial:"Avec la <i class='fas fa-tape'></i> Datasette vous pouvez partager le dernier jeu joué avec un ami sans utiliser une QR-Cart.<br><br>Ouvrez Rewtro sur cet appareil, choisissez <i class='fas fa-camera'></i> Charger QR-Cart et continuer à viser le code animé au centre de l'écran jusqu'au démarrage du jeu.<br><br>Si le jeu ne se charge pas, essayer de changer la luminosité de l'écran ou la taille du QR-Code en utilisant les boutons en haut de l'écran.",
+	datasette_tutorial:"Avec la <i class='fas fa-tape'></i> Datasette vous pouvez partager le dernier jeu jou&eacute; avec un ami sans utiliser une QR-Cart.<br><br>Ouvrez Rewtro sur cet appareil, choisissez <i class='fas fa-camera'></i> Charger QR-Cart et continuer à viser le code anim&eacute; au centre de l'&eacute;cran jusqu'au d&eacute;marrage du jeu.<br><br>Si le jeu ne se charge pas, essayer de changer la luminosit&eacute; de l'&eacute;cran ou la taille du QR-Code en utilisant les boutons en haut de l'&eacute;cran.",
 	// --- Console
 	console_backtomenu:"Retourner au menu",
 	console_paused:"Pause. <i class='fas fa-gamepad'></i> Appuyer ici pour jouer!",
@@ -187,7 +187,7 @@ LocaleManager.languages.FR={
 	console_tap:"Appuyer sur <i class='fas faa-pulse animated fa-hand-pointer'></i>",
 	console_drag:"Faire glisser <i class='fas faa-wrench animated fa-hand-pointer'></i>",
 	console_or:"/",
-	console_move:"Déplacer",
+	console_move:"D&eacute;placer",
 	console_buttonalabel:"Bouton A",
 	console_buttonblabel:"Bouton B",
 	console_buttonclabel:"Bouton C",
