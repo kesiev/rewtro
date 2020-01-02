@@ -6,7 +6,7 @@ header('Content-Type: text/javascript');
 
 ?>
 
-var CACHE = 'rewtro-cache';
+var CACHE = 'rewtro-cache-v1';
 var precacheFiles =
 
 <?php
