@@ -21,7 +21,8 @@ function ModuleCredits(label) {
 			{name:"Bianca", url:"http://www.linearkey.net/"},
 			{name:"Frulla",url:"https://www.instagram.com/mogliagiovanni/"},
 			{name:"Stefano Caroli"},
-			{name:"Rosy/Damiano"}
+			{name:"Rosy/Damiano"},
+			{name:"All Rewtro contributors",url:"https://github.com/kesiev/rewtro/graphs/contributors"}
 		],
 		onSelect: function ($,gameConsole) {
 			var label="<b><a href='"+this.url+"'>Rewtro</a></b> ("+this.year+") by <a href='"+this.by.url+"'>"+this.by.name+"</a><br><br> "+LOC._("credits_techs")+"</b><br>";
