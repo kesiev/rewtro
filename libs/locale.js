@@ -146,3 +146,55 @@ LocaleManager.languages.IT={
 	console_left:"<i class='fas fa-arrow-left'></i>",
 	console_right:"<i class='fas fa-arrow-right'></i>"
 }
+
+LocaleManager.languages.FR={
+	LABEL:"French",
+	// --- Credits
+	credits:"Cr&eacute;dit",
+	credits_techs:"Rewtro existe gr&acirc;ce à ces technologies :",
+	credits_people:"...et gr&acirc;ce au support de ces personnes :",
+	// --- Global
+	button_ok:"<i class='fas fa-thumbs-up'></i> OK",
+	button_close:"<i class='fas fa-times-circle'></i> Fermer",
+	// --- Language
+	language_change:"Changer la langue",
+	// --- Main menu
+	qrcart_load:"Charger QR-Cart{1}",
+	qrcart_datasette:"Datasette",
+	lastplayed_run:"Rejouer avec le dernier jeu",
+	lastplayed_discard:"Annuler l'ancien jeu",
+	fullscreen_toggle:"Plein &eacute;cran",
+	label_sharedgame:"Jeu partag&eacute;",
+	// --- Last played management
+	lastplayed_discard_confirm:"Voulez-vous jeter ce jeu?<br>Pour y rejouer, vous allez devoir le recharger depuis un QR-code ou par un autre moyen.",
+	button_yesdiscard:"<i class='fas fa-trash-alt'></i> Oui, effacer le jeu.",
+	button_nokeep:"<i class='fas fa-undo'></i> Non, le garder.",
+	lastplayed_discard_discarded:"Le jeu sauvegard&eacute; est effac&eacute;.",
+	// --- QR-Cart scanner
+	button_lightonoff:"<i class='fas fa-lightbulb'></i> ON/OFF",
+	button_cameraid:"<i class='fas fa-camera'></i> CAM {1}",
+	loadqr_tutorial:"Pointer la camera vers le <i class='fas fa-qrcode'></i> QR-Cart pour la charger.",
+	loadqr_progress:"<br>Scanner <b>{1}</b> QR-Carts to go!",
+	loadqr_scanning:"Scan du jeu <b>{1}</b> QR-Cart jeu.<br>",
+	// --- Installer
+	installer_install:"Installer Rewtro",
+	// --- Datasette
+	datasette_tutorial:"Avec la <i class='fas fa-tape'></i> Datasette vous pouvez partager le dernier jeu jou&eacute; avec un ami sans utiliser une QR-Cart.<br><br>Ouvrez Rewtro sur cet appareil, choisissez <i class='fas fa-camera'></i> Charger QR-Cart et continuer à viser le code anim&eacute; au centre de l'&eacute;cran jusqu'au d&eacute;marrage du jeu.<br><br>Si le jeu ne se charge pas, essayer de changer la luminosit&eacute; de l'&eacute;cran ou la taille du QR-Code en utilisant les boutons en haut de l'&eacute;cran.",
+	// --- Console
+	console_backtomenu:"Retourner au menu",
+	console_paused:"Pause. <i class='fas fa-gamepad'></i> Appuyer ici pour jouer!",
+	console_nogame:"Charger un jeu en utilisant la <i class='fas fa-camera'></i> Charger depuis une QR-Cart",
+	console_tap:"Appuyer sur <i class='fas faa-pulse animated fa-hand-pointer'></i>",
+	console_drag:"Faire glisser <i class='fas faa-wrench animated fa-hand-pointer'></i>",
+	console_or:"/",
+	console_move:"D&eacute;placer",
+	console_buttonalabel:"Bouton A",
+	console_buttonblabel:"Bouton B",
+	console_buttonclabel:"Bouton C",
+	console_buttondlabel:"Bouton D",
+	console_pulldown:"Tirer vers le bas <i class='fas faa-bounce animated fa-hand-pointer'></i>",
+	console_up:"<i class='fas fa-arrow-up'></i>",
+	console_down:"<i class='fas fa-arrow-down'></i>",
+	console_left:"<i class='fas fa-arrow-left'></i>",
+	console_right:"<i class='fas fa-arrow-right'></i>"
+}
