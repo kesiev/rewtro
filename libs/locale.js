@@ -179,7 +179,7 @@ LocaleManager.languages.FR={
 	// --- Installer
 	installer_install:"Installer Rewtro",
 	// --- Datasette
-	datasette_tutorial:"Avec la <i class='fas fa-tape'></i> Datasette vous pouvez partager le dernier jeu jou&eacute; avec un ami sans utiliser une QR-Cart.<br><br>Ouvrez Rewtro sur cet appareil, choisissez <i class='fas fa-camera'></i> Charger QR-Cart et continuer à viser le code anim&eacute; au centre de l'&eacute;cran jusqu'au d&eacute;marrage du jeu.<br><br>Si le jeu ne se charge pas, essayer de changer la luminosit&eacute; de l'&eacute;cran ou la taille du QR-Code en utilisant les boutons en haut de l'&eacute;cran.",
+	datasette_tutorial:"Avec la <i class='fas fa-tape'></i> Datasette vous pouvez partager le dernier jeu jou&eacute; avec un ami sans utiliser une QR-Cart.<br><br>Ouvrez Rewtro sur cet appareil, choisissez <i class='fas fa-camera'></i> Charger QR-Cart et continuer &agrave; viser le code anim&eacute; au centre de l'&eacute;cran jusqu'au d&eacute;marrage du jeu.<br><br>Si le jeu ne se charge pas, essayer de changer la luminosit&eacute; de l'&eacute;cran ou la taille du QR-Code en utilisant les boutons en haut de l'&eacute;cran.",
 	// --- Console
 	console_backtomenu:"Retourner au menu",
 	console_paused:"Pause. <i class='fas fa-gamepad'></i> Appuyer ici pour jouer!",
