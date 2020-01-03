@@ -221,6 +221,45 @@ That means that it can encode our `sample.png` image keeping just the white colo
 
 ...for the same result but saving ~115 bytes, which is _a huge amount of data_ in Rewtro. For the more nerdy of you out there, the `rewtro` format limitations were loosely inspired by the [ZX Spectrum 48K](https://en.wikipedia.org/wiki/ZX_Spectrum#ZX_Spectrum_16K/48K).
 
+### Custom fonts
+
+As I promised [before](rewtrocartridge.md) you can add custom fonts in your game cartridges. All you need is to create an image using any supported format which contains all the letters in all the palette colors into the `font` id image. Something like this:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sample-font-sample.png"></p>
+</div>
+
+All the letters must have the same size but they don't have to be strictly 8x8 pixels. The fastest way to get this image done is to make your pixel font using a single color, like in our [sample-font.png](images/sample-font.png)...
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sample-font.png"></p>
+</div>
+
+...and load this image using the `monocolor` format...
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "images":[{"id":"font","image":{"data":{"_file":"sample-font.png"},"format":"monocolor"}}],
+      "sprites":[{"id":"A","text":"HELLO,~WORLD!","textColor":3,"backgroundColor":2,"width":50,"height":16}],
+      "tilemaps":[{"map":["A"]}]
+   }]
+}
+```
+
+This cartridge gives you this:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sample-font-load.png"></p>
+</div>
+
+Notice that the blue background doesn't cover the full text as it did in our _Hello, World!_ code since this time our font is taller.
+
 ## Sounds
 
 _TODO_
