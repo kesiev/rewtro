@@ -18,7 +18,7 @@ Data blocks are unsorted _bundles of assets_, like graphics, music, sounds, and 
 }
 ```
 
-We already met a working data block in our working [Hello, World!](README.md) example:
+We already met a working data block in our working [Hello, World!](rewtrocartridge.md) example:
 
 ```
 {
@@ -93,7 +93,7 @@ This cartridge output is this:
     <p><img src="images/image-load.png"></p>
 </div>
 
-Why the image is colored while our `sample.png` is just in white and transparent? The secret souce is into the `monocolor` image format. Rewtro supports up to 15 built-in image formats but just some of them are available. Each image format have its limits and perks.
+Why the image is colored while our `sample.png` is just in white and transparent? The secret sauce is into the `monocolor` image format. Rewtro supports up to 15 built-in image formats but just some of them are available. Each image format have its limits and perks.
 
 ### Monocolor format
 
@@ -150,7 +150,7 @@ Like this:
 
 You may wonder why there are multiple image formats in Rewtro. The `monocolor` uses less bytes to store an image but you can use one color at a time. The `indexed` format uses more bytes but you can create more detailed sprites. As it usually happens in low-data environments you have to make a trade-off.
 
-The `rewtro` format creates something _in the middle_ between the `monocolor` and the `indexed` format. Images are loaded as-is like the `monocolor` format but just supports _2 different colors for every 8x8 area of your sprite_.
+The `rewtro` format creates something _in the middle_ between the `monocolor` and the `indexed` format. Images are loaded as-is like the `monocolor` format but just supports _transparency and up to 2 different colors for every 8x8 area of your sprite_.
 
 That means that it can encode our `sample.png` image keeping just the white color...
 
@@ -179,7 +179,7 @@ That means that it can encode our `sample.png` image keeping just the white colo
     <p><img src="images/sample-2colors-zoom.png"></p>
 </div>
 
-...while it can be loaded with the `indexed` format...
+...while it can be encoded by the `indexed` format...
 
 ```
 {

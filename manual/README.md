@@ -12,7 +12,7 @@ I hope it will help you a little on how to code a Rewtro game.
 
 ## Index
 
-  * [The Rewtro cartridge](rewtrocartridges.md): It explains what a Rewtro cartridge is and how to set basic settings of your game.
+  * [The Rewtro cartridge](rewtrocartridge.md): It explains what a Rewtro cartridge is and how to set basic settings of your game.
   * [Data blocks](datablocks.md): Learn what you can put inside a Rewtro cartridge and how to do that.
     * [Sprite attributes](spriteattributes.md): Sprites are the _moving parts_ of your game. We are going to talk about how to define them!
     * [Code statements](codestatements.md): Time to add some code to your game!
