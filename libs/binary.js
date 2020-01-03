@@ -107,7 +107,7 @@ var ImageCodecs={
 								p=py*this.CHARSIZE*4+(px*4);
 								reqcolor=ImageCodecs.findColorInPalette(data[p],data[p+1],data[p+2],data[p+3],system.PALETTE);
 								if (reqcolor==-1) {
-									console.warn("Color not found",data[p],data[p+1],data[p+2],data[p+3],"at",px,",",py);
+									console.warn("Color not found",data[p],data[p+1],data[p+2],data[p+3],"at",px,",",py,"char",x,",",y);
 									reqcolor=0;
 									done=false;
 								}
