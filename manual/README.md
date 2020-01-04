@@ -17,3 +17,4 @@ I hope it will help you a little on how to code a Rewtro game.
     * [Sprite attributes](spriteattributes.md): Sprites are the _moving parts_ of your game. We are going to talk about how to define them!
     * [Code statements](codestatements.md): Time to add some code to your game!
   * [Compiler helpers](compilerhelpers.md): Make your game modular and write code a little faster!
+  * [Advanced Rewtro](advanced.md): Know Rewtro even better and learn some development tricks.

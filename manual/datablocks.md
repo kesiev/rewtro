@@ -262,7 +262,96 @@ Notice that the blue background doesn't cover the full text as it did in our _He
 
 ## Sounds
 
-_TODO_
+Old computers and gaming consoles had different sound chips, each one with its signature sound. Like most of us _old euro gamers_ I've fond memories of the Commodore 64's [SID 6581](https://en.wikipedia.org/wiki/MOS_Technology_6581) but most of you out there will recognize how a [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) sounds.
+
+Rewtro uses a very simple retro-inspired sound synthesizer which tries to sound _old_ but breaks some limits to make game development a little easier. You can add sounds in a data block with the `sounds` key:
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sounds":[
+         <add your sounds here>
+      ]      
+   }]
+}
+```
+
+Each sound has a one-letter `id` that's used as a reference when you need to play it and some attributes that instruct the synthesizer on how to play that sound. The Rewtro synthesizer has 8 wave generators you can select with the `wave` key. Its allowed values are: `whitenoise`, `square`, `sine`, `saw`, `triangle`, `tangent`, `whistle`, and `breaker`.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sounds":[{"id":"A","wave":"square"}],
+      "tilemaps":[{"playAudio":"A"}]
+   }]
+}
+```
+
+This cartridge starts with a short _beep_, made using the `sine` wave generator. You can modulate a wave using the keys `bitCrush`, `bitCrushSweep`, `attack`, `sustain`, `limit`, `decay`, `release`, `frequency`, `tremoloFrequency`, `tremoloDepth`, `frequencyJump1onset`, `frequencyJump1amount`, `frequencyJump2onset`, `frequencyJump2amount`, and `pitch`, which accepts values from 0 to 255.
+
+I don't want to annoy you with an in-depth explanation of each of these values. Even I got _super sick_ of fiddling with these values, so I added a super simple _sound editor_ to the SDK. Just select the _note_ icon from the home.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sound-editor.png"></p>
+</div>
+
+Yeah. It's kinda scary but it does very little - it's just ugly. Changing the _Wave_ combo box and moving all the sliders, the sound editor will play a sound. You can hear the sound again without touching anything hitting the _Play_ button. The _Randomize_ button will randomize all the combo and slider value every time is hit. You can lock/unlock values to be randomized selecting the checkbox on the left of each option. For now, just skip the _Play note C4_ button and the _Piano_ section. The _Paste this in your resource loader_ contains the JSON you need to put the sound you've just built in your data blocks.
+
+I've moved some sliders and made an explosion sound.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sound-explosion.png"></p>
+</div>
+
+To use that sound in a game, I've to give that an `id` and kick it in a data block.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sounds":[{"id":"A","wave":"whitenoise","attack":17,"sustain":127,"decay":61,"release":127,"frequency":124,"pitch":25}],
+      "tilemaps":[{"playAudio":"A"}]
+   }]
+}
+```
+
+This time our cartridge will start with an _EXPLOSION_!
+
+### Channels
+
+Rewtro plays sounds in _virtual channels_ in which only a single sound at a time can be played. By default all `sounds` are played in their _virtual channel_: this means that if the _same sound_ is played _multiple times_ the previous one is stopped. Why? If your game wants to play a _jump_ and _explosion_ sound at the same time it will work since they are played in different channels, but playing the _explosion_ sound ten times will result in a single _explosion_ sound instead, saving you from an unpleasant cacophony.
+
+You are not probably going to set _virtual channels_ to sounds very often but it's good to know that you can set single sounds channels with the `channelId` key. You can set the channel using a single letter.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sounds":[{"id":"A","channelId":"A","wave":"triangle"}],
+      "tilemaps":[{"playAudio":"A"}]
+   }]
+}
+```
+
+Just remember that sounds with the same `channelId` will stop each other when played.
 
 ## Music and songs
 
