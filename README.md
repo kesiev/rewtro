@@ -7,7 +7,7 @@
 ---
 
 <div align="center">
-    <a href="markdown/game-k001-stetris.pdf">Print the launch title cartridge</a> | <a href="https://www.kesiev.com/rewtro/">Load the game using your mobile</a>
+    <a href="markdown/game-k001-stetris.pdf">Print the launch title cartridge</a> | <a href="https://www.kesiev.com/rewtro/">Load the game using your mobile</a> |  <a href="manual/README.md">Manual</a>
 </div>
 
 ---
@@ -134,14 +134,9 @@ A: If you know what [Petscop](https://en.wikipedia.org/wiki/Creepypasta#Petscop)
 
 Consider Rewtro in beta _right now_. I've not so much time to work on pet projects but I'll try to evolve the game engine a little more without breaking it. There is some kind of engine version tracking in the Rewtro code and encoded in cartridges but, If you want to be extra cautious, make a snapshot of the engine and host it elsewhere - there is no URL encoded in game cartridges so you're safe.
 
-## Neat ideas for the future
+## News and contacts
 
-  * A manual :)
-  * A building system for the Rewtro console (minify, static PWA etc.)
-  * Implement multiple papercraft templates. Solid models are probably more fragile than flat models but are undoubtly _cooler_ an may offer more storage. An alternative model has been suggested.
-    * _tyingq from Hacker News_: I'd switch to this pattern to make the cube: http://www.mathematische-basteleien.de/origam16.gif Sturdier, less cutting, and would be more "true oragami". Though maybe the folds would make it harder to scan along the face edges.
-  * Use alternative _barcodes_ to encode games, like [HCCB](https://en.wikipedia.org/wiki/High_Capacity_Color_Barcode). It can help making better games in the same amount of paper space. Need a JavaScript encoder/decoder to give it a shot.
-    * _PostOnce  from Hacker News_: If you ever do a successor format, color triangle barcodes can store 3x as much information per square inch -- so you could either have just one scannable code on the back of the cart, or have 3x as much game with the current method.
+I use [Twitter](https://twitter.com/kesiev) as my main social. It's probably the best place to be updated about Rewtro and to contact me.
 
 ## Credits
 

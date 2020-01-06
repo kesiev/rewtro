@@ -22,6 +22,7 @@ I hope it will help you a little on how to code a Rewtro game.
     * [The Scene and Game objects](scenegameobjects.md): Move the virtual camera, save data across your game scenes and more!
   * [Compiler helpers](compilerhelpers.md): Make your game modular and write code a little faster!
   * Extras: A collection of in-depth articles.
+    * [Neat ideas for the future](ideas.md): A collection of ideas I've collected from people around the _internet_ to make Rewtro better.
     * [Advanced Rewtro](advanced.md): Know Rewtro even better and learn some development tricks.
     * _Physics_: How to work with the tiny Rewtro physics engine.
 
