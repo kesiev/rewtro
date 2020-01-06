@@ -54,7 +54,7 @@ This cartridge displays just this:
 
 Even if it's quite straightforward what's going on, I'll explain what's happening in that [data block](datablocks.md) later but, for now, let's accept this _Hello, World!_ as it is.
 
-Rewtro system can be configured to have different fonts, screen resolution, and more. I'd like to explain to you how to do that changing this _Hello, World!_ a little. I promise to add a few screenshots, okay?
+Rewtro system can be configured to have different font, screen resolution, and more. I'd like to explain to you how to do that changing this _Hello, World!_ a little. I promise to add a few screenshots, okay?
 
 ## System configuration
 
@@ -77,7 +77,7 @@ In our working blank cartridge, this key wasn't there. All of the system configu
 
 ### Screen resolution
 
-Rewtro screen has a _screen resolution_ which is the usual screen size that's used to place stuff on the screen and a _render resolution_ which stretches that screen image to any other size when rendered. By default, both of them are set to 160x144, inspired by the [GameBoy](https://en.wikipedia.org/wiki/Game_Boy#Technical_specifications) screen size. Changing with these values you can use larger and smaller resolutions for your games and, with some creativity, can easily recreate some _resolution weirdness_ from systems of the past.
+Rewtro screen has a _screen resolution_ which is the usual screen size that's used to place stuff on the screen and a _render resolution_ which stretches that screen image to any other size when rendered. By default, both of them are set to 160x144, inspired by the [GameBoy](https://en.wikipedia.org/wiki/Game_Boy#Technical_specifications) screen size. Changing these values you can use larger and smaller resolutions for your games and, with some creativity, can easily recreate some _resolution weirdness_ from systems of the past.
 
   * `screenWidth` and `screenHeight` change the _screen resolution_. You can set any value from 0 to 2047.
   * `renderWidth` and `renderHeight` change the _render resolution_. You can set any value from 0 to 2047.
@@ -347,6 +347,8 @@ Old systems used to load and unpack data _a lot_. That's why I decided to simula
 ```
 
 This way our cartridge will take 3 seconds (25 frames per seconds multiplied by 3 seconds gives 75 frames) to load every scene, even the first one: the screen will stay blank for 3 seconds and then our usual "HELLO, WORLD!" message is displayed.
+
+The background color of this blank loading screen is the `defaultColor` you defined in your system configuration.
 
 ## Cartridge metadata
 

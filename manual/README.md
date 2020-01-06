@@ -1,6 +1,6 @@
 # Rewtro developer manual
 
-_NOTE: I'm writing this manual in random slices of spare time and it's far from being complete right now. Anyway, I hope you'll find this useful in the meanwhile._
+_NOTE: I'm writing this manual in random slices of spare time and it's far from being complete right now. Anyway, I hope you'll find this useful in the meanwhile. Some chapters are quite long so I'll split them once the manual is nearing completion._
 
 Rewtro is a fantasy console/game engine thought to load games from a very small amount of data. While coding a game in Rewtro can be a little more difficult than other fantasy consoles and game engines due to its self-imposed limits, Rewtro allows you to distribute your games in unusual ways. Right now, the [Rewtro fake console](https://kesiev.com/rewtro) can load games from papercraft cartridges you can build using a computer, any printer, scissors, a cutter, and some foldings. The fake console is thought for mobile devices but it just works on desktop computers too.
 
@@ -15,6 +15,13 @@ I hope it will help you a little on how to code a Rewtro game.
   * [The Rewtro cartridge](rewtrocartridge.md): It explains what a Rewtro cartridge is and how to set basic settings of your game.
   * [Data blocks](datablocks.md): Learn what you can put inside a Rewtro cartridge and how to do that.
     * [Sprite attributes](spriteattributes.md): Sprites are the _moving parts_ of your game. We are going to talk about how to define them!
-    * [Code statements](codestatements.md): Time to add some code to your game!
+    * [Code commands](codecommands.md): Time to add some code to your game! Learn how to create conditions and execute actions!
+      * [Getters](getters.md): Getters is _the_ most important part of Rewtro. Learn how to select sprites and music notes, create numbers and text, and more!
+      * [Conditions](conditions.md): When this stuff happens...
+      * [Statements](codestatements.md): ...do that.
+    * [The Scene and Game objects](scenegameobjects.md): Move the virtual camera, save data across your game scenes and more!
   * [Compiler helpers](compilerhelpers.md): Make your game modular and write code a little faster!
-  * [Advanced Rewtro](advanced.md): Know Rewtro even better and learn some development tricks.
+  * Extras: A collection of in-depth articles.
+    * [Advanced Rewtro](advanced.md): Know Rewtro even better and learn some development tricks.
+    * _Physics_: How to work with the tiny Rewtro physics engine.
+

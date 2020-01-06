@@ -262,7 +262,7 @@ Notice that the blue background doesn't cover the full text as it did in our _He
 
 ## Sounds
 
-Old computers and gaming consoles had different sound chips, each one with its signature sound. Like most of us _old euro gamers_ I've fond memories of the Commodore 64's [SID 6581](https://en.wikipedia.org/wiki/MOS_Technology_6581) but most of you out there will recognize how a [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) sounds.
+Old computers and gaming consoles had different sound chips, each one with its signature sound. Like most of us _old euro gamers_, I've fond memories of the Commodore 64's [SID 6581](https://en.wikipedia.org/wiki/MOS_Technology_6581) but most of you out there will recognize how a [NES](https://en.wikipedia.org/wiki/Nintendo_Entertainment_System) sounds.
 
 Rewtro uses a very simple retro-inspired sound synthesizer which tries to sound _old_ but breaks some limits to make game development a little easier. You can add sounds in a data block with the `sounds` key:
 
@@ -305,7 +305,7 @@ I don't want to annoy you with an in-depth explanation of each of these values. 
     <p><img src="images/sound-editor.png"></p>
 </div>
 
-Yeah. It's kinda scary but it does very little - it's just ugly. Changing the _Wave_ combo box and moving all the sliders, the sound editor will play a sound. You can hear the sound again without touching anything hitting the _Play_ button. The _Randomize_ button will randomize all the combo and slider value every time is hit. You can lock/unlock values to be randomized selecting the checkbox on the left of each option. For now, just skip the _Play note C4_ button and the _Piano_ section. The _Paste this in your resource loader_ contains the JSON you need to put the sound you've just built in your data blocks.
+Yeah. It's kinda scary but it does very little - it's just ugly. Changing the _Wave_ combo box and moving all the sliders, the sound editor will play a sound. You can hear the last sound again without changing it hitting the _Play_ button. The _Randomize_ button will randomize all the combo and slider values every time it's hit. You can lock/unlock values to be randomized selecting the checkbox on the left of each option. For now, just skip the _Play note C4_ button and the _Piano_ section. The _Paste this in your resource loader_ contains the JSON you need to put the sound you've just built in a data block.
 
 I've moved some sliders and made an explosion sound.
 
@@ -355,16 +355,476 @@ Just remember that sounds with the same `channelId` will stop each other when pl
 
 ## Music and songs
 
-_TODO_
+Rewtro implements a super basic sequencer to play songs in your games. Songs are split into two parts: the `music` part that contains the notes and the instruments to be used to play them and the `song` part that describes a sequence of `music` parts and its tempo. Long story short, your game is going to play `song`s made by different parts of `music`.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "music":[
+         <add your music here>
+      ],
+      "song":[
+         <add your song here>
+      ]
+   }]
+}
+```
+
+This time we need to start from a _much complex_ example. Ready?
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sounds":[
+         {"id":"A","wave":"square"},
+         {"id":"B","wave":"whitenoise"}
+      ],
+      "music":[
+         {
+            "id":"A",
+            "notes":[
+               ["C4-","---","---","C4-","---","---","B3-","---","---","B3-","---","---"],
+               ["C4-","   ","   ","G7-","   ","   ","C4-","   ","   ","G7-","   ","   "]
+            ],"instruments":"AB"
+         },
+         {
+            "id":"B",
+            "notes":[
+               ["A3-","   ","B3-","A3-","   ","B3-","---","---","   ","   ","   ","   "],
+               ["C4-","   ","G7-","G7-","   ","C4-","   ","   ","G7-","G7-","   ","G7-"]
+            ],"instruments":"AB"
+         },
+         {
+            "id":"C",
+            "notes":[
+               ["A3-","   ","B3-","A3-","   ","G3-","---","---","G3-","A3-","   ","B3-"],
+               ["C4-","   ","G7-","G7-","   ","C4-","   ","   ","G7-","G7-","   ","G7-"]
+            ],"instruments":"AB"
+         }
+      ],
+      "songs":[{"id":"A","music":"ABAC","loopTo":0,"tempo":2}],
+      "tilemaps":[{"song":"A"}]
+   }]
+}
+```
+
+This cartridge starts playing the looping title song from the Flappy Bird clone I did for my 2019 christmas greeting cards. Ready to dive in?
+
+### Music
+
+A `music` block is identified by a single letter `id`, a grid of `note`s and a definition of the `instruments` to be used. This is a `music` block from our complex example.
+
+```
+{
+  "id":"A",
+  "notes":[
+     ["C4-","---","---","C4-","---","---","B3-","---","---","B3-","---","---"],
+     ["C4-","   ","   ","G7-","   ","   ","C4-","   ","   ","G7-","   ","   "]
+  ],"instruments":"AB"
+}
+```
+
+The `notes` are arranged in rows of the same length of notes and each one is played by an instrument, defined by the `instrument` key. The first row is played by the `A` `instrument` and the second row is played by the `B` `instrument`. The instruments are just the `sounds` we talked about before: they are played modulating the `frequency` according to the note to be played. The notes in the rows are played simultaneously and at the same speed, so notes in different rows at the same position are played at the same time.
+
+```
+"sounds":[
+   {"id":"A","wave":"square"},
+   {"id":"B","wave":"whitenoise"}
+]
+```
+
+These are the instruments our example is going to use. The `A` instrument is a default square wave and will be used to play the main theme (the first row of the `notes` grid) and the `B` instrument is a default white noise wave that's used as drums (the second row of the `noted` grid). When a sound is used as instruments its `channelId` and `frequency` attributes are ignored. 
+
+All of the `notes` are 3 symbols long and there are 3 types of them:
+
+  * You can play a sound specifying the note using [letter notation](https://en.wikipedia.org/wiki/Letter_notation) (using `C`, `D`, `E`, `F`, `G`, `A`, or `B`), the octave using a number from `2` to `7`, and an optional half-step raise (using `#` or `-`). Valid notes are `C4-`, `B3-`, `G7#`.
+  * You can do nothing and let the previous note keep going using three minus symbols like this `---`.
+  * You can silence the previous note using three spaces.
+
+A `music` block may contain your full song or parts of them: you can arrange multiple `music` blocks, loop them, and change their tempo using `songs`.
+
+### Songs
+
+A song is a sequence of `music` blocks played at a given `tempo` and identified by a single letter `id`. You can optionally define a looping part using the `loopTo` key, otherwise the song music sequence is played just once and then stopped. There is no way to play a `music` block in your game: even if your song is just one `music` block long, you've to create a song with a single music block.
+
+From our music example...
+
+```
+"songs":[{"id":"A","music":"ABAC","loopTo":0,"tempo":2}]
+```
+
+...here we're defining the song `A` that will play the sequence `A`, `B`, `A` again and then `C` of `music` blocks with a delay of `2` frames between each note as defined by the `tempo` key. The `loopTo` key set to `0` says that the song will loop from the first `music` block of the sequence - removing that key the song will be played just once. The song is played by the `tilemap` statement...
+
+```
+"tilemaps":[{"song":"A"}]
+```
+
+...but we will talk about `tilemaps` data block later.
 
 ## Sprites
 
-_TODO_
+_Right now_ there is no way to draw a thing on the screen in Rewtro without sprites. This is one of the strongest limitations of Rewtro since most of the fantasy consoles offer raw commands to draw lines and filled shapes to create vector and even 3D games. Luckily sprites are the key element of most of the classic retrogames and, well... you can get creative and use sprites in unconventional ways.
+
+Describing sprites takes a little more so I've reserved [a manual chapter](spriteattributes.md) to them. Anyway, since we've already seen different sprites in our examples, let's talk about the basics here. Sprites can be added to data blocks using the `sprites` key.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         <add your sprites here>
+      ]
+   }]
+}
+```
+
+The `sprites` you're going to add to a data block are more _sprite templates_ than actual moving things on the screen: in your game you can spawn the `sprites` you defined in data blocks multiple times, describe their behavior using [code](codecommands.md), and manipulate them singularly or in groups.
+
+Sprites have an `id` that is used as a reference to spawn, remove, and manipulate them. Do you remember the _Hello, world!_ example?
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A","text":"HELLO,~WORLD!","textColor":3,"backgroundColor":2,"width":50,"height":16}],
+      "tilemaps":[{"map":["A"]}]
+   }]
+}
+```
+
+This defines the `A` sprite, which is `50` pixels wide and `16` pixels tall, have the `2`nd color of the [system palette](rewtrocartridge.md) as `backgroundColor`, and displays the `text` `HELLO, WORLD!` in two lines (`~` acts as new line) using the `3`rd color of the palette as `textColor`.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/helloworld-basic.png"></p>
+</div>
+
+You can create multiple sprites and places them around the screen using the `x` and `y` attributes, like this:
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+        {"id":"A","width":32,"height":64,"backgroundColor":3,"x":16,"y":16},
+        {"id":"B","width":64,"height":32,"backgroundColor":6,"x":64,"y":80}
+      ],
+      "tilemaps":[{"map":["AB"]}]
+   }]
+}
+```
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-multiple.png"></p>
+</div>
+
+As you probably expect, there is [way more to learn about sprites](spriteattributes.md) but we just need to know how to draw _fancy rectangles_ to learn everything about `tilemaps`.
 
 ## Tilemaps
 
-_TODO_
+You can store a tilemap in a data block using the `tilemaps` key.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "tilemaps":[
+         <add your tilemaps here>
+      ]
+   }]
+}
+```
+
+Tilemaps are _way too much flexible_ in Rewro. In our examples, tilemaps were used to spawn sprites...
+
+```
+"tilemaps":[{"map":["AB"]}]
+```
+
+...play sounds...
+
+```
+"tilemaps":[{"playAudio":"A"}]
+```
+
+...and songs...
+
+```
+"tilemaps":[{"song":"A"}]
+```
+
+Well. Rewtro uses `tilemaps` both to create _actual grids of sprites_ as you expected using the `map` key but also to do many of the things a game does when initializing a new scene, such a title screen, a new game level, and so on. You can use just what you need since all of its keys are optional, so you can think about `tilemaps` as a _scene initializer_.
+
+### Grid of sprites
+
+Let's first talk about the most obvious function of `tilemaps`: making grids of sprites. Using the `map` key to define an _ASCII art_ tilemap you can spawn a grid of sprites on the screen, arranging their `id`s in rows and columns of the same length. The spacing between sprites can be defined using the `tileWidth` and `tileHeight` keys and the grid position can be changed using the `x` and `y` attributes.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+        {"id":"A","width":16,"height":16,"backgroundColor":3},
+        {"id":"B","width":16,"height":16,"backgroundColor":6}
+      ],
+      "tilemaps":[{
+         "tileWidth":16,
+         "tileHeight":16,
+         "x":16,
+         "y":48,
+         "map":[
+            "AAAA BBB",
+            "ABBA BAB",
+            "AAAA BBB"
+         ]}]
+   }]
+}
+```
+
+This cartridge shows the famous painting [Differences but friendship](https://www.youtube.com/watch?v=dQw4w9WgXcQ) in glorious _developer colors_:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/tilemaps-sprites.png"></p>
+</div>
+
+By default, a `map` is spawned at the top left corner of the screen and has `tileWidth` and `tileHeight` of 8 pixels.
+
+#### Anchor effect
+
+Sprites spawned by `tilemaps` have _lazy coordinates_: if the `x` or `y` keys are set in the sprite definition it will be spawned at that position and the tilemap coordinate will be ignored. This logic is applied to the single coordinates so you can _anchor_ a coordinate and let the tilemap decide the other one position or _anchor_ both of them. This way you can both make a grid of sprites or spawn your game HUD when a new scene is started without code.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+        {"id":"A","textColor":3,"text":"A"},
+        {"id":"B","textColor":3,"text":"B","y":136},
+        {"id":"C","textColor":3,"text":"C","x":0},
+        {"id":"D","textColor":3,"text":"D","x":152,"y":136}
+      ],
+      "tilemaps":[{
+         "map":[
+            "  BBBBBBBBB",
+            "     A    C",
+            "    AAA   C",
+            "   AADAA  C",
+            "  AAAAAAA C"
+         ]}]
+   }]
+}
+```
+
+Looking at the `map` grid you are expecting this output...
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/tilemaps-anchorsno.png"></p>
+</div>
+
+...but it's not the right one due to _anchors_. The `B` sprite has a `y` anchor, the `C` has an `x` anchor and `D` has both `x` and `y` anchors. Only the `A` sprite don't have any anchor, so the right output is:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/tilemaps-anchorsyes.png"></p>
+</div>
+
+See? A lot of stuff on the screen with a tiny tilemap.
+
+#### Multiple grids
+
+You can define multiple `map`s in a single tilemap data block, each one with its configuration. So...
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+        {"id":"A","text":"A"},
+        {"id":"B","text":"B"},
+        {"id":"C","backgroundColor":7,"width":16},
+        {"id":"D","backgroundColor":2,"width":16}
+      ],
+      "tilemaps":[
+         {
+            "x":56,
+            "y":62,
+            "map":[
+               "A A B ",
+               " A B B"
+            ]
+         },
+         {
+            "x":40,
+            "y":54,
+            "tileWidth":16,
+            "map":[
+               "CDCDC",
+               "D   D",
+               "C   C",
+               "DCDCD"
+            ]
+         }]
+   }]
+}
+```
+
+...will display two `map`s at different positions and different spacings.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/tilemaps-multiple.png"></p>
+</div>
+
+### Prepare your scene
+
+Using `tilemaps` you can do stuff you usually want to do when a new scene appears: playing a sound effect or a song or changing the screen background color. All these actions can be done [code](codecommands.md) but since they are very common, I decided to put a shortcut here to shrink game size a little bit more.
+
+  * The `backgroundColor` key changes the screen background color. Every time a scene is changed, the screen background color is reversed to the `defaultColor` defined in your [system configuration](rewtrocartridge.md). Setting this key you can have scenes with different background colors.
+  * The `song` key plays one of the defined `songs` by its `id`.
+  * The `playAudio` key plays one of the defined `sounds` by its `id`.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sounds":[
+         {"id":"A","wave":"triangle"},
+         {"id":"B","wave":"whitenoise"}
+      ],
+      "music":[
+         {"id":"A","notes":[["C4-","D4-","E4-","F4-","G4-"]],"instruments":"A"}
+      ],
+      "songs":[
+         {"id":"A","music":"A","tempo":4}
+      ],
+      "tilemaps":[{
+         "backgroundColor":7,
+         "song":"A",
+         "playAudio":"B"
+       }]
+   }]
+}
+```
+
+This cartridge sets the background color to yellow (that's the `7`th color of the default palette), plays the sound with `id` `B` using `playAudio`, which is a short clip of `whitenoise` and, at the same time, it plays the `song` with `id` `A`, which is a short music scale played with the `A` instrument, that's a `triangle` `wave`.
+
+### Set the scene configuration
+
+There is an object that's available in every scene of your Rewtro games that's called `scene` that acts like a [special sprite](scenegameobjects.md) you can use to move the virtual camera, store global variables and more. You can initialize its values in `tilemaps` using the `set` key. One of the things managed by this `scene` object is the virtual camera position.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+        {"id":"A","width":32,"height":64,"backgroundColor":3,"x":0,"y":0}
+      ],
+      "tilemaps":[{
+         "map":["A"],
+         "set":[{
+            "x":-30,
+            "y":-50
+         }]
+      }]
+   }]
+}
+```
+
+While this object has been spawned at `x` `0` and `y` `0`, so on the top left corner of the screen, it appears very far from that angle. That's because we moved the camera up by `50` pixels and left by `30` pixels.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/tilemaps-camera.png"></p>
+</div>
 
 ## Game code
 
-_TODO_
+In `code` data blocks you can describe the logic of your game. Time to code!
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "code":[
+         <add your code here>
+      ]      
+   }]
+}
+```
+
+There is a [whole chapter](codecommands.md) about coding. Coding in Rewtro is pretty weird, so I'm leaving here a tiny example to show you how a `code` data block looks like:
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A","text":"0"}],
+      "tilemaps":[{"map":["A"]}],
+      "code":[
+         {
+            "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],
+            "then":[
+               {"id":"A","sum":[{"value1":[{"smallNumber":1}]}]},
+               {"id":"A","set":[{"text":[{"attribute":"value1"}]}]}
+            ]
+         }
+      ]
+   }]
+}
+```
+
+This cartridge shows a counter on the top left of the screen: hit the virtual _A button_ to increase that.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/code-counter.png"></p>
+</div>
