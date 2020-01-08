@@ -48,7 +48,7 @@ LocaleManager.languages.EN={
 	// --- Credits
 	credits:"Credits",
 	credits_techs:"Rewtro exists thanks to these techs:",
-	credits_people:"...and these great peoples' support:",
+	credits_people:"...and these great people's support:",
 	// --- Global
 	button_ok:"<i class='fas fa-thumbs-up'></i> OK",
 	button_close:"<i class='fas fa-times-circle'></i> Close",
