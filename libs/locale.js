@@ -225,7 +225,7 @@ LocaleManager.languages.ES={
 	// --- QR-Cart scanner
 	button_lightonoff:"<i class='fas fa-lightbulb'></i> ENCENDIDO/APAGADO",
 	button_cameraid:"<i class='fas fa-camera'></i> CAM {1}",
-	loadqr_tutorial:"Apunte la cámara a un <i class='fas fa-qrcode'></i> QR-Cart para descargar.",
+	loadqr_tutorial:"Apunte la c&aacute;mara a un <i class='fas fa-qrcode'></i> QR-Cart para descargar.",
 	loadqr_progress:"<br>Exploraci&oacute;n <b>{1}</b> QR-Carts restante!",
 	loadqr_scanning:"Escaniando <b>{1}</b> juegos QR-Cart.<br>",
 	// --- Installer
