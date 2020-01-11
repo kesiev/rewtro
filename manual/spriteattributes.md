@@ -437,7 +437,7 @@ Let's explain their movement:
   * The `B` sprite has a constant vertical speed to the top and it's faster than `A`. It will go out to the top of the screen.
   * The `C` sprite starts with no speed but is affected by a soft vertical gravity. It will gain a `0.1` speed to the bottom every frame and will slowly fall out to the bottom of the screen.
   * The `D` sprite starts still like the `C` sprite but is affected by horizontal gravity. It will do the same as the `C` sprite but faster (`0.2`) and to the left.
-  * The `E` sprite will tray moving fast to the right but have a restitution value to the same side that will make it lose 9/10 (`0.9`) of its horizontal speed every frame. It will move to the right until it stops.
+  * The `E` sprite will try moving fast to the right but have a restitution value to the same side that will make it lose 9/10 (`0.9`) of its horizontal speed every frame. It will move to the right until it stops.
 
 Mixed physic attributes can help you implementing game genres with less code: setting `restitutionX` and `restitutionY` to the same value recreates a top-down behavior, setting `restitutionX` and positive `gravityY` helps on making a platformer, etc.
 
