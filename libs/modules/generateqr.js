@@ -47,7 +47,7 @@ function ModuleGenerateQR(label,qrcart) {
 					if (interval) button.className+=" selected";
 				}
 
-				var viewer=$("div",{set:{className:"qrviewer"}},dialog);
+				var viewer=$("div",{set:{className:"qrviewer"},css:{backgroundSize:"contain"}},dialog);
 				var footerbar=$("div",{set:{className:"qrviewerfooterbar"}},dialog);
 				var topbar=$("div",{set:{className:"qrviewertopbar"}},dialog);
 				gameConsole.createButton("<i class='fas fa-times-circle'></i>",topbar,function(){
