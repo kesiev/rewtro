@@ -44,7 +44,7 @@
 			"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]
 		}],
 		"then":[{
-			"as":"game","set":[{"value0":[{"_":0}],"value1":[{"_":{"_placeholder":"startingLives"}}],"value2":[{"_":1}]}],
+			"as":"game","set":[{"value0":[{"_":0}],"value1":[{"_":{"_placeholder":"startingLives"}}],"value2":[{"_":1}],"value5":[{"_":{"_placeholder":"runScene"}}]}],
 			"runScene":[{"_":{"_placeholder":"runScene"}}]
 		}]
 	}]
