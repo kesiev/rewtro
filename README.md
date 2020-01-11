@@ -104,7 +104,7 @@ Rewtro QR-Carts are cheap to print and contain the _whole_ game data, are _physi
 
 *Q: I want to make a Rewtro game too!*
 
-A: Ok! Well... the SDK has been rushed to make some games working for my 2019 Christmas greeting cards but you can try to learn how to use it by yourself! You need an Apache server with PHP support and writing access to the `carts/` directory. Then have a look to the JSON files (I suggest you to start with `K-005-sdong.json` which is a self-contained mini-Pong clone) and get inspired. If there is some kind of interest around this POC I'll try to publish a programmer's guide but, in the meanwhile... good luck!
+A: Ok! You need an Apache server with PHP support and writing access to the `carts/` directory. You'll probably need a manual and I'm working on it: you can read a work in progress version [here](manual/README.md). If you prefer to learn from the code have a look to the JSON files into the `carts/` directory (I suggest you to start with `K-005-sdong.json` which is a self-contained mini-Pong clone) and get inspired.
 
 *Q: Which browser I can use for running Rewtro games?*
 

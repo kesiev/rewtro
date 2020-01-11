@@ -1,45 +1,474 @@
 # Sprite attributes
 
-_TODO_
+Sprites are rectangular things that may show a background color, an image or some text that are defined in [data blocks](datablocks.md) and can be spawned multiple times by both `tilemaps` or via `code`.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","text":"SHOW~SOME~TEXT","backgroundColor":5,"width":48,"height":24,"x":56,"y":60}
+      ],
+      "tilemaps":[{"map":["A"]}]
+   }]
+}
+```
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-basic.png"></p>
+</div>
+
+Once spawned sprites can be moved, removed and animated manually or following the rules of a very basic physic engine.
 
 ## ID and Flags
 
-_TODO_
+Sprites can be referenced by `code` using `id`s or `flags`.
+
+  * `id` is a mandatory single letter reference that is used by `tilemaps` and `code` to spawn a sprite as it's defined in a loaded data block. While `id` _must_ be unique in loaded data blocks, multiple sprites can have the same `id` once they're spawned.
+  * `flags` is a multiple letters identifier. Sprites sharing the same letter in its `flags` can be considered as _a group_.
+
+Time for a little example.
 
 ```
-{ key:"id", character:SYMBOLS },
-{ key:"flags", string:SYMBOLS, defaultValue:"" },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","text":"A"},
+         {"id":"B","text":"B","flags":"AB"},
+         {"id":"C","text":"C","flags":"AC"},
+         {"id":"D","text":"D","flags":"CDE"}
+      ],
+      "tilemaps":[{"map":["ABCD"]}],
+      "code":[
+         {"then":[
+            {"id":"A","set":[{"backgroundColor":[{"smallNumber":5}]}]},
+            {"flags":"A","set":[{"backgroundColor":[{"smallNumber":6}]}]},
+            {"flags":"CD","set":[{"y":[{"smallNumber":8}]}]}
+         ]}
+      ]
+   }]
+}
 ```
+
+This cartridge displays some colored letters:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-idflags.png"></p>
+</div>
+
+Let's have a look to what happened. The data block defines these `sprites`:
+
+  * Sprite with `A` id and text have no flags.
+  * Sprite with `B` id and text have the `A` and `B` flags.
+  * Sprite with `C` id and text have the `A` and `C` flags.
+  * Sprite with `D` id and text have the `C`, `D`, and `E` flags.
+
+These four sprites are spawned on the top left of the screen by a `tilemap`. Then these sprites' background color and position are changed by three lines of `code`.
+
+  * Sprites with `id` `A` are set to `backgroundColor` `5`, which is red. It's just our `A` sprite.
+  * Sprites with `flags` `A` are set to `backgroundColor` `6`, which is purple. The `B` and `C` sprites both shares the `A` flags, so they are now purple.
+  * Sprites with `C` _or_ `D` flags are set to `y` `8`, moving them a little.  The `C` sprite has the `C` flag only and the `D` sprite has both the `C` and `D` flags, so they are moved.
+
+Sprite `id` and `flags` are _just normal attributes_, so they can be changed by your game `code` at any time.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","text":"A"},
+         {"id":"B","text":"B","flags":"B"},
+         {"id":"C","text":"C"},
+         {"id":"D","text":"D"}
+      ],
+      "tilemaps":[{"map":["ABCD"]}],
+      "code":[
+         {"then":[
+            {"id":"A","set":[{"backgroundColor":[{"smallNumber":5}]}]},
+            {"flags":"B","set":[{"backgroundColor":[{"smallNumber":6}]}]}
+         ]},
+         {
+            "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"==","smallNumber":25}]}],
+            "then":[
+               {"id":"C","set":[{"id":[{"character":"A"}]}]},
+               {"id":"D","set":[{"flags":[{"string":"AB"}]}]}
+            ]
+         }
+      ]
+   }]
+}
+```
+
+Like the previous one, this cartridge spawns 4 sprites and its code keep setting the `backgroundColor` of the sprites with `id` `A` and `flags` `B`, which are just the `A` and `B` sprites.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-change1.png"></p>
+</div>
+
+After a little while the sprite with `id` `C` is changed and its `id` is set to `A`. Then the sprite with `id` `D` gains the `A` and `B` flags. From now the `C` and `D` sprites will be targeted by the color change, resulting in this:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-change2.png"></p>
+</div>
+
+On the screen we have now two sprites with `id` `A` and two sprites with flag `B`.
 
 ## Background color and graphic
 
-_TODO_
+Sprites are mostly used to display enemies, bullets, and the player itself. Sprites in Rewtro are rectangles and you can set its position using `x` and `y` and its size with `width` and `height`.
+
+Sprites are transparent by default. The easiest way to make them appear is by setting their `backgroundColor` to a color index of your [system](rewtrocartridge.md) color palette.
 
 ```
-{ key:"graphic", value:GRAPHICS, defaultValue:GRAPHICS[0] },
-{ key:"x",integer:RANGES.COORD, defaultValue:0 },
-{ key:"y",integer:RANGES.COORD, defaultValue:0 },
-{ key:"width",integer:RANGES.SIZE, defaultValue:8 },
-{ key:"height",integer:RANGES.SIZE, defaultValue:8 },
-{ key:"graphicsX",integer:RANGES.SIZE },
-{ key:"graphicsY",integer:RANGES.SIZE },
-{ key:"graphicsWidth",integer:RANGES.SIZE },
-{ key:"graphicsHeight",integer:RANGES.SIZE },
-{ key:"backgroundColor", integer:RANGES.COLOR, defaultValue:0 },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","x":16,"y":32,"width":16,"height":48,"backgroundColor":4},
+         {"id":"B","x":40,"y":40,"width":16,"height":48},
+         {"id":"C","x":64,"y":48,"width":16,"height":48,"backgroundColor":5},
+         {"id":"D","x":88,"y":56,"width":16,"height":48,"backgroundColor":6}
+      ],
+      "tilemaps":[{"map":["ABCD"]}]
+   }]
+}
 ```
+
+This cartridge shows 4 sprites...
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-position.png"></p>
+</div>
+
+...but only 3 of them are visible since the `B` sprite has no background color.
+
+The way you're going to use sprites the most is to display and moving graphics. To do that you've to load `images` in a [data block](datablocks.md) and use that images as a _sprite sheet_, selecting the image you want to use with the `graphic` key and the portion you want to display with `graphicsX` and `graphicsY`. The `graphic` key can be set to any valid image id: `font`, `graphics`, `graphics0`, `graphics1`, `graphics2`, `graphics3`, `graphics4`, `graphics5`. If no `graphic` key is defined the `graphics` image is used.
+
+The size of the displayed portion is already defined by the `width` and `height` keys of your sprite we mentioned before but you can _stretch_ a larger or smaller portion of the image into the sprite using `graphicsX` and `graphicsY`. All these keys values must be numbers from `0` to `255`.
+
+Do you remember our ugly [sample.png](images/sample.png) and [sample-colors.png](images/sample-colors.png) images?
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "images":[
+         {"id":"graphics","image":{"data":{"_file":"sample.png"},"format":"monocolor"}},
+         {"id":"graphics1","image":{"data":{"_file":"sample-colors.png"},"format":"indexed"}}
+      ],
+      "sprites":[
+         {"id":"A","x":16,"y":16,"graphicsX":0,"graphicsY":64,"width":16,"height":16},
+         {"id":"B","x":40,"y":16,"graphicsX":16,"graphicsY":80,"width":16,"height":16},
+         {"id":"C","x":64,"y":16,"graphic":"graphics1","graphicsX":0,"graphicsY":0,"width":16,"height":16},
+         {"id":"D","x":16,"y":40,"graphic":"graphics1","graphicsX":0,"graphicsY":0,"graphicsWidth":16,"graphicsHeight":16,"width":72,"height":32},
+         {"id":"E","x":16,"y":80,"graphicsX":0,"graphicsY":96,"graphicsWidth":16,"graphicsHeight":16,"width":8,"height":8},
+         {"id":"F","x":32,"y":80,"graphic":"font","graphicsX":16,"graphicsY":16,"width":80,"height":16}
+      ],
+      "tilemaps":[{"map":["ABCDEF"]}]
+   }]
+}
+```
+
+It displays some sprites with different sizes and portions:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-sizes.png"></p>
+</div>
+
+There is a lot of stuff going on. Let's fetch the sprites one by one:
+
+  * The `A` sprite is cyan: it just _cuts_ the part at 0,64 of the default `graphics` image by 16x16 pixels.
+  * The `B` sprite is red: it does the same as the `A` sprite but changing the cut coordinates to 16,80.
+  * The `C` sprite is the smaller colored one: it does the same of the others but using the `graphics1` image instead
+  * The `D` sprite is the stretched one: even if it _cuts_ a 16x16 area from `graphics1` as the sprite `C` did, it used `graphicsWidth` and `graphicsHeight` instead of `width` and `height`, allowing the sprite to have different sizes for the size and the cut. Rewtro then draws a 16x16 image cut into a 72x32 area, resulting in a stretched image.
+  * The `E` sprite is the tiny purple one: it does the same of `D` but this time the sprite size is smaller than the image cut, resulting in a shrunk face.
+  * The `D` sprite... are all the letters: in Rewtro fonts are just images, so you can render parts of them setting `graphic` to `font`.
 
 ## Effects
 
-_TODO_
+Rewtro sprite renderer is very simple... but it supports some effects you can apply to sprites, setting keys:
+
+  * `flipX` and `flipY` can be set to `true` or `false` and mirrors the sprite horizontally or vertically.
+  * `scale` can be set to a single decimal float number from `-25` to `26.1` and scales and shrink the sprite by the center.
+  * `opacity` can be a number from `0` to `127` and can make a sprite transparent.
+  * `rotate` can be set to a number from `0` and `360` and rotates the sprite by the center.
+  * `visible` can be `true` or `false` and can prevent your sprite to be displayed.
+
+All of these effects can be mixed and matched as you want. Mandatory _effects gallery_!
 
 ```
-{ key:"rotate", integer:RANGES.ANGLE, defaultValue:0 },
-{ key:"flipX", bool:true, defaultValue:false },
-{ key:"flipY", bool:true, defaultValue:false },
-{ key:"scale", float:RANGES.SCALE, defaultValue:1 },
-{ key:"visible", bool:true, defaultValue:true },
-{ key:"opacity", integer:RANGES.OPACITY, defaultValue:RANGES.OPACITY[1] },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "images":[
+         {"id":"graphics","image":{"data":{"_file":"sample.png"},"format":"monocolor"}}
+      ],
+      "sprites":[
+         {"id":"A","x":16,"y":4,"graphicsX":0,"graphicsY":64,"width":16,"height":16},
+         {"id":"B","x":40,"y":4,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"opacity":60},
+         {"id":"C","x":48,"y":4,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"opacity":30},
+         {"id":"D","x":56,"y":4,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"opacity":15},
+         {"id":"E","x":40,"y":28,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"flipX":true},
+         {"id":"F","x":64,"y":28,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"flipY":true},
+         {"id":"G","x":88,"y":28,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"flipX":true,"flipY":true},
+         {"id":"I","x":40,"y":52,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"rotate":45},
+         {"id":"J","x":40,"y":76,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"scale":1.5},
+         {"id":"K","x":40,"y":100,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"visible":false},
+         {"id":"L","x":40,"y":124,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"scale":0.7,"flipX":true,"opacity":60,"rotate":20}
+      ],
+      "tilemaps":[{"map":["ABCDEFGHIJKL"]}]
+   }]
+}
 ```
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-effects.png"></p>
+</div>
+
+Sprite `A` has no effect applied, sprites from `B`, `C`, and `D` have different opacity, sprites `E`, `F`, and `G` are flipped, sprite `I` is rotated, `J` is scaled, `K` is not visible since its `visible` key is `false` and `L` has multiple effects applied.
+
+## Animations
+
+Sprites displaying an image can be animated frame by frame using the `animations` and `animation` key. To do that all of your sprite animation frames must be one next to the other in your image like I did in [sample-animated.png](images/sample-animated.png).
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sample-animated-zoom.png"></p>
+</div>
+
+You can have multiple sprites and animations in the same image. Starting from your sprite `graphicsX` and `graphicsY`, each frame size is given by the sprite _cut_ size (`graphicsWidth` or `graphicsHeight` or `width` and `height` if they're missing). The first frame of the sequence has id 0, the second one has id 1 and so on. The frame order doesn't matter since each animation has its own `frames` sequence.
+
+To animate your sprites you've to define first one or multiple animations with the `animations` key. Each animation is described by:
+
+  * The `frames` key, which is a sequence of frames ids that will be played in the specified order.
+  * The `speed` key, which is a number from `0` to `127`, sets for how many screen frames a frame is displayed before going to the next one. Under default [system settings](rewtrocartridge.md) the game runs at 25 frames per second so an animation with `speed` set to `25` will wait a second between each animation frame. An animation with `speed` set to the default value of  `0` will run at the same speed of the screen frame rate.
+  * The `mode` key which sets how the animation will be played. It can be set to:
+    * `loop` will play the animation forever, starting the `frames` sequence again. It's the `mode` default value.
+    * `once` will play the animation just once.
+    * `bounce` will play the animation following the `frames` order and then plays it backward forever.
+
+Once your animations are defined, just set the `animation` key to `0` to play the first animation you defined, `1` for the second one and so on.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "images":[
+         {"id":"graphics","image":{"data":{"_file":"sample-animated.png"},"format":"monocolor"}}
+      ],
+      "sprites":[
+         {
+            "id":"A","x":16,"y":8,"graphicsX":0,"graphicsY":64,"width":16,"height":16,
+            "animations":[
+               {"frames":[0,1,2,3],"speed":10},
+               {"frames":[0,1,2,3],"speed":5}
+            ]
+         },
+         {
+            "id":"B","x":40,"y":8,"graphicsX":0,"graphicsY":64,"width":16,"height":16,
+            "animations":[
+               {"frames":[0,1,2,3],"speed":10},
+               {"frames":[0,1,2,3],"speed":5}
+            ],
+            "animation":0
+         },
+         {
+            "id":"C","x":64,"y":8,"graphicsX":0,"graphicsY":64,"width":16,"height":16,
+            "animations":[
+               {"frames":[0,1,2,3],"speed":10},
+               {"frames":[0,1,2,3],"speed":5}
+            ],
+            "animation":1
+         },
+         {
+            "id":"D","x":88,"y":8,"graphicsX":0,"graphicsY":64,"width":16,"height":16,
+            "animations":[
+               {"frames":[0,1,2,3],"speed":2,"mode":"bounce"}
+            ],
+            "animation":0
+         },
+         {
+            "id":"E","x":112,"y":8,"graphicsX":0,"graphicsY":64,"width":16,"height":16,
+            "animations":[
+               {"frames":[1,3,0,2],"speed":25,"mode":"once"}
+            ],
+            "animation":0
+         }
+      ],
+      "tilemaps":[{"map":["ABCDE"]}]
+   }]
+}
+```
+
+This cartridge shows 5 sprites following different animations. Sorry for the not-so-helpful screenshot.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-animation.png"></p>
+</div>
+
+The `A` sprite has some defined `animations` but no `animation` set, so it's still. The `B` and `C` sprites have the same `animations` but `B` uses the first one and `C` uses the second one, which is faster. Both of them will loop forever, going back to the first frame of the `frames` list every loop. The `D` sprite animation will instead `bounce` going from the first frame of the `frames` list to the last one and then goes backward. The `E` sprite is the slowest of all sprites, displaying a new image every `25` frames (i.e. every second). Its `frames` order is different than the other sprites and the animation will be played just `once`: after the `frames` sequence is over, the `E` sprite will stay still.
+
+## Text
+
+Sprites can be also used to print text on the screen. Just set the `text` key to the text you want to display, using just the  `ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?!@,-.:;<=>[\]/_#$%&'()*+"` symbols and `~` for a new line, the `textColor` key to a color index of your [system](rewtrocartridge.md) color palette and align text inside the sprite area setting the `textAlignment` key to `right`, `center`, or `left` (which is the default alignment).
+
+Like the `graphic` key of a sprite, you can set the source image to change the font face. By default the `font` image is used but you can use multiple fonts adding a [custom font in a data block](datablocks.md) and using its id.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "images":[{"id":"graphics1","image":{"data":{"_file":"sample-font.png"},"format":"monocolor"}}],
+      "sprites":[
+         {"id":"A","text":"THIS TEXT IS~LEFT ALIGNED!","textColor":3,"backgroundColor":2,"x":8,"y":8,"width":144,"height":16},
+         {"id":"B","text":"THIS TEXT IS~RIGHT ALIGNED!","textColor":4,"backgroundColor":2,"x":24,"y":32,"width":128,"height":16,"textAlignment":"right"},
+         {"id":"C","text":"THIS TEXT IS~CENTERED!","textColor":5,"backgroundColor":2,"x":40,"y":56,"width":112,"height":16,"textAlignment":"center"},
+         {"id":"D","text":"THIS TEXT USES~A CUSTOM FONT!","font":"graphics1","textColor":7,"backgroundColor":2,"x":8,"y":80,"width":144,"height":32,"textAlignment":"center"}
+      ],
+      "tilemaps":[{"map":["ABCD"]}]
+   }]
+}
+```
+
+This cartridge shows some text with different alignment and font face:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-font.png"></p>
+</div>
+
+Effects on text works this way:
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","text":"LETTERS ARE~ROTATED!","rotate":90,"x":36,"y":40,"backgroundColor":5,"width":88,"height":16},
+         {"id":"B","x":36,"y":40,"backgroundColor":6,"width":88,"height":16,"opacity":64},
+         {"id":"C","text":"SPRITE~SCALED","backgroundColor":5,"x":48,"y":108,"width":64,"height":16,"scale":2,"textAlignment":"right"},
+         {"id":"D","backgroundColor":6,"x":48,"y":108,"width":64,"height":16,"opacity":64}
+      ],
+      "tilemaps":[{"map":["ABCD"]}]
+   }]
+}
+```
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-fonteffects.png"></p>
+</div>
+
+Purple areas are covering the matching sprite but without any effect applied. Sprite `A` shows that the `rotate` effect is applied to _single letters_ and separately to the sprite, resulting in misalignment. Sprite `B` shows that the text `scale` effect follows its sprite size and position. Like `rotate` also `flipX` and `flipY` effects are applied to single letters too.
+
+## Physics
+
+All spawned sprites are ruled by Rewtro tiny physic engine. Default sprites are still because they don't have any speed by default but you can start moving them just setting `speedX` and `speedY` keys. Sprites movement can be influenced by a constant horizontal acceleration with `gravityX` and a vertical one with `gravityY` and be slowed down until they stop by `restitutionX` and `restitutionY` keys.
+
+All physics key values are single decimal float numbers from `-25` to `26.1`.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","text":"A","speedX":-1},
+         {"id":"B","text":"B","speedY":2},
+         {"id":"C","text":"C","gravityY":0.1},
+         {"id":"D","text":"D","gravityX":-0.2},
+         {"id":"E","text":"E","speedX":3,"restitutionX":0.9}
+      ],
+      "tilemaps":[{
+         "y":68,
+         "x":52,
+         "map":["ABCDE"]
+      }]
+   }]
+}
+```
+
+This cartridge spawns some letters in the middle of the screen but, as soon as it's started, the letter are scattered around.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-physic.png"></p>
+</div>
+
+Let's explain their movement:
+
+  * The `A` sprite has a constant horizontal speed to the left. It will go out to the left of the screen.
+  * The `B` sprite has a constant vertical speed to the top and it's faster than `A`. It will go out to the top of the screen.
+  * The `C` sprite starts with no speed but is affected by a soft vertical gravity. It will gain a `0.1` speed to the bottom every frame and will slowly fall out to the bottom of the screen.
+  * The `D` sprite starts still like the `C` sprite but is affected by horizontal gravity. It will do the same as the `C` sprite but faster (`0.2`) and to the left.
+  * The `E` sprite will tray moving fast to the right but have a restitution value to the same side that will make it lose 9/10 (`0.9`) of its horizontal speed every frame. It will move to the right until it stops.
+
+Mixed physic attributes can help you implementing game genres with less code: setting `restitutionX` and `restitutionY` to the same value recreates a top-down behavior, setting `restitutionX` and positive `gravityY` helps on making a platformer, etc.
+
+Maximum vertical speed can be automatically limited in a range by `speedLimitYBottom` and `speedLimitYTop` and the horizontal one by `speedLimitXBottom` and `speedLimitXTop`. By default, bottom speed limit is `-4` for and the top is `-4`. You can disable restitution for a single game frame setting `applyRestitutionX` and `applyRestitutionY`.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","text":"A","gravityY":0.1},
+         {"id":"B","text":"B","gravityY":0.1,"speedLimitYTop":1.5},
+         {"id":"C","text":"C","speedY":-3,"restitutionY":0.9},
+         {"id":"D","text":"D","speedY":-3,"restitutionY":0.9,"applyRestitutionY":false}
+      ],
+      "tilemaps":[{
+         "y":68,
+         "x":52,
+         "map":["ABCD"]
+      }]
+   }]
+}
+```
+
+Sprite `A` and `B` will fall to the bottom at the same speed but the `A` sprite will eventually surpass `B` once it reaches its speed limit. `C` and `D` will move to the top with some restitution applied, so they will be slowed down until stopped. The `D` sprite will stop a little later than `C` since restitution wasn't applied in the first frame.
+
+`applyRestitutionX` and `applyRestitutionY` are thought to be set by your code: when the player wants to move its character to a direction, restitution will keep trying stopping it slowing down its movements. Disabling restitution on player inputs will make its character more reactive.
 
 ## Auto-effects
 
@@ -50,49 +479,6 @@ _TODO_
 { key:"rotateToAim", bool:true, defaultValue:false },
 { key:"flipXtoSpeedX", bool:true, defaultValue:false },
 { key:"flipYtoSpeedY", bool:true, defaultValue:false },
-```
-
-## Animations
-
-_TODO_
-
-```
-{ key:"animation", integer:RANGES.SMALLNUMBER },
-{ key:"animations", values:System.padWithUnused(debug,"animations",8,[
-	{ key:"frames", listNumbers:RANGES.SMALLNUMBER },
-	{ key:"mode", value:System.padWithUnused(debug,"mode",4,["loop","once","bounce"]) },
-	{ key:"speed", integer:RANGES.SMALLNUMBER }
-])}
-```
-
-## Text
-
-_TODO_
-
-```
-{ key:"font", value:GRAPHICS, defaultValue:GRAPHICS[1] },
-{ key:"text", string:SYMBOLS },
-{ key:"textColor", integer:RANGES.COLOR, defaultValue:8 },
-{ key:"textAlignment", value:System.padWithUnused(debug,"textAlignment",4,["left","right","center"]) },
-```
-
-## Physics
-
-_TODO_
-
-```
-{ key:"speedX",float:RANGES.SPEED, defaultValue:0 },
-{ key:"speedY",float:RANGES.SPEED, defaultValue:0 },
-{ key:"speedLimitXTop", float:RANGES.SPEED, defaultValue:4 },
-{ key:"speedLimitXBottom", float:RANGES.SPEED, defaultValue:-4 },
-{ key:"speedLimitYTop", float:RANGES.SPEED, defaultValue:4 },
-{ key:"speedLimitYBottom", float:RANGES.SPEED, defaultValue:-4 },
-{ key:"gravityX", float:RANGES.SPEED, defaultValue:0 },
-{ key:"gravityY", float:RANGES.SPEED, defaultValue:0 },
-{ key:"applyRestitutionX", bool:true, defaultValue:true },
-{ key:"applyRestitutionY", bool:true, defaultValue:true },
-{ key:"restitutionX", float:RANGES.SPEED },
-{ key:"restitutionY", float:RANGES.SPEED },
 ```
 
 ## Collisions

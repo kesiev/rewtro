@@ -59,7 +59,7 @@ To add some images to a data block you have to set the `images` key:
 
 An image has the following mandatory keys:
 
-  * `id`: How the image is referenced in code. It must be one of these values: `font`,`graphics`,`graphics0`,`graphics1`,`graphics2`,`graphics3`,``graphics4`,`graphics5`. The `font` image is used as custom font for your game. The `graphics` image is used as default spritesheet for sprites rendering.
+  * `id`: How the image is referenced in code. It must be one of these values: `font`,`graphics`, `graphics0`, `graphics1`, `graphics2`, `graphics3`, `graphics4`, `graphics5`. The `font` image is used as custom font for your game. The `graphics` image is used as default spritesheet for sprites rendering.
   * `image`: The image data. It has two sub-keys:
     * `data`: The raw image data. Since you can't type in raw binary data you can load an external PNG file using the [compiler helper](compilerhelpers.md) `_file`.
     * `format`: The image format. We're going to talk about them later.
@@ -452,6 +452,16 @@ All of the `notes` are 3 symbols long and there are 3 types of them:
   * You can silence the previous note using three spaces.
 
 A `music` block may contain your full song or parts of them: you can arrange multiple `music` blocks, loop them, and change their tempo using `songs`.
+
+### The piano
+
+You can sketch some notes using the piano function in the SDK _sound editor_ we mentioned before. To go there, just select the _note_ icon from the home.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sound-piano.png"></p>
+</div>
+
+Once you've set up your sound moving sliders and changing combos you can hear how its `C4-` note sounds hitting the _Play note C4_ button. Selecting the _Piano_ input box you can press your QWERTY keyboard keys to play a virtual piano. The notes you can play will range from the previous octave you selected from the _Octave_ selector to the next one and its symbol will appear into the _Piano_ input box once played. The last notes sequence you played will appear into the _Notes book_ text area in an array format: it will be played the same way when pasted into `notes`, so it's a good way to start working on simple music.
 
 ### Songs
 

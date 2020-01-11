@@ -2,7 +2,7 @@
 
 _NOTE: I'm writing this manual in random slices of spare time and it's far from being complete right now. Anyway, I hope you'll find this useful in the meanwhile. Some chapters are quite long so I'll split them once the manual is nearing completion._
 
-Rewtro is a fantasy console/game engine thought to load games from a very small amount of data. While coding a game in Rewtro can be a little more difficult than other fantasy consoles and game engines due to its self-imposed limits, Rewtro allows you to distribute your games in unusual ways. Right now, the [Rewtro fake console](https://kesiev.com/rewtro) can load games from papercraft cartridges you can build using a computer, any printer, scissors, a cutter, and some foldings. The fake console is thought for mobile devices but it just works on desktop computers too.
+Rewtro is a fantasy console inspired game engine thought to load games from a very small amount of data. While coding a game in Rewtro can be a little more difficult than other fantasy consoles and game engines due to its self-imposed limits, Rewtro allows you to distribute your games in unusual ways. Right now, the [Rewtro fake console](https://kesiev.com/rewtro) can load games from papercraft cartridges you can build using a computer, any printer, scissors, a cutter, and some foldings. The fake console is thought for mobile devices but it just works on desktop computers too.
 
 To run the Rewtro SDK you just need to download the [Rewtro project](https://github.com/kesiev/rewtro), host its folder on an Apache/PHP server and then load the `carts/` folder in your browser. If everything works, open your favorite editor, create a new JSON file in that `carts/` folder and you're ready to go!
 
@@ -24,5 +24,7 @@ I hope it will help you a little on how to code a Rewtro game.
   * Extras: A collection of in-depth articles.
     * [Neat ideas for the future](ideas.md): A collection of ideas I've collected from people around the _internet_ to make Rewtro better.
     * [Advanced Rewtro](advanced.md): Know Rewtro even better and learn some development tricks.
+    * SDK Manual: How to use the Rewtro SDK software.
+    * _Printing and folding_: A collection of tips on how to print and fold Rewtro QR-Carts.
     * _Physics_: How to work with the tiny Rewtro physics engine.
 

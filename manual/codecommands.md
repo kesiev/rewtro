@@ -6,6 +6,10 @@ _TODO - Reference to [getters](getters.md)_
 
 _TODO_
 
+### Every line is a getter
+
+_TODO_
+
 ## When
 
 _TODO - Using as iterator, reference to [conditions](conditions.md) for is._

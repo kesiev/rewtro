@@ -13,3 +13,7 @@ HTML5 specs say that sound in browsers must be enabled during user interaction. 
 ## Sound editor and paste in code
 
 The sound editor has a _Paste this in code_ section that shows a more verbose JSON for each sound. You can paste that JSON in Rewtro JavaScript code to create _system sounds_. That's how the `shutter` and `click` sounds of the fake console dashboard [were made](https://github.com/kesiev/rewtro/blob/master/libs/gameconsole.js).
+
+## Rewtro console in developer mode
+
+Your local Rewtro console can be switched to _developer mode_ from the settings screen of the SDK. Hit the _cogs icon_ on the top and toggle the _Rewtro console in developer mode_.
