@@ -230,7 +230,7 @@ function RewtroEngine(parent,CFG) {
 			effectsChannels[channel]=1;
 		});
 		if (line.images)
-			line.images.forEach(image=>{if (image.id=="font") prepareFont(image); });
+			line.images.forEach(image=>{ prepareFont(image); });
 	});
 
 	// Music preparation
@@ -879,7 +879,7 @@ function RewtroEngine(parent,CFG) {
 
 					var newsprite;
 					var pattern=line.fillAreaWithPattern||line.outlineAreaWithPattern;
-					var tileWidth=memory.sprites[pattern[0][0]].width,tileHeight=memory.sprites[pattern[0][0]].height;
+					var tileWidth=memory.sprites[pattern[0][0]].width||8,tileHeight=memory.sprites[pattern[0][0]].height||8;
 					var cols=Math.floor(inArea.width/tileWidth);
 					var rows=Math.floor(inArea.height/tileHeight);
 					for (var x=0;x<cols;x++)
@@ -1087,7 +1087,7 @@ function RewtroEngine(parent,CFG) {
 				randomNumber=Math.random();
 				run=statement.then;
 
-				if (statement.times) times=evaluateGetter(1,0,subject,statement.times[0],randomNumber)[0];
+				if (statement.times) times=evaluateGetter(subject,0,subject,statement.times[0],randomNumber)[0];
 				else times=1;
 
 				// Evaluate condition
@@ -1288,26 +1288,31 @@ function RewtroEngine(parent,CFG) {
 								sprite.noCamera?sprite.y:sprite.y-scene.y,
 								sprite.width,sprite.height
 							);
-						if (memory.images.font&&(sprite.text!==undefined)) {
-							var letterWidth=memory.images.font.tileWidth*sprite.scale;
-							var letterHeight=memory.images.font.tileHeight*sprite.scale;
+						if (memory.images[sprite.font]&&(sprite.text!==undefined)) {
+							var font=memory.images[sprite.font];
+							var letterWidth=font.tileWidth*sprite.scale;
+							var letterHeight=font.tileHeight*sprite.scale;
 							var lines=(sprite.text+"").split("~");
 							lines.forEach((text,line)=>{
-								var dx=(letterWidth-memory.images.font.tileWidth)/2;
-								var dy=(letterHeight-memory.images.font.tileHeight)/2;
+								var dx=(letterWidth-font.tileWidth)/2;
+								var dy=(letterHeight-font.tileHeight)/2;
+								var xgap=((sprite.scale-1)*0.5)*sprite.width;
+								var ygap=((sprite.scale-1)*0.5)*sprite.height;
+								dy-=ygap;
 								switch (sprite.textAlignment) {
-									case "right":{ dx-=text.length*letterWidth-sprite.width; break; }
+									case "right":{ dx-=text.length*letterWidth-sprite.width-xgap; break; }
 									case "center":{ dx-=(text.length*letterWidth-sprite.width)/2; break; }
+									default:{ dx-=xgap; }
 								}
 								for (var i=0;i<text.length;i++) {								
 									HW.blit(
 										memory.images[sprite.font].image.data,
 										sprite.flipX,sprite.flipY,sprite.rotate,sprite.opacity/OPACITYRANGE[1],sprite.scale,
-										FONTLETTERS.indexOf(text[i])*memory.images.font.tileWidth,sprite.textColor*memory.images.font.tileHeight,
-										memory.images.font.tileWidth,memory.images.font.tileHeight,
+										FONTLETTERS.indexOf(text[i])*font.tileWidth,sprite.textColor*font.tileHeight,
+										font.tileWidth,font.tileHeight,
 										(sprite.noCamera?sprite.x:sprite.x-scene.x)+i*letterWidth+dx,
 										line*letterHeight+(sprite.noCamera?sprite.y:sprite.y-scene.y)+dy,
-										memory.images.font.tileWidth,memory.images.font.tileHeight
+										font.tileWidth,font.tileHeight
 									);
 								}	
 							});
