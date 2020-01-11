@@ -320,6 +320,17 @@ function selected(option,file,isclick) {
 			})
 			break;
 		}
+		case "settings":{
+			var rowlabel;
+			document.body.innerHTML=header()+"<div class='filerow'>Settings</div>";			
+			var box=document.createElement("div");
+			box.className="buttonbar";
+			rowlabel="<b>Rewtro console in developer mode:</b> "+(window.localStorage["_CRT_DEVMODE"]?"Yes":"No");
+			rowlabel+=" <div class='button' onclick=\"toggleDeveloperMode();selected('settings',0,true);\"><i class='fas fa-cogs'></i></div>";
+			box.innerHTML=rowlabel;
+			document.body.appendChild(box);
+			break;
+		}
 		case "noisemaker":{
 			noiseMaker();
 			break;
@@ -364,6 +375,7 @@ function cartSelector() {
 		html+="<div class='button' onclick=\"selected('resolutions',0,true)\"><i class='fas fa-expand'></i></div>";
 		html+="<div class='button' onclick=\"selected('controllers',0,true)\"><i class='fas fa-gamepad'></i></div>";
 		html+="&nbsp;";
+		html+="<div class='button' onclick=\"selected('settings',0,true)\"><i class='fas fa-cogs'></i></div>";
 		html+="<div class='button' onclick=\"selected('noisemaker',0,true)\"><i class='fas fa-music'></i></div>";
 		html+="</div><div class='filerow'>";
 		html+="<i class='fas fa-qrcode'></i> &times;";
@@ -387,6 +399,15 @@ function cartSelector() {
 		});
 		document.body.innerHTML=html;
 	});
+}
+
+// --- HELPERS
+
+function toggleDeveloperMode() {
+	if (window.localStorage["_CRT_DEVMODE"])
+		delete window.localStorage["_CRT_DEVMODE"];
+	else
+		window.localStorage["_CRT_DEVMODE"]=true;
 }
 
 // --- NOISEMAKER (hacked from Wright :) )
