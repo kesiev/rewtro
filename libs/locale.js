@@ -48,7 +48,7 @@ LocaleManager.languages.EN={
 	// --- Credits
 	credits:"Credits",
 	credits_techs:"Rewtro exists thanks to these techs:",
-	credits_people:"...and this great people support:",
+	credits_people:"...and these great people's support:",
 	// --- Global
 	button_ok:"<i class='fas fa-thumbs-up'></i> OK",
 	button_close:"<i class='fas fa-times-circle'></i> Close",
@@ -62,20 +62,20 @@ LocaleManager.languages.EN={
 	fullscreen_toggle:"Toggle fullscreen",
 	label_sharedgame:"Shared game",
 	// --- Last played management
-	lastplayed_discard_confirm:"Do you want to discard your last played game?<br>To play it again you've to load id from QR-Carts and other media.",
+	lastplayed_discard_confirm:"Do you want to discard your last played game?<br>To play it again, you must load it from QR-Carts or other media.",
 	button_yesdiscard:"<i class='fas fa-trash-alt'></i> Yes, discard the game.",
 	button_nokeep:"<i class='fas fa-undo'></i> No, keep it.",
 	lastplayed_discard_discarded:"Saved game discarded.",
 	// --- QR-Cart scanner
 	button_lightonoff:"<i class='fas fa-lightbulb'></i> ON/OFF",
 	button_cameraid:"<i class='fas fa-camera'></i> CAM {1}",
-	loadqr_tutorial:"Point the camera to a <i class='fas fa-qrcode'></i> QR-Cart to load it.",
+	loadqr_tutorial:"Point the camera at a <i class='fas fa-qrcode'></i> QR-Cart to load it.",
 	loadqr_progress:"<br>Scan <b>{1}</b> QR-Carts to go!",
 	loadqr_scanning:"Scanning a <b>{1}</b> QR-Cart game.<br>",
 	// --- Installer
 	installer_install:"Install Rewtro",
 	// --- Datasette
-	datasette_tutorial:"With the <i class='fas fa-tape'></i> Datasette you can share your last played game with a friend without using a QR-Cart.<br><br>Open Rewtro on his device, choose <i class='fas fa-camera'></i> Load QR-Cart and keep framing the animated code in the center of this screen until the game is started.<br><br>If the game is not loading try changing this screen brightness or the QR-Code size using the buttons on the top of the screen.",
+	datasette_tutorial:"With the <i class='fas fa-tape'></i> Datasette, you can share your last played game with a friend without using a QR-Cart.<br><br>Open Rewtro on his device, choose <i class='fas fa-camera'></i> Load QR-Cart and keep framing the animated code in the center of this screen until the game is started.<br><br>If the game is not loading, try changing this device's screen brightness or the QR-Code size using the buttons on the top of the screen.",
 	// --- Console
 	console_backtomenu:"Go to menu",
 	console_paused:"Game paused. <i class='fas fa-gamepad'></i> Hit here to play!",
@@ -193,6 +193,58 @@ LocaleManager.languages.FR={
 	console_buttonclabel:"Bouton C",
 	console_buttondlabel:"Bouton D",
 	console_pulldown:"Tirer vers le bas <i class='fas faa-bounce animated fa-hand-pointer'></i>",
+	console_up:"<i class='fas fa-arrow-up'></i>",
+	console_down:"<i class='fas fa-arrow-down'></i>",
+	console_left:"<i class='fas fa-arrow-left'></i>",
+	console_right:"<i class='fas fa-arrow-right'></i>"
+}
+
+LocaleManager.languages.ES={
+	LABEL:"Espa&ntilde;ol",
+	// --- Credits
+	credits:"Cr&eacute;ditos",
+	credits_techs:"Rewtro existe gracias a estas tecnolog&iacute;as:",
+	credits_people:"...y el apoyo de estas personas:",
+	// --- Global
+	button_ok:"<i class='fas fa-thumbs-up'></i> OK",
+	button_close:"<i class='fas fa-times-circle'></i> Cerrar",
+	// --- Language
+	language_change:"Cambiar idioma",
+	// --- Main menu
+	qrcart_load:"Descarga QR-Cart{1}",
+	qrcart_datasette:"Datasette",
+	lastplayed_run:"Repetir el &uacute;ltimo juego",
+	lastplayed_discard:"Descartar el &uacute;ltimo juego",
+	fullscreen_toggle:"Alternar pantalla completa",
+	label_sharedgame:"Juego compartido",
+	// --- Last played management
+	lastplayed_discard_confirm:"¿Quieres descartar tu &uacute;ltimo juego jugado? Para reproducirlo nuevamente, debe cargarlo desde QR-Carts u otros medios.",
+	button_yesdiscard:"<i class='fas fa-trash-alt'></i> S&iacute;, descarta el juego.",
+	button_nokeep:"<i class='fas fa-undo'></i> No, qu&eacute;datelo.",
+	lastplayed_discard_discarded:"Partida guardada descartada.",
+	// --- QR-Cart scanner
+	button_lightonoff:"<i class='fas fa-lightbulb'></i> ENCENDIDO/APAGADO",
+	button_cameraid:"<i class='fas fa-camera'></i> CAM {1}",
+	loadqr_tutorial:"Apunte la c&aacute;mara a un <i class='fas fa-qrcode'></i> QR-Cart para descargar.",
+	loadqr_progress:"<br>Exploraci&oacute;n <b>{1}</b> QR-Carts restante!",
+	loadqr_scanning:"Escaniando <b>{1}</b> juegos QR-Cart.<br>",
+	// --- Installer
+	installer_install:"Instalar Rewtro",
+	// --- Datasette
+	datasette_tutorial:"Con el <i class='fas fa-tape'></i> Datasette, puedes compartir tu &uacute;ltimo juego con un amigo sin usar un QR-Cart.<br><br>Abre Rewtro en su dispositivo, elige <i class='fas fa-camera'></i> Cargar QR-Cart y siga enmarcando el c&oacute;digo animado en el centro de esta pantalla hasta que comience el juego.<br><br>Si el juego no se est&aacute; cargando, intente ajustar el brillo de la pantalla de este dispositivo o el tama&ntilde;o QR-Code con los botones en la parte superior de la pantalla.",
+	// --- Console
+	console_backtomenu:"Volver al men&uacute;",
+	console_paused:"Juego pausado. <i class='fas fa-gamepad'></i> Haga clic aquí para jugar!",
+	console_nogame:"Descargar un juego usando <i class='fas fa-camera'></i> Descarga de QR-Cart",
+	console_tap:"Pulsa <i class='fas faa-pulse animated fa-hand-pointer'></i>",
+	console_drag:"Arrastra <i class='fas faa-wrench animated fa-hand-pointer'></i>",
+	console_or:"/",
+	console_move:"Mueve",
+	console_buttonalabel:"Bot&oacute;n A",
+	console_buttonblabel:"Bot&oacute;n B",
+	console_buttonclabel:"Bot&oacute;n C",
+	console_buttondlabel:"Bot&oacute;n D",
+	console_pulldown:"Bajar <i class='fas faa-bounce animated fa-hand-pointer'></i>",
 	console_up:"<i class='fas fa-arrow-up'></i>",
 	console_down:"<i class='fas fa-arrow-down'></i>",
 	console_left:"<i class='fas fa-arrow-left'></i>",
