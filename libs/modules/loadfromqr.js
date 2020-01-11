@@ -9,11 +9,21 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 
 			var help=$("div",{ set:{className:"bottomoverlay"} },dialog);
 			
-			function stopReader() {
+			function stopReader(endoption) {
 				ModuleLoadFromQR[mode].stop(scanner,dialog);
 				dialog.close();
 				clearInterval(resizeInterval);
-				gameConsole.endOption();
+				if (endoption) gameConsole.endOption();
+			}
+
+			function abort() {
+				stopReader(false);
+				gameConsole.getAlert(LOC._("loadqr_permissions"),[
+					{label:LOC._("button_ok"),onclick:function(dialog){
+						dialog.close();
+						gameConsole.endOption();
+					}}
+				]);
 			}
 
 			var readingSignature,partsloaded=0,partstoload=0,qrcartparts=[],lastqrcartpart=0;
@@ -51,7 +61,7 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 
 			// --- Prepare camera and resize
 
-			addButton(LOC._("button_close"),10,0,function(){ stopReader(); })
+			addButton(LOC._("button_close"),10,0,function(){ stopReader(true); })
 
 			// --- Prepare scanner
 
@@ -94,7 +104,7 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 				}
 			},500);
 
-			ModuleLoadFromQR[mode].registerOnScan(scanner,function(content){
+			ModuleLoadFromQR[mode].registerOnScan(scanner,abort,function(content){
 
 				// Read only QR-Cart
 				if (content.substr(0,3)=="CRT") {
@@ -112,7 +122,7 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 				        	qrcartparts[qrcartdata.id]=qrcartdata;
 				        	partsloaded++;
 				        	if (partsloaded==partstoload) {
-				        		stopReader();
+				        		stopReader(true);
 								qrcart.readQRCartParts(qrcartparts,binary=>{gameConsole.run(binary); });
 				        	} else gameConsole.playAudio("shutter");
 				        }
@@ -121,17 +131,17 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 			    }
 			});
 
-			ModuleLoadFromQR[mode].waitForCameras(scanner,(id,total,camera)=>{
+			ModuleLoadFromQR[mode].waitForCameras(scanner,abort,(id,total,camera)=>{
 				addButton(LOC._("button_cameraid",id+1),10+(id+1)*40,{camera:camera,position:id},function(){
 					if (preview) preview.style.display="none";
 					gameConsole.setStorage("CAM_"+mode,this._id.position);
-					ModuleLoadFromQR[mode].start(scanner,this._id.camera,dialog);
+					ModuleLoadFromQR[mode].start(scanner,abort,this._id.camera,dialog);
 				});
 				if (
 					(gameConsole.setStorage("CAM_"+mode)&&(gameConsole.getStorage("CAM_"+mode)==id))
 					||
 					(!gameConsole.setStorage("CAM_"+mode)&&(id==total-1))
-				) ModuleLoadFromQR[mode].start(scanner,camera,dialog);
+				) ModuleLoadFromQR[mode].start(scanner,abort,camera,dialog);
 			});
 
 			// -- Prepare torch
@@ -167,21 +177,25 @@ ModuleLoadFromQR.instascanng={
 		};
 	},
 	toggleTorch:function(scanner,to,callback) {
-		if ( scanner.stream ) {
-			if (window.ImageCapture) {
-			const track =scanner.stream.getVideoTracks()[0];
-		      const imageCapture = new ImageCapture(track)
-		      const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
-		      	try {
-			      	track.applyConstraints({ advanced: [{torch: to}] })
-						.then(e=>{callback()})
-						.catch(e => {})
-				} catch (e) {}
-		      });
-		  }
+		try {
+			if ( scanner.stream ) {
+				if (window.ImageCapture) {
+				const track =scanner.stream.getVideoTracks()[0];
+			      const imageCapture = new ImageCapture(track)
+			      const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
+			      	try {
+				      	track.applyConstraints({ advanced: [{torch: to}] })
+							.then(e=>{callback()})
+							.catch(e => {})
+					} catch (e) {}
+			      });
+			  }
+			}
+		} catch (e) {
+
 		}
 	},
-	waitForCameras:function(scanner,callback) {
+	waitForCameras:function(scanner,abort,callback) {
 	      var constraints,self=this;
 	      if (scanner.iOS) callback(0,1,"Fake camera");
 	      else {
@@ -191,16 +205,16 @@ ModuleLoadFromQR.instascanng={
 	            if (scanner.firefox	&& (deviceIds.length==0) && !scanner.firefoxOk) {
 		      		scanner.firefoxOk=true;
 		      		navigator.mediaDevices.getUserMedia({video:true,audio:true}).then(function(){
-		      			self.waitForCameras(scanner,callback);
-		      		}).catch(function(){console.log("ko")});
+		      			self.waitForCameras(scanner,abort,callback);
+		      		}).catch(function(){abort()});
 	            }
 	            deviceIds.forEach((camera,id)=>{ callback(id,deviceIds.length,camera); })
 	         }).catch(function(){
-	         	console.log("Error")
+	         	abort()
 	         }); 
 	      }    
 	},
-	registerOnScan:function(scanner,callback) {
+	registerOnScan:function(scanner,abort,callback) {
 		scanner.onFrame=function() {
 			if (scanner.running) {
 				if (scanner.videoElement.readyState === scanner.videoElement.HAVE_ENOUGH_DATA) {
@@ -214,7 +228,7 @@ ModuleLoadFromQR.instascanng={
 			    }
 		}		
 	},
-	start:function(scanner,camera,dialog) {
+	start:function(scanner,abort,camera,dialog) {
 		if (scanner.stream) {
 			scanner.canvasElement.width=scanner.canvasElement.width;
 			scanner.videoElement.pause();	     
@@ -232,251 +246,14 @@ ModuleLoadFromQR.instascanng={
     		dialog.appendChild(scanner.canvasElement);
 			scanner.running=true;
 			requestAnimationFrame(scanner.onFrame);
-	    });
+	    }).catch(function(){
+         	abort()
+         }); 
 	},
 	stop:function(scanner,dialog) {		
-		scanner.videoElement.pause();	     
-		scanner.stream.getTracks().forEach(function (track) { track.stop(); });
-		dialog.removeChild(scanner.canvasElement);
+		scanner.videoElement.pause();
+		if (scanner.stream) scanner.stream.getTracks().forEach(function (track) { track.stop(); });
+		if (scanner.canvasElement.parentNode) dialog.removeChild(scanner.canvasElement);
 		scanner.running=false;
-	}
-}
-
-// --- Old, alternative and partially not-working adapters
-
-ModuleLoadFromQR.jsqr={
-	previewClassName:"qrPreviewVideo",
-	create:function(previewId) {
-		var canvasElement=document.createElement("canvas");
-		canvasElement.className="qrPreviewVideo";
-		var videoElement=document.createElement("video");
-		videoElement.setAttribute("playsinline",true);
-		return {
-			running:true,
-			canvasElement:canvasElement,
-			canvasCtx:canvasElement.getContext("2d"),
-			videoElement:videoElement,
-			jsqr:false
-		};
-	},
-	toggleTorch:function(scanner,to,callback) {
-		if ( scanner.stream ) {
-			const track =scanner.stream.getVideoTracks()[0];
-		      const imageCapture = new ImageCapture(track)
-		      const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
-		      	try {
-			      	track.applyConstraints({ advanced: [{torch: to}] })
-						.then(e=>{callback()})
-						.catch(e => {})
-				} catch (e) {}
-		      });
-		}
-	},
-	waitForCameras:function(scanner,callback) {
-		navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
-			callback(0,1,stream);	      
-	    });        
-	},
-	registerOnScan:function(scanner,callback) {
-		scanner.onFrame=function() {
-			if (scanner.running) {
-				if (scanner.videoElement.readyState === scanner.videoElement.HAVE_ENOUGH_DATA) {
-					scanner.canvasElement.height = scanner.videoElement.videoHeight;
-			        scanner.canvasElement.width = scanner.videoElement.videoWidth;
-			        scanner.canvasCtx.drawImage(scanner.videoElement, 0, 0, scanner.canvasElement.width, scanner.canvasElement.height);
-			        var imageData = scanner.canvasCtx.getImageData(0, 0, scanner.canvasElement.width, scanner.canvasElement.height);
-			        var code = jsQR(imageData.data, imageData.width, imageData.height, {
-			          inversionAttempts: "dontInvert",
-			        });
-			        if (code) callback(code);		        
-			      }
-			      requestAnimationFrame(scanner.onFrame);
-			    }
-		}
-		requestAnimationFrame(scanner.onFrame);
-	},
-	start:function(scanner,camera,dialog) {
-		scanner.stream=camera;
-		scanner.videoElement.srcObject = camera;
-	    scanner.videoElement.play();	      
-		dialog.appendChild(scanner.canvasElement);
-		scanner.running=true;
-	},
-	stop:function(scanner,dialog) {
-		scanner.videoElement.pause();	     
-		scanner.stream.getTracks().forEach(function (track) { track.stop(); });
-		dialog.removeChild(scanner.canvasElement);
-		scanner.running=false;
-	}
-}
-
-function toUTF8Array(str) {
-    var utf8 = [];
-    for (var i=0; i < str.length; i++) {
-        var charcode = str.charCodeAt(i);
-        if (charcode < 0x80) utf8.push(charcode);
-        else if (charcode < 0x800) {
-            utf8.push(0xc0 | (charcode >> 6), 
-                      0x80 | (charcode & 0x3f));
-        }
-        else if (charcode < 0xd800 || charcode >= 0xe000) {
-            utf8.push(0xe0 | (charcode >> 12), 
-                      0x80 | ((charcode>>6) & 0x3f), 
-                      0x80 | (charcode & 0x3f));
-        }
-        // surrogate pair
-        else {
-            i++;
-            // UTF-16 encodes 0x10000-0x10FFFF by
-            // subtracting 0x10000 and splitting the
-            // 20 bits of 0x0-0xFFFFF into two halves
-            charcode = 0x10000 + (((charcode & 0x3ff)<<10)
-                      | (str.charCodeAt(i) & 0x3ff))
-            utf8.push(0xf0 | (charcode >>18), 
-                      0x80 | ((charcode>>12) & 0x3f), 
-                      0x80 | ((charcode>>6) & 0x3f), 
-                      0x80 | (charcode & 0x3f));
-        }
-    }
-    return utf8;
-}
-
-ModuleLoadFromQR.instascan={
-	create:function(previewId) {
-		return {
-			instascan:new Instascan.Scanner({ video: document.getElementById("preview") })
-		};
-	},
-	toggleTorch:function(scanner,to,callback) {
-		if (
-			scanner.instascan&&
-			scanner.instascan._camera&&
-			scanner.instascan._camera._stream
-		) {
-			const track = scanner.instascan._camera._stream.getVideoTracks()[0];
-		      const imageCapture = new ImageCapture(track)
-		      const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
-		      	try {
-			      	track.applyConstraints({ advanced: [{torch: to}] })
-						.then(e=>{callback()})
-						.catch(e => {})
-				} catch (e) {}
-		      });
-		}
-	},
-	waitForCameras:function(scanner,callback) {
-        Instascan.Camera.getCameras().then(function (cameras) {
-        	if (cameras.length) {
-        		// Added a custom property to instascan cameras
-		      	if (cameras[0].iOS) {
-			      	// Stuck only to last camera for weird instascan iOS compatibility (?)
-			      	callback(0,1,cameras[cameras.length-1]);
-			    } else cameras.forEach((camera,id)=>{ callback(id,cameras.length,camera);	})
-			}
-	    }).catch(function (e) { console.error(e); });	    
-	},
-	registerOnScan:function(scanner,callback) {
-		scanner.instascan.addListener('scan', function (content) { callback(content); });
-	},
-	start:function(scanner,camera) {
-		scanner.instascan.start(camera);
-	},
-	stop:function(scanner) {
-		scanner.instascan.stop();
-	}
-}
-
-ModuleLoadFromQR.zxing={
-	create:function(previewId) {
-		return {
-			zxing:new ZXing.BrowserQRCodeReader()
-		}
-	},
-	waitForCameras:function(scanner,callback) {
-		scanner.zxing.getVideoInputDevices().then((cameras) => {
-        	cameras.forEach((camera,id)=>{ callback(id,cameras.length,camera.deviceId);})
-        })
-        .catch((err) => { console.error(err) });
-	},
-	registerOnScan:function(scanner,callback) {
-		scanner.onscan=callback;
-	},
-	start:function(scanner,camera) {
-		scanner.zxing.reset();
-		scanner.zxing.decodeFromInputVideoDeviceContinuously(camera, 'preview', (result, err) => {
-			if (result) {
-				var code,content="";
-
-				var bytes=toUTF8Array(result.text);
-				bytes.forEach(byte=>content+=String.fromCharCode(byte));
-				alert(content);
-				scanner.onscan(content);
-				/*
-				content=result.text;
-				scanner.onscan(content);
-				*/
-			}
-		});
-	},
-	stop:function(scanner) {
-		scanner.zxing.reset();
-	}
-}
-
-ModuleLoadFromQR.jsscanner={
-	previewClassName:"qrPreviewVideo",
-	create:function(previewId) { return { jbScanner:0 } },
-	toggleTorch:function(scanner,to,callback) {
-		if (
-			scanner.jbScanner&&
-			scanner.jbScanner.g&&
-			scanner.jbScanner.g.a&&
-			scanner.jbScanner.g.a.n
-		) {
-			const track = scanner.jbScanner.g.a.n.getVideoTracks()[0];
-		      const imageCapture = new ImageCapture(track)
-		      const photoCapabilities = imageCapture.getPhotoCapabilities().then(() => {
-		      	try {
-			      	track.applyConstraints({ advanced: [{torch: to}] })
-						.then(e=>{callback()})
-						.catch(e => {})
-				} catch (e) {}
-		      });
-		}
-	},
-	waitForCameras:function(scanner,callback) {
-		navigator.mediaDevices.enumerateDevices().then(function(devices) {
-            var exCameras = [];
-            devices.forEach(function(device) { if (device.kind === 'videoinput')exCameras.push(device.deviceId) });
-            exCameras.forEach((camera,id)=>{ callback(id,exCameras.length,camera); })
-         });       
-	},
-	registerOnScan:function(scanner,callback) {
-		scanner.onscan=callback;
-	},
-	start:function(scanner,camera,dialog) {
-		if (scanner.jbScanner) {
-			scanner.jbScanner.removeFrom(dialog)
-			scanner.jbScanner.stopScanning();
-		}
-		var jbScanner=new JsQRScanner(text=>{
-			alert(text);
-			scanner.onscan(text);
-		},function(){
-			return navigator.mediaDevices.getUserMedia({
-	            video: {
-	              'optional': [{
-	                'sourceId': camera
-	                }]
-	            }
-	        }); 
-		});
-		//jbScanner.setSnapImageMaxSize(300);
-		jbScanner.appendTo(dialog);
-		scanner.jbScanner=jbScanner;
-	},
-	stop:function(scanner,dialog) {
-		scanner.jbScanner.removeFrom(dialog)
-		scanner.jbScanner.stopScanning();
 	}
 }
