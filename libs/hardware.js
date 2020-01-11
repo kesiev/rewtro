@@ -62,12 +62,15 @@ var  Hardware=function(parent,CFG) {
 		canvas.width=width;
 		canvas.height=height;
 		var ctx=canvas.getContext("2d");
-		ctx.webkitImageSmoothingEnabled = ctx.imageSmoothingEnabled = ctx.mozImageSmoothingEnabled = ctx.oImageSmoothingEnabled = ctx.msImageSmoothingEnabled= false;		
+		ctx.webkitImageSmoothingEnabled = ctx.imageSmoothingEnabled = ctx.mozImageSmoothingEnabled = ctx.oImageSmoothingEnabled = ctx.msImageSmoothingEnabled= false;
 		return {
 			cnv:canvas,
 			ctx:ctx,
 			width:width,
 			height:height,
+			fix:function() {
+				this.ctx.webkitImageSmoothingEnabled = this.ctx.imageSmoothingEnabled = this.ctx.mozImageSmoothingEnabled = this.ctx.oImageSmoothingEnabled = this.ctx.msImageSmoothingEnabled= false;
+			},
 			getData:function(){
 				return this.ctx.getImageData(0,0,this.cnv.width, this.cnv.height)
 			},
@@ -536,7 +539,10 @@ var  Hardware=function(parent,CFG) {
 		renderLoop=render;
 	}
 
-	this.screenClear=function() { screen.cnv.width=CFG.screenWidth;	}
+	this.screenClear=function() {
+		screen.cnv.width=CFG.screenWidth;
+		screen.fix();
+	}
 
 	this.rect=function(color,flipx,flipy,ang,opacity,scale,dx,dy,dw,dh) {
 		if (isOnScreen(dx,dy,dw,dh)) {
@@ -545,7 +551,7 @@ var  Hardware=function(parent,CFG) {
 
 			screen.ctx.fillStyle=color;
 
-			if (flipx||flipy||ang||!opacity||(scale!=1)) {
+			if (flipx||flipy||ang||(opacity<1)||(scale!=1)) {
 
 				var tx=dw/2,ty=dh/2,fx=flipx?-scale:scale,fy=flipy?-scale:scale;
 
@@ -571,7 +577,7 @@ var  Hardware=function(parent,CFG) {
 			dw=Math.floor(dw);
 			dh=Math.floor(dh);
 
-			if (flipx||flipy||ang||!opacity||(scale!=1)) {
+			if (flipx||flipy||ang||(opacity<1)||(scale!=1)) {
 
 				var tx=dw/2,ty=dh/2,fx=flipx?-scale:scale,fy=flipy?-scale:scale;
 
