@@ -100,7 +100,7 @@
 					"text":{"_placeholder":"creditsText"}
 				},
 				{
-					"id":"I","x":76,"y":36,"textColor":6,
+					"id":"I","x":76,"y":44,"textColor":6,
 					"textAlignment":"center","scale":3,
 					"text":{"_placeholder":"textName"}
 				},
