@@ -1,0 +1,382 @@
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"K006 - Nibble",
+      "centerTitle":"NIBBLE",
+      "legalText":"(c)2020 by KesieV - www.kesiev.com/rewtro"
+   },
+   "systemConfiguration":[{"fontModel":1}],
+   "data":[{
+         "id":"A",
+         "images":[
+            {"id":"graphics","image":{"data":{"_file":"graphics/nibble.png"},"format":"monocolor"}}
+         ],
+         "sounds":[
+            {"id":"A","_file":"sounds/instruments/8bit-vibrate.json"},
+            {"id":"B","_file":"sounds/instruments/8bit-beat.json"},
+            {"id":"X","_file":"sounds/effects/8bit-fail.json"},
+            {"id":"Y","_file":"sounds/effects/8bit-step.json"},            
+            {"id":"Z","_file":"sounds/effects/8bit-powerup.json"},
+            {"id":"K","_file":"sounds/effects/8bit-spawn.json"}
+         ],
+         "music":[
+            {
+               "_file":"songs/jungle-music.json",
+               "_replace":{
+                  "instruments":"AB"
+               }
+            }
+         ],
+         "songs":[
+            {"id":"A","_file":"songs/jungle-song.json","_replace":{"tempo":4}}
+         ],
+         "_file":"scenes/arcade-shadowtitle.json",
+         "_replace":{
+            "song":"A",
+            "titleX":45,
+            "titleY":37,
+            "titleWidth":69,
+            "titleHeight":16,
+            "titleScale":2,
+            "graphicsX":16,
+            "graphicsY":0,
+            "backgroundColor":10,
+            "blinkColors":[8,3],
+            "blinkColorsCount":2,
+            "blinkSpeed":10,
+            "titlePrefix":"~~~~~~~~~- HIGH SCORE -~",
+            "titleSuffix":"~~~(C)2020 KESIEV",
+            "shadowGraphicsY":16,
+            "shadowX":45,
+            "shadowY":41,
+            "textColor":8,
+            "runScene":"1G",
+            "startingLives":3
+         }
+      },{
+         "id":"D",
+         "_file":"scenes/arcade-debriefing.json",
+         "_replace":{
+            "gameOverText":"** GAME OVER **",
+            "noHiScoreText":"BETTER LUCK~NEXT TIME!",
+            "hiScoreText":"WELL DONE!~A NEW HIGH SCORE!",
+            "scoreText":"SCORE: ",
+            "hiScoreBlinkSpeed":8,
+            "hiScoreColor":7,
+            "gameOverColor":5,
+            "scoreColor":8,
+            "backgroundColor":0,
+            "runScene":"A",
+            "closeSound":"X",
+            "hiScoreSound":"K"
+         }
+      },{
+      "id":"G",
+      "sprites":[
+         {"id":"A","flags":"BK","value0":0,"graphicsX":0,"graphicsY":56},
+         {"id":"H","flags":"BK","value0":1,"value1":8,"graphicsX":0,"graphicsY":48},
+         {"id":"S","x":0,"y":136,"width":160,"backgroundColor":1},
+         {"id":"I","graphicsX":0,"graphicsY":48,"x":136,"y":136,"zIndex":2},
+         {"id":"L","x":144,"y":136,"zIndex":2},
+         {"id":"G","x":76,"y":48,"textAlignment":"center"},
+         {"id":"P","flags":"E","graphicsX":8,"graphicsY":8,"graphicsY":120},
+         {"id":"W","flags":"K","graphicsX":8,"backgroundColor":3,"graphicsY":80}
+      ],
+      "tilemaps":[{
+         "x":72,"y":64,
+         "map":["AHSILG"],
+         "playAudio":"K",
+         "backgroundColor":15
+      }],
+      "code":[        
+         {
+            "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"==","_":0}]}],
+            "then":[{
+               "set":[{"value5":[{"as":"game","attribute":"value2"}],"value6":[{"_":12}],"value7":[{"_":15}]}]
+            }]
+         },         
+         {
+            "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":">","_":75}]}],
+            "then":[{"id":"G","remove":true},{
+               "code":[
+                  {
+                     "when":[{"id":"P","count":true,"if":[{"is":"==","_":0}]}],
+                     "then":[{
+                        "randomize":true,
+                        "spawn":[{"ids":[{"_":"P"}]}],
+                        "set":[{
+                           "x":[{"list":[0,19],"randomNumber":true}],
+                           "y":[{"list":[0,16],"randomNumber":true}]
+                        }],
+                        "multiply":[{
+                           "x":[{"_":8}],
+                           "y":[{"_":8}]
+                        }]
+                     }]
+                  },
+                  {
+                     "when":[{"id":"P","if":[{"is":"collidingWith","flags":"K"}]}],
+                     "then":[{"remove":true}]
+                  },
+                  {
+               "when":[{"as":"scene","if":[{"itsAttribute":"value0","is":"==","_":0}]}],
+               "then":[
+                  {
+                     "set":[{"value0":[{"attribute":"value6"}],"value8":[{"_":0}]}], 
+                     "playAudio":[{"_":"Y"}],
+                     "code":[
+                        {
+                           "when":[{"attribute":"value5","if":[{"is":">","_":0}]}],
+                           "then":[
+                              {"spawn":[{"ids":[{"_":"A"}],"at":[{"id":"H"}]}],"set":[{
+                                 "value0":[{"id":"H","attribute":"value0"}]
+                              }]},
+                              {
+                                 "id":"H",
+                                 "sum":[{"value0":[{"_":1}]}]
+                              },
+                              {
+                                 "as":"scene",
+                                 "subtract":[{"value5":[{"_":1}]}]
+                              }
+                           ],
+                           "else":[{                           
+                              "code":[    
+                                 {
+                                    "times":[{"id":"H","attribute":"value0"}],
+                                    "then":[
+                                       {
+                                          "set":[{"value2":[{"attribute":"value8"}],"value4":[{"_":0}]}],
+                                          "sum":[{"value2":[{"_":1}]}]
+                                       },
+                                       {
+                                          "code":[
+                                             {
+                                                "when":[{"flags":"B"}],
+                                                "then":[{
+                                                   "code":[
+                                                      {
+                                                         "when":[{"if":[{"itsAttribute":"value0","is":"==","as":"scene","attribute":"value8"}]}],
+                                                         "then":[
+                                                            {"as":"scene","set":[{"value3":[{"as":"that"}]}]}
+                                                         ]
+                                                      },
+                                                      {
+                                                         "when":[{"if":[{"itsAttribute":"value0","is":"==","as":"scene","attribute":"value2"}]}],
+                                                         "then":[
+                                                            {"as":"scene","set":[{"value4":[{"as":"that"}]}]}
+                                                         ]
+                                                      }
+                                                   ]
+                                                }]
+                                             },
+                                             {
+                                                "when":[{"attribute":"value4","if":[{"is":"!=","_":0}]}],
+                                                "then":[{
+                                                   "as":"scene",
+                                                   "attribute":"value3",
+                                                   "placeAt":[{"as":"scene","attribute":"value4"}]
+                                                }]
+                                             }
+                                          ]                              
+                                       },
+                                       {"sum":[{"value8":[{"_":1}]}]}
+                                    ]
+                                 }  
+
+                              ]
+                           }
+                           ]
+                        }
+                     ]                  
+                  },
+                  {"id":"H","sum":[{"x":[{"attribute":"value1"}],"y":[{"attribute":"value2"}]}],"set":[{"rotate":[{"attribute":"value3"}]}]},
+                  {
+                     "id":"H",
+                     "code":[
+                        {
+                           "when":[{"if":[{"itsAttribute":"x","is":"<","_":0}]}],
+                           "then":[{"set":[{"x":[{"_":152}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"itsAttribute":"x","is":">","_":159}]}],
+                           "then":[{"set":[{"x":[{"_":0}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"itsAttribute":"y","is":"<","_":0}]}],
+                           "then":[{"set":[{"y":[{"_":128}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"itsAttribute":"y","is":">","_":135}]}],
+                           "then":[{"set":[{"y":[{"_":0}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"is":"collidingWith","flags":"K"}]}],
+                           "then":[
+                              {"as":"game","playAudio":[{"_":"X"}]},
+                              {
+                                 "code":[
+                                    {
+                                       "when":[{"as":"game","if":[{"itsAttribute":"value1","is":">","_":0}]}],
+                                       "then":[{"subtract":[{"value1":[{"_":1}]}],"runScene":[{"attribute":"value5"}]}],
+                                       "else":[{"runScene":[{"_":"D"}]}]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "when":[{"if":[{"is":"collidingWith","flags":"E"}]}],
+                           "then":[
+                              {
+                                 "as":"game",
+                                 "playAudio":[{"_":"Z"}],
+                                 "sum":[{
+                                    "value0":[{"_":1}]
+                                 }]
+                              },
+                              {
+                                 "as":"scene",
+                                 "sum":[{"value5":[{"_":1}]}],
+                                 "subtract":[{"value7":[{"_":1}]}]
+                              },
+                              {
+                                 "code":[
+                                    {
+                                       "when":[{"as":"scene","if":[{"itsAttribute":"value6","is":">","_":1}]}],
+                                       "then":[{"subtract":[{"value6":[{"_":1}]}]}]
+                                    }
+                                 ]
+                              },
+                              {"as":"that","remove":true}
+                           ]
+                        }
+                     ]
+                  }
+                  
+               ],
+               "else":[{"as":"scene","subtract":[{"value0":[{"_":1}]}]}]
+            }
+         ]
+            }]
+         },
+         {
+            "when":[{"as":"scene","attribute":"value7","if":[{"is":"<=","_":0}]}],
+            "then":[{"as":"game","set":[{"value5":[{"as":"scene","attribute":"value9"}]}],"sum":[{"value2":[{"_":1}]}]},{"runScene":[{"as":"scene","attribute":"value9"}]}]
+         },
+         {
+            "when":[{"id":"H","if":[{"itsAttribute":"rotate","is":"!=","_":-90}]},{"as":"keyboard","attribute":"down","if":[{"is":"down"}]}],
+            "then":[{"id":"H","set":[{"value1":[{"_":0}],"value2":[{"_":8}],"value3":[{"_":90}]}]}]
+         },
+         {
+            "when":[{"id":"H","if":[{"itsAttribute":"rotate","is":"!=","_":90}]},{"as":"keyboard","attribute":"up","if":[{"is":"down"}]}],
+            "then":[{"id":"H","set":[{"value1":[{"_":0}],"value2":[{"_":-8}],"value3":[{"_":-90}]}]}]
+         },
+         {
+            "when":[{"id":"H","if":[{"itsAttribute":"rotate","is":"!=","_":0}]},{"as":"keyboard","attribute":"left","if":[{"is":"down"}]}],
+            "then":[{"id":"H","set":[{"value1":[{"_":-8}],"value2":[{"_":0}],"value3":[{"_":180}]}]}]
+         },
+         {
+            "when":[{"id":"H","if":[{"itsAttribute":"rotate","is":"!=","_":180}]},{"as":"keyboard","attribute":"right","if":[{"is":"down"}]}],
+            "then":[{"id":"H","set":[{"value1":[{"_":8}],"value2":[{"_":0}],"value3":[{"_":0}]}]}]
+         },
+         {
+            "then":[
+               {"id":"S","set":[{"text":[{"as":"game","attribute":"value0","prefix":" SCORE: "}]}]},
+               {"id":"L","set":[{"text":[{"as":"game","attribute":"value1"}]}]},
+               {"id":"G","set":[{"text":[{"as":"game","attribute":"value2","prefix":"STAGE ","suffix":"~~~~READY?"}]}]}
+            ]
+         }
+      ]
+   },{
+      "id":"1",
+      "tilemaps":[{"set":[{"value9":"2G"}]}]
+   },{
+      "id":"2",      
+      "tilemaps":[{
+         "y":32,
+         "map":[
+            "    W          W    ",
+            "    W          W    ",
+            "    W          W    ",
+            "    W          W    ",
+            "    W          W    ",
+            "    W          W    ",
+            "    W          W    ",
+            "    W          W    ",
+            "    W          W    "
+         ],
+         "set":[{"value9":"3G"}] 
+      }]
+   },{
+      "id":"3",
+      "tilemaps":[{
+         "y":16,
+         "map":[
+            "  WW            WW  ",
+            "  W              W  ",
+            "                    ",
+            "                    ",
+            "     WW      WW     ",
+            "     WW      WW     ",
+            "                    ",
+            "     WW      WW     ",
+            "     WW      WW     ",
+            "                    ",
+            "                    ",
+            "  W              W  ",
+            "  WW            WW  "
+         ],
+         "set":[{"value9":"4G"}]
+      }]
+   },{
+      "id":"4",
+      "tilemaps":[{
+         "map":[
+            "WWWWWWWWWWWWWWWWWWWW",
+            "W        WW        W",
+            "W        WW        W",
+            "W        WW        W",
+            "W        WW        W",
+            "W      WWWWWW      W",
+            "W                  W",
+            "W                  W",
+            "W                  W",
+            "W                  W",
+            "W                  W",
+            "W      WWWWWW      W",
+            "W        WW        W",
+            "W        WW        W",
+            "W        WW        W",
+            "W        WW        W",
+            "WWWWWWWWWWWWWWWWWWWW"
+         ],
+         "set":[{"value9":"5G"}]
+      }]
+   },{
+      "id":"5",
+      "tilemaps":[{
+         "map":[
+            "       WW           ",
+            "      WW            ",
+            "     WW             ",
+            "    WW              ",
+            "   WW               ",
+            "  WW                ",
+            " WW                 ",
+            "WW                  ",
+            "W                  W",
+            "                  WW",
+            "                 WW ",
+            "                WW  ",
+            "               WW   ",
+            "              WW    ",
+            "             WW     ",
+            "            WW      ",
+            "           WW       "
+         ],
+         "set":[{"value9":"1G"}]
+      }]
+   }
+]
+}
