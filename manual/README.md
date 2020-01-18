@@ -12,6 +12,7 @@ I hope it will help you a little on how to code a Rewtro game.
 
 ## Index
 
+  * Quickstart: Let's make a Rewtro game from the code to the paper!
   * [The Rewtro cartridge](rewtrocartridge.md): It explains what a Rewtro cartridge is and how to set basic settings of your game.
   * [Data blocks](datablocks.md): Learn what you can put inside a Rewtro cartridge and how to do that.
     * [Sprite attributes](spriteattributes.md): Sprites are the _moving parts_ of your game. We are going to talk about how to define them!
@@ -19,9 +20,10 @@ I hope it will help you a little on how to code a Rewtro game.
       * [Getters](getters.md): Getters is _the_ most important part of Rewtro. Learn how to select sprites and music notes, create numbers and text, and more!
       * [Conditions](conditions.md): When this stuff happens...
       * [Statements](codestatements.md): ...do that.
-    * [The Scene and Game objects](scenegameobjects.md): Move the virtual camera, save data across your game scenes and more!
+    * [The Scene and Game objects](specialobjects.md): Move the virtual camera, save data across your game scenes and more!
   * [Compiler helpers](compilerhelpers.md): Make your game modular and write code a little faster!
   * Extras: A collection of in-depth articles.
+    * [Rewtro changelog](rewtrochangelog.md): Differences between different Retro core versions.
     * [Neat ideas for the future](ideas.md): A collection of ideas I've collected from people around the _internet_ to make Rewtro better.
     * [Advanced Rewtro](advanced.md): Know Rewtro even better and learn some development tricks.
     * SDK Manual: How to use the Rewtro SDK software.

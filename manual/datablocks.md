@@ -759,7 +759,7 @@ This cartridge sets the background color to yellow (that's the `7`th color of th
 
 ### Set the scene configuration
 
-There is an object that's available in every scene of your Rewtro games that's called `scene` that acts like a [special sprite](scenegameobjects.md) you can use to move the virtual camera, store global variables and more. You can initialize its values in `tilemaps` using the `set` key. One of the things managed by this `scene` object is the virtual camera position.
+There is an object that's available in every scene of your Rewtro games that's called `scene` that acts like a [special sprite](specialobjects.md) you can use to move the virtual camera, store global variables and more. You can initialize its values in `tilemaps` using the `set` key. One of the things managed by this `scene` object is the virtual camera position.
 
 ```
 {

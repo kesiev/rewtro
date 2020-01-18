@@ -10,7 +10,7 @@ I'm not going to dwell into this nerdy protocol part: what I'd like you to know 
 
 Let's start making an _empty cartridge_.
 
-  * Rewtro supports multiple _versions_ which are a combination of a game engine and its configuration. Right now the latest version of Rewtro is `0.2`, which uses the custom `RewtroEngine` with extended commands set.
+  * Rewtro supports multiple _core versions_ which are a combination of a game engine and its configuration. Right now the latest version of Rewtro is `0.2`, which uses the custom `RewtroEngine` with extended commands set.
   * Then there is a `metadata` section, which includes several extra details of your game. This part is never encoded in cartridges data but is useful to configure text printed on QR-Carts and more. The only mandatory key of `metadata` is your game name, which is used as file name in exports and displayed by the debugger.
   * There is a `data` section, which holds all your game contents grouped in [data blocks](datablocks.md). Unsurprisingly enough, it's a mandatory section too. Since we're creating a minimal cartridge, let's keep that empty.
 

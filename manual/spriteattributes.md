@@ -28,7 +28,7 @@ Once spawned sprites can be moved, removed and animated manually or following th
 
 Sprites can be referenced by `code` using `id`s or `flags`.
 
-  * `id` is a mandatory single letter reference that is used by `tilemaps` and `code` to spawn a sprite as it's defined in a loaded data block. While `id` _must_ be unique in loaded data blocks, multiple sprites can have the same `id` once they're spawned.
+  * `id` is a mandatory single letter reference that is used by `tilemaps` and `code` to spawn a sprite as it's defined in a loaded data block. While `id` _must_ be unique in a single data block, multiple sprites can have the same `id` once they're spawned.
   * `flags` is a multiple letters identifier. Sprites sharing the same letter in its `flags` can be considered as _a group_.
 
 Time for a little example.
@@ -472,64 +472,279 @@ Sprite `A` and `B` will fall to the bottom at the same speed but the `A` sprite 
 
 ## Auto-effects
 
-_TODO_
+It is possible to link a sprite effect to the physics engine in order to make your code slimmer. When set to `true` the `flipXtoSpeedX` and `flipYtoSpeedY` keys will flip the sprite horizontally or vertically when it moves to the left or to the down. The `aim` key works like the `rotate` key but without applying any sprite rotation. When you want the sprite `rotate` to follow its `aim` value you can set the `rotateToAim` to `true`.
 
 ```
-{ key:"aim", integer:RANGES.ANGLE, defaultValue:0 },
-{ key:"rotateToAim", bool:true, defaultValue:false },
-{ key:"flipXtoSpeedX", bool:true, defaultValue:false },
-{ key:"flipYtoSpeedY", bool:true, defaultValue:false },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "images":[{"id":"graphics","image":{"data":{"_file":"sample.png"},"format":"monocolor"}}],
+      "sprites":[
+         {"id":"A","graphicsX":0,"graphicsY":64,"width":16,"height":16,"speedY":-3,"gravityY":0.1,"flipYtoSpeedY":true},
+         {"id":"B","graphicsX":0,"graphicsY":80,"width":16,"height":16,"speedX":3,"gravityX":-0.1,"flipXtoSpeedX":true},
+         {"id":"C","graphicsX":0,"graphicsY":96,"width":16,"height":16,"aim":45},
+         {"id":"D","graphicsX":0,"graphicsY":112,"width":16,"height":16,"aim":45,"rotateToAim":true}
+      ],
+      "tilemaps":[{"y":64,"x":16,"map":["AB  C  D"]}]
+   }]
+}
 ```
+
+This time we have a bunch of faces moving around:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-autoeffects.png"></p>
+</div>
+
+The cyan and red faces will move up and right by `speedY` and `speedX` but `gravityY` and `gravityX` will keep push them back. When gravity will start moving the sprites to their opposite direction the `flipYtoSpeedY` and `flipXtoSpeedX` keys will flip the sprites vertically and horizontally. The purple and yellow faces have the same `aim` but only the last one is rotated since the key `rotateToAim` is set to `true`.
 
 ## Collisions
 
-_TODO_
+The Rewtro physics engine can let sprites interact with each other when colliding. The `touchDown`, `touchUp`, `touchLeft` and `touchRight` keys are designed to be read-only and contain the list of sprites the current sprite is colliding with. These collisions can be enabled and disabled setting the `collisionsEnabled` property to `true` (the default value) and `false`.
 
 ```
-{ key:"collisionsEnabled", bool:true, defaultValue:true },
-{ key:"touchDown", bool:true, defaultValue:false },
-{ key:"touchUp", bool:true, defaultValue:false },
-{ key:"touchLeft", bool:true, defaultValue:false },
-{ key:"touchright", bool:true, defaultValue:false },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","flags":"W","backgroundColor":5,"speedX":0.5,"speedY":0.5},
+         {"id":"B","flags":"W","backgroundColor":13,"speedX":0.5,"speedY":0.5,"collisionsEnabled":false},
+         {"id":"X","backgroundColor":8}         
+      ],
+      "tilemaps":[{
+         "map":[
+            "XXXXXXXXXX",
+            "X        X",
+            "X   AB   X",
+            "X        X",
+            "X        X",
+            "XXXXXXXXXX"
+         ]}
+      ],
+      "code":[
+         {
+            "when":[{
+               "event":"hitWall","flags":"W","if":[{"is":"collidingWith","id":"X"}]
+            }],
+            "then":[{"bounce":[{"speedY":[{"_":-1}],"speedX":[{"_":-1}]}]}]
+         },
+         {
+            "when":[{"id":"A","sublist":"touchDown"}],
+            "then":[{"set":[{"backgroundColor":[{"smallNumber":2}]}]}]
+         },
+         {
+            "when":[{"id":"A","sublist":"touchRight"}],
+            "then":[{"set":[{"backgroundColor":[{"smallNumber":3}]}]}]
+         },
+         {
+            "when":[{"id":"A","sublist":"touchUp"}],
+            "then":[{"set":[{"backgroundColor":[{"smallNumber":4}]}]}]
+         },
+         {
+            "when":[{"id":"A","sublist":"touchLeft"}],
+            "then":[{"set":[{"backgroundColor":[{"smallNumber":5}]}]}]
+         }         
+      ]
+   }]
+}
 ```
+
+This cartridge is a little more complex but its payload is quite interesting:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-collisions.png"></p>
+</div>
+
+The red `A` and purple `B` sprites will start moving in a cage of white `X` sprites. Both of them have the `W` flag set but the `B` sprite has its collisions disabled. The `code` block will `bounce` all the sprites with `W` flag set colliding with `X` sprites and then change the colliding sprites with different colors depending on the colliding side. While the `A` sprite will stay into the `X` cage, the `B` sprite will keep moving outside, eventually leaving the screen.
 
 ## Z-index
 
-_TODO_
+The `zIndex` is a number ranging from `0` to `255` that changes the drawing order of the sprites: the higher its `zIndex` is set the later the sprite is rendered, resulting _on top_ of sprites with lower `zIndex`. The default `zIndex` of a sprite is `0`.
 
 ```
-{ key:"zIndex", integer:RANGES.ZINDEX, defaultValue:0 },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "images":[{"id":"graphics","image":{"data":{"_file":"sample.png"},"format":"monocolor"}}],
+      "sprites":[
+         {"id":"A","x":16,"y":16,"graphicsX":0,"graphicsY":64,"width":16,"height":16},
+         {"id":"B","x":24,"y":16,"graphicsX":0,"graphicsY":80,"width":16,"height":16},
+         {"id":"C","x":16,"y":40,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"zIndex":10},
+         {"id":"D","x":24,"y":40,"graphicsX":0,"graphicsY":80,"width":16,"height":16},
+         {"id":"E","x":16,"y":64,"graphicsX":0,"graphicsY":64,"width":16,"height":16,"zIndex":10},
+         {"id":"F","x":24,"y":64,"graphicsX":0,"graphicsY":80,"width":16,"height":16,"zIndex":20}
+      ],
+      "tilemaps":[{"y":64,"x":16,"map":["ABCDEF"]}]
+   }]
+}
 ```
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-zindex.png"></p>
+</div>
+
+The first two sprites are rendered following the spawn order so the cyan one is under the red one. The second two sprites have reverse order since the cyan one has a `zIndex` of `10` that's higher than the default `zIndex` `0`. Finally, in the third pair of sprites the red one is back to the top since the cyan one has a `zIndex` of 10 but the red one has a higher `zIndex` of 20.
 
 ## Camera
 
-_TODO_
+Every Rewtro scene features a [special object](specialobjects.md) called `scene` that has the same `sprite` properties but works in a very different way. `scene` keys `x` and `y` moves a virtual camera around: sprites that are moving outside the screen can be displayed again moving the camera origin near that sprite... as a normal camera does.
+
+You can prevent a sprite to work with the camera setting its `noCamera` key to `true`. This way the sprite will be displayed at its screen `x` and `y` position even if the camera moves. This property is very useful to create HUDs with scores, lives, etc. on games with scrolling screens.
 
 ```
-{ key:"noCamera", bool:true, defaultValue: false },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","backgroundColor":4},
+         {"id":"X","backgroundColor":10},
+         {"id":"S","text":"SCORE: 1234","x":0,"y":0,"noCamera":true}
+      ],
+      "tilemaps":[{
+         "y":120,
+         "map":[
+            "S         A         ",
+            "XXXXXXXXXXXXXXXXXXXX"
+         ],
+         "set":[{
+            "x":64
+         }]
+      }]
+   }]
+}
 ```
+
+This cartridge displays a cyan block laying on a green platform and a score indicator on the top of the screen.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-nocamera-ok.png"></p>
+</div>
+
+The camera position `x` is moved to `64` so the whole green platform is not displayed and part of it will be outside the screen and the cyan block is a little on the left of the screen. Despite the camera movement, the score indicator is still at its top left corner, since its `noCamera` key is set to `true`.
+
+Setting the `noCamera` key to `false` will result in this:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-nocamera-ko.png"></p>
+</div>
+
+The score label is now outside the screen and partially visible since it _scrolled_ with the tilemap due to the camera movement.
 
 ## Sprite timer
 
-_TODO_
+Every sprite has a `timer` key, which starts from `0` and is automatically increased every game frame.
 
 ```
-{ key:"timer", integer:RANGES.TIME, defaultValue:0 },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","flags":"T"},
+         {"id":"B","flags":"T","x":0,"y":16,"timer":100}
+      ],
+      "tilemaps":[{"map":["AB"]}],
+      "code":[{
+         "then":[
+            {"flags":"T","set":[{"text":[{"attribute":"timer"}]}]}
+         ]
+      }]
+   }]
+}
 ```
+
+This cartridge the `A` and `B` sprites with the same `T` flag set. The `code` block copies their `timer` key to the `text` key, so the two sprites will display their `timer` value every frame resulting in two different counters.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-timer.png"></p>
+</div>
+
+While the `A` sprite `timer` starts from the default value of `0` the second one `timer` starts from `100`, so even if they are on the screen for the same amount of frames their `timer` values will be different.
 
 ## Local variables
 
-_TODO_
+Sprites have also a number of general-purpose keys with different allowed values. From `value0` to `value4` you can store any single decimal float number from `-25` to `26.1` and from `value5` to `value9` a text string.
 
 ```
-{ key:"value0", float:RANGES.FLOAT, defaultValue:0 },
-{ key:"value1", float:RANGES.FLOAT, defaultValue:0 },
-{ key:"value2", float:RANGES.FLOAT, defaultValue:0 },
-{ key:"value3", float:RANGES.FLOAT, defaultValue:0 },
-{ key:"value4", float:RANGES.FLOAT, defaultValue:0 },
-{ key:"value5", string:SYMBOLS, defaultValue:"" },
-{ key:"value6", string:SYMBOLS, defaultValue:"" },
-{ key:"value7", string:SYMBOLS, defaultValue:"" },
-{ key:"value8", string:SYMBOLS, defaultValue:"" },
-{ key:"value9", string:SYMBOLS, defaultValue:"" },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","value6":"I AM A SPRITE!","value7":"HELLO!"},
+         {"id":"B","x":0,"y":16,"value1":3}
+      ],
+      "tilemaps":[{"map":["AB"]}],
+      "code":[
+         {
+            "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"%%","smallNumber":25}]}],
+            "then":[
+               {"id":"A","set":[{"text":[{"attribute":"value6"}]}]},
+               {"id":"B","sum":[{"value0":[{"attribute":"value1"}]}],"set":[{"text":[{"attribute":"value0"}]}]}
+            ]
+         },
+         {
+            "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"%%","smallNumber":50}]}],
+            "then":[
+               {"id":"A","set":[{"text":[{"attribute":"value7"}]}]}
+            ]
+         }
+      ]
+   }]
+}
 ```
+
+Every second the `A` sprite `text` is alternated to the `value6` and `value7` values and the `value0` of sprite `B` is increased by its `value1`, set to its `text` key and displayed.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/sprites-variables.png"></p>
+</div>
+
+This _type restriction_ is limited to the _sprite definition only_. Sprite local variables may be set to any value type by `code`.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A"}], 
+      "tilemaps":[{"map":["A"]}],
+      "code":[
+         {
+            "then":[
+               {"id":"A","set":[{"value0":[{"string":"SETTING TEXT TO~VALUE 0? NO WAY!"}]}]},
+               {"id":"A","set":[{"text":[{"attribute":"value0"}]}]}
+            ]
+         }
+      ]
+   }]
+}
+```
+
+`value0` attributes must be initialized with float numbers but it's set to a string by `code` with any problem.
+
