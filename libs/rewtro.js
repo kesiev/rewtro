@@ -543,7 +543,6 @@ function RewtroEngine(parent,CFG) {
 			else if (line.largeNumber!==undefined) subjects.push(line.largeNumber);
 			else if (line.list!==undefined) subjects.push(line.list);
 			// ---
-			else if (line.coordinates!==undefined) subjects.push(line.coordinates);
 			else if (line.string!==undefined) subjects.push(line.string);
 			else if (line.character!==undefined) subjects.push(line.character);
 			else if (line.numbers!==undefined) subjects=line.numbers;
@@ -860,7 +859,7 @@ function RewtroEngine(parent,CFG) {
 													else newsprite.x=pos.x-(newsprite.width-pos.width)/2;
 													if (newsprite.height==undefined) newsprite.y=pos.y;
 													else newsprite.y=pos.y-(newsprite.height-pos.height)/2;
-												} else if (pos[0]!==undefined) { // Allow spawn:[{at:[{coordinates:[10,20]}]}]
+												} else if (pos[0]!==undefined) { // Allow spawn:[{at:[{list:[10,20]}]}]
 													newsprite.x=pos[0];
 													newsprite.y=pos[1];
 												}
