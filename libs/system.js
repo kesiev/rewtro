@@ -659,7 +659,7 @@ System.versions["0.1"]={
 			{ key:"touchDown", bool:true, defaultValue:false },
 			{ key:"touchUp", bool:true, defaultValue:false },
 			{ key:"touchLeft", bool:true, defaultValue:false },
-			{ key:"touchright", bool:true, defaultValue:false },
+			{ key:"touchRight", bool:true, defaultValue:false },
 
 			{ key:"aim", integer:RANGES.ANGLE, defaultValue:0 },
 			{ key:"rotate", integer:RANGES.ANGLE, defaultValue:0 },
@@ -728,7 +728,7 @@ System.versions["0.1"]={
 			{ key:"index", values:"*GETTERS*" },
 			{ key:"randomNumber", flag:true },
 			{ key:"randomValue", flag:true },
-			{ key:"coordinates", listNumbers:RANGES.INTEGER },
+			{ key:"UNUSED-coordinates", unused:true},
 			{ key:"angleTo", values:"*GETTERS*" },
 			{ key:"distanceTo", values:"*GETTERS*" },
 			{ key:"nearest", values:"*GETTERS*" },
