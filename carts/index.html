@@ -97,7 +97,7 @@
 	</style>
 </head><body onload="onl()"></body><script>
 
-var SYSTEMVERSION="0.2";
+var SYSTEMVERSION="0.3";
 system=System.constructSystem(SYSTEMVERSION);
 system.configure();
 
@@ -139,6 +139,7 @@ function selected(option,file,isclick) {
 				System.unpack(compressed.data,cart=>{
 					document.getElementById('stats').innerHTML=
 							"<i class='fas fa-cog'></i> "+compressed.metadata.title+" (Rewtro "+cart.system.VERSION+" using "+cart.system.ENGINE+")<br>"+
+							(cart.system.WARNING?"<i class='fas fa-exclamation-circle'></i> <span class='error'>"+cart.system.WARNING+"</span><br>":"")+
 							"<i class='fas fa-expand'></i> "+cart.system.RESOLUTION.screenWidth+" &times; "+cart.system.RESOLUTION.screenHeight+" ("+cart.system.RESOLUTION.renderWidth+" &times; "+cart.system.RESOLUTION.renderHeight+") @ "+cart.system.FPS+"fps. "+cart.system.PALETTE.length+" colors.<br>"+
 							"<i class='fas fa-qrcode'></i> <span class='"+(qrmode.carts>3?"error":"")+"'>&times;"+qrmode.carts+"</span> <span class='"+(qrmode.type>17?"error":"")+"'>Lv."+qrmode.type+"</span> Correction: "+qrmode.correctionLevel+"<br>"+
 							"<i class='fas fa-compress'></i> "+compressed.bestMethod.label+": "+compressed.data.length+" byte(s)<br>"+
