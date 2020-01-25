@@ -1,0 +1,336 @@
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"K007 - WWW",
+      "centerTitle":"WWW",
+      "legalText":"(c)2020 by KesieV - www.kesiev.com/rewtro"
+   },
+   "systemConfiguration":[{"paletteModel":2,"fontModel":2}],
+   "data":[
+      {
+         "id":"A",
+         "sounds":[
+            {"id":"A","wave":"triangle","attack":10,"sustain":30,"decay":25,"release":76,"pitch":178},
+            {"id":"B","wave":"saw","attack":127,"sustain":17,"decay":45,"release":15,"frequency":191,"pitch":102},
+            {"id":"C","wave":"tangent","attack":22,"sustain":84,"decay":53,"release":127,"frequencyJump1onset":40,"frequencyJump1amount":160,"frequencyJump2onset":99,"frequencyJump2amount":168},
+            {"id":"D","wave":"square","attack":2,"sustain":10,"decay":22,"release":249,"frequency":117,"tremoloFrequency":63,"tremoloDepth":48,"bitCrush":15,"bitCrushSweep":239},
+            {"id":"E","wave":"whitenoise","decay":17,"release":91},
+            {"id":"F","wave":"whitenoise","attack":12,"sustain":2,"decay":15,"release":5,"pitch":248}
+         ],
+         "music":[
+            {
+               "id":"A",
+               "notes":[
+                  ["G5-","---","G5-","---","F5-","---","G5-","---","   ","   ","A5#","---","A5-","   ","G5-","   "],
+                  ["C4-","   ","   ","   ","G7-","   ","   ","   ","C4-","   ","   ","   ","G7-","   ","   ","   "],
+                  ["   ","   ","G7-","---","   ","   ","G7-","---","   ","   ","G7-","---","   ","   ","G7-","---"]                  
+               ],
+               "instruments":"DEF"
+            },
+            {
+               "id":"B",
+               "notes":[
+                  ["F5-","---","F5-","---","D5#","---","F5-","---","   ","   ","G5#","---","G5-","   ","F5-","   "],
+                  ["C4-","   ","   ","   ","G7-","   ","   ","   ","C4-","   ","   ","   ","G7-","   ","   ","   "],
+                  ["   ","   ","G7-","---","   ","   ","G7-","---","   ","   ","G7-","---","   ","   ","G7-","---"]
+               ],
+               "instruments":"DEF"
+            }
+         ],
+         "songs":[{"id":"A","music":"AABB","loopTo":0,"tempo":2}],
+         "images":[
+            {"id":"graphics","image":{"data":{"_file":"graphics/www.png"},"format":"monocolor"}}
+         ],         
+         "sprites":[
+            {"id":"A","x":76,"y":32,"text":"WWW","textAlignment":"center","textColor":4,"scale":3},
+            {"id":"B","x":76,"y":104,"text":"A SQUEEZED~TRIBUTE GAME~~(C)2020 BY KESIEV","textAlignment":"center","textColor":2}
+         ],
+         "tilemaps":[{"song":"A","map":["AB"]}],
+         "code":[
+         {
+               "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],
+               "then":[{"playAudio":[{"_":"A"}],"runScene":[{"_":"G"}]}]
+            }
+         ]
+      },
+      {
+         "id":"G",
+         "sprites":[
+            {"id":"X","flags":"W","graphicsX":0,"graphicsY":144},
+            {"id":"_","flags":"W","graphicsX":0,"graphicsY":144},
+            {"id":"T","graphicsX":0,"graphicsY":88},
+            {"id":"S","x":0,"y":136,"width":160,"noCamera":true,"backgroundColor":1,"textAlignment":"center","zIndex":2,"textColor":2},
+
+            {"id":"E","flags":"BKL","width":16,"height":16,"value0":3,"graphicsX":40,"value2":-1},
+            {"id":"F","flags":"L","graphicsX":16,"height":16,"flipX":true},
+
+            {"id":"V","flags":"K","graphicsX":8,"graphicsY":40},
+            {
+               "id":"P","height":16,"graphicsX":16,"graphicsY":240,"restitutionX":0,"restitutionY":0,"backgroundColor":1,
+               "flipXtoSpeedX":true,"gravityY":4,"restitutionX":0,"speedLimitXBottom":-3,"speedLimitXTop":3,
+               "zIndex":1,"flags":"B",
+               "animations":[
+                  {"frames":[0]},
+                  {"frames":[0,1],"speed":4}
+               ],
+               "animation":1
+            },{
+               "id":"C","height":16,"graphicsX":32,"graphicsY":208
+            }
+         ],
+         "tilemaps":[{
+            "x":8,"y":8,
+            "map":[
+               "S                 __     VVV                VVVVVVVVVVVVVV",
+               " T                XX                    C                 ",
+               "                  __           VVV             XX    XX   ",
+               "XXXXXXXXX   XXX   XX   XXXXXXXX___XXXXXXXX                ",
+               "            ___   __   XX___XXXXXXXXXX__                  ",
+               " P          X_X   XX     VVV          X_V                 ",
+               " C          ___   __ C                __V                 ",
+               "            X_X   XX           VVV    X_V   XX    XX      ",
+               "XXX         ___   __XXXXXXXXXXX___X   __V                 ",
+               "__X         X_X   X_XXXXXX_____XXXX   X_V VVVVVVVVVVVVVV  ",
+               "___XXX      ___   __      VVVVV       __V X____XXX_____X  ",
+               "_____X      X_X   XX                  X_V VVVVV T VVVVVV  ",
+               "______XXX   ___                       __V                 ",
+               "________    X_X      C XX             X_                  ",
+               "________ VVV _X        __             __X                 ",
+               "________X______XXXXXXXX__XXX   XXXXXXX___XXXXXXXXXXXXXXXXX",
+               "XXXXXXXXXXXXXXXXXXXXXXXXXXXX   XXXXXXX____________________",
+               "    E       E                         X_VVVVVVVVVVVVVVVVVV",
+               " T               C                    __                  ",
+               "                                      XX      XXX XX  X X ",
+               "                 XXXXXXXX        XXXXXXXXX     X  _XX  X  ",
+               "V                 XX                           X  X X  X  ",
+               "V       E         __                     C                ",
+               "VVV               XX                                      ",
+               "_XXXXXXXXXXXXXXXXX_X         C        XXXX                ",
+               "X     _           __  V    X   X    V XX                  ",
+               "   T  XV         V_X  X   V_XXX_V   X __                  ",
+               "      _V  VVXV   V__  V    X   X    V XX  XXX X X X X     ",
+               "      XV  XX_V   VXX                  __   X  _X_  X      ",
+               "            XV                        XX   X  X X X X     ",
+               "            _V C             C        __                  ",
+               "X           XV                        XXVVVVVVVVVVVVVVVVVT",
+               "_XX   XXXX  X_XXXXXXXXXXXXXXXXXXXXXXXX___________________X",
+               "XXX   XXXX  XXXXXX__XXXXXXXXXXXXXXXXXX__XXXXXXXXXXXXXXXXXX",
+               "    C    X C      XX                  __                  ",
+               "        XX        __       C          XX       V          ",
+               "   XXXXX__XXX    VXX     X   X        __       X          ",
+               "E       ____V   V__X     XXXXX        XX       V          ",
+               "        X__V    V___      TXT       E __   V       F      ",
+               "        __V    V_XXX       X          XX   X            V ",
+               "   XXX  XX     VXT _       XE         __   V       X    X ",
+               "      E __    V_X  _       X          XX          X_X   V ",
+               "        XX    V__XXX       X        E __         X___X    ",
+               "        __   V______E      X          XX        X_____X   ",
+               "XX      XX  V______X       V          __       X_______X  ",
+               " T      __   VVVVVX_XXXX   V      XXXXXX      X_________XT",
+               "        XX         X   X   V      X          X___________X",
+               " C      __           C     V        C       X_____________",
+               "        XX                 V               X______________"
+            ]
+         }],
+         "code":[            
+            {
+               "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"==","_":0}]}],
+               "then":[
+                  {
+                     "inArea":[{
+                        "x":[{"_":0}],"y":[{"_":0}],
+                        "width":[{"_":480}],"height":[{"_":408}]
+                     }],
+                     "outlineAreaWithPattern":["X"]
+                  },
+                  {
+                     "flags":"W","inArea":[{
+                        "x":[{"_":160}],
+                        "y":[{"_":0}],
+                        "width":[{"_":160}],
+                        "height":[{"_":408}]
+                     }],"set":[{"graphicsX":[{"_":8}]}]
+                  },
+                  {
+                     "flags":"W","inArea":[{
+                        "x":[{"_":320}],
+                        "y":[{"_":0}],
+                        "width":[{"_":160}],
+                        "height":[{"_":408}]
+                     }],"set":[{"graphicsX":[{"_":32}]}]
+                  },
+                  {
+                     "flags":"W","inArea":[{
+                        "x":[{"_":0}],
+                        "y":[{"_":136}],
+                        "width":[{"_":480}],
+                        "height":[{"_":136}]
+                     }],"set":[{"graphicsY":[{"_":208}]}]
+                  },
+                  {
+                     "flags":"W","inArea":[{
+                        "x":[{"_":0}],
+                        "y":[{"_":272}],
+                        "width":[{"_":480}],
+                        "height":[{"_":136}]
+                     }],"set":[{"graphicsY":[{"_":176}]}]
+                  },                  
+                  {
+                     "id":"V",
+                     "code":[{
+                        "when":[{"if":[{"is":"collidingWith","flags":"W","deltaY":[{"_":-1}]}]}],
+                        "then":[{"set":[{"flipY":[{"_":1}]}]}],
+                        "else":[{
+                           "code":[
+                              {
+                                 "when":[{"if":[{"is":"collidingWith","flags":"W","deltaX":[{"_":-1}]}]}],
+                                 "then":[{"set":[{"rotate":[{"_":90}]}]}]
+                              },{
+                                 "when":[{"if":[{"is":"collidingWith","flags":"W","deltaX":[{"_":1}]}]}],
+                                 "then":[{"set":[{"rotate":[{"_":270}]}]}]
+                              }
+                           ]
+                        }]
+                     }]
+                  },
+                  {
+                     "flags":"B",
+                     "code":[
+                        {
+                           "when":[{"if":[{"is":"collidingWith","flags":"W","deltaY":[{"_":-1}]}]}],
+                           "then":[{"sum":[{"speedY":[{"attribute":"value0"}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"is":"collidingWith","flags":"W","deltaX":[{"_":-1}]}]}],
+                           "then":[{"sum":[{"speedX":[{"attribute":"value0"}]}]}]
+                        },{
+                           "when":[{"if":[{"is":"collidingWith","flags":"W","deltaY":[{"_":1}]}]}],
+                           "then":[{"subtract":[{"speedY":[{"attribute":"value0"}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"is":"collidingWith","flags":"W","deltaX":[{"_":1}]}]}],
+                           "then":[{"subtract":[{"speedX":[{"attribute":"value0"}]}]}]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "then":[          
+                  {
+                     "flags":"L",
+                     "set":[{"graphicsY":[{"list":[2,16],"randomNumber":true}]}],
+                     "multiply":[{"graphicsY":[{"_":16}]}]
+                  },        
+                  {
+                     "as":"scene",
+                     "set":[{
+                        "x":[{"id":"P","attribute":"x"}],
+                        "y":[{"id":"P","attribute":"y"}]
+                     }],
+                     "divide":[{
+                        "x":[{"_":160}],
+                        "y":[{"_":136}]
+                     }]
+                  },{
+                     "as":"scene",
+                     "set":[{
+                        "x":[{"attribute":"x","floor":true}],
+                        "y":[{"attribute":"y","floor":true}]
+                     }],
+                     "multiply":[{
+                        "x":[{"_":160}],
+                        "y":[{"_":136}]
+                     }]
+                  },{
+                     "as":"scene",
+                     "set":[{"value0":[{"_":0}]}],
+                     "sum":[{
+                        "value0":[{"id":"P","sublist":"touchDown","count":true}]
+                     }],"subtract":[{
+                        "value0":[{"id":"P","sublist":"touchUp","count":true}]
+                     }]
+                  },
+                  {
+                     "id":"S",
+                     "set":[{"text":[{"as":"game","attribute":"value0","prefix":"TRINKETS: "}]}]
+                  }
+               ]
+            },
+            {
+               "when":[{"as":"keyboard","attribute":"left","if":[{"is":"down"}]}],
+               "then":[{"id":"P","subtract":[{"speedX":[{"_":1}]}],"set":[{"animation":[{"_":1}],"applyRestitutionX":[{"_":0}]}]}]
+            },
+            {
+               "when":[{"as":"keyboard","attribute":"right","if":[{"is":"down"}]}],
+               "then":[{"id":"P","sum":[{"speedX":[{"_":1}]}],"set":[{"animation":[{"_":1}],"applyRestitutionX":[{"_":0}]}]}]
+            },
+            {
+               "when":[
+                  {"as":"scene","attribute":"value0","if":[{"is":"!=","_":0}]},
+                  {"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}
+               ],
+               "then":[{"id":"P","playAudio":[{"_":"A"}],"multiply":[{"gravityY":[{"_":-1}]}],"invert":[{"flipY":[{"_":1}]}]}]
+            },
+            {
+               "when":[{"id":"P","if":[{"itsAttribute":"speedX","is":"==","_":0}]}],
+               "then":[{"id":"P","set":[{"animation":[{"_":0}]}]}]
+            },{
+               "when":[{"id":"P","if":[{"is":"collidingWith","id":"C"}]}],
+               "then":[
+                  {"id":"J","set":[{"graphicsY":[{"_":208}],"id":[{"_":"C"}]}]},
+                  {"as":"that","set":[{"graphicsY":[{"_":32}],"id":[{"_":"J"}]}]}
+               ]
+            },{
+               "when":[{"id":"P","if":[{"is":"collidingWith","flags":"K"}]}],
+               "then":[
+                  {"id":"P","placeAt":[{"id":"J"}]},
+                  {"playAudio":[{"_":"B"}],"as":"game","sum":[{"value1":[{"_":1}]}]}
+               ]
+            },{
+               "when":[{"id":"P","if":[{"is":"collidingWith","id":"T"}]}],
+               "then":[
+                  {"as":"that","remove":true},
+                  {"playAudio":[{"_":"C"}],"as":"game","sum":[{"value0":[{"_":1}]}]}
+               ]
+            },{
+               "when":[{"id":"P","if":[{"is":"collidingWith","id":"F"}]}],
+               "then":[{"playAudio":[{"_":"C"}],"runScene":[{"_":"E"}]}]
+            },
+            {
+               "when":[{"event":"hitWall","flags":"B","if":[{"is":"collidingWith","id":"X"}]}],
+               "then":[
+                  {"bounce":[{"speedY":[{"attribute":"value2"}],"speedX":[{"attribute":"value2"}]}]}
+               ]
+            }
+         ]
+      },{
+         "id":"E",
+         "sprites":[
+            {"id":"A","x":76,"y":16,"text":"YOU SAVED~WIBRANT!","flags":"L","textAlignment":"center","textColor":2},
+            {"id":"B","x":76,"y":48,"textAlignment":"center"},
+            {"id":"C","x":76,"y":72,"textAlignment":"center"},
+            {"id":"D","x":76,"y":100,"textAlignment":"center","textColor":4,"scale":2},
+            {"id":"E","x":76,"y":120,"text":"THANKS FOR~PLAYING!","textAlignment":"center","textColor":2}
+         ],
+         "tilemaps":[{"map":["ABCDE"]}],
+         "code":[
+            {
+               "then":[
+                  {"id":"B","set":[{"text":[{"as":"game","attribute":"value0","prefix":"TRINKETS~"}]}]},
+                  {"id":"C","set":[{"text":[{"as":"game","attribute":"value1","prefix":"DEATHS~"}]}]},
+                  {
+                     "flags":"L",
+                     "set":[{"textColor":[{"list":[2,16],"randomNumber":true}]}]
+                  }
+               ]
+            },
+            {
+               "when":[{"as":"game","if":[{"itsAttribute":"value0","is":">=","_":10}]}],
+               "then":[{"id":"D","set":[{"text":[{"_":"PERFECT"}],"flags":[{"_":"L"}]}]}],
+               "else":[{"id":"D","set":[{"text":[{"_":"GOOD JOB"}]}]}]
+            }
+         ]
+      }
+   ]
+}
