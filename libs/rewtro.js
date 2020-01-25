@@ -618,8 +618,11 @@ function RewtroEngine(parent,CFG) {
 			if (line.cos) subjects=subjects.map(subject=>Math.cos(subject));
 			if (line.acos) subjects=subjects.map(subject=>Math.acos(subject));
 			if (line.limit) subjects=subjects.map(subject=>limit(subject,line.limit[0],line.limit[1]));
-			if (line.negate) subjects=[!subjects[0]];
+			if (line.negate) subjects=subjects.map(subject=>!subject?1:0);
 			if (line.abs) subjects=subjects.map(subject=>Math.abs(subject));
+			if (line.floor) subjects=subjects.map(subject=>Math.floor(subject));
+			if (line.ceil) subjects=subjects.map(subject=>Math.ceil(subject));
+			if (line.round) subjects=subjects.map(subject=>Math.round(subject));
 			if (line.max) {
 				var out=subjects[0];
 				subjects.forEach(subject=>{ if (subject>out) out=subject; });
@@ -824,11 +827,21 @@ function RewtroEngine(parent,CFG) {
 
 	function executeInstructions(instructions,subject,codeThat,codeThis,speed,restitution,restitutionSpeed,randomNumber) {
 
-		var lineThis, lineThat, isBreaking=false;
+		var lineThis, newLineThis, lineThat, isBreaking=false;
 
 		if (instructions&&codeThis) instructions.forEach(line=>{
 
 			if (!isBreaking) {
+
+				if (line.randomize) randomNumber=-1;
+				else randomNumber=Math.random();
+
+				lineThis=evaluateGetter(0,codeThat,subject,line,randomNumber,codeThis);
+
+				// If this is explicit in line, local that is the global that
+				if (lineThis===codeThis) lineThat=codeThat;
+				// ...else local that the same of the global this.
+				else lineThat=codeThis;
 
 				var inArea=0;
 				if (line.inArea) inArea=getArea(0,codeThat,subject,randomNumber,line.inArea[0]);
@@ -836,12 +849,12 @@ function RewtroEngine(parent,CFG) {
 				// --- STATEMENTS THAT UPDATES LOCALTHIS
 				if (line.spawn) {
 
-					lineThis=[];
+					newLineThis=[];
 					lineThat=codeThis;
 
 					var x,y,newsprite,at;
 
-					codeThis.forEach(othis=>{
+					lineThis.forEach(othis=>{
 						line.spawn.forEach(spawn=>{
 							var at;
 							if (spawn.at!==undefined) at=spawn.at;
@@ -863,13 +876,15 @@ function RewtroEngine(parent,CFG) {
 													newsprite.x=pos[0];
 													newsprite.y=pos[1];
 												}
-											lineThis.push(newsprite);
+											newLineThis.push(newsprite);
 										}										
 									})								
 								})
 							})						
 						});
 					});
+
+					lineThis=newLineThis;
 
 				} else if ((line.fillAreaWithPattern||line.outlineAreaWithPattern)&&inArea) {
 
@@ -891,19 +906,31 @@ function RewtroEngine(parent,CFG) {
 								lineThis.push(newsprite);
 							}
 						}
-				} else {
 
-					lineThis=evaluateGetter(0,codeThat,subject,line,randomNumber,codeThis);
+				} else if (line.areaCopy&&inArea) {
 
-					// If this is explicit in line, local that is the global that
-					if (lineThis===codeThis) lineThat=codeThat;
-					// ...else local that the same of the global this.
-					else lineThat=codeThis;
+					newLineThis=[];
+					lineThat=codeThis;
+
+					lineThis.forEach(othis=>{
+						line.areaCopy.forEach(area=>{
+							var fromids=area.fromIds,toids=area.toIds;
+							var spawnId=fromids.indexOf(othis.id);
+							if ((spawnId!=-1)&&(toids[spawnId])) {
+								var dx=evaluateGetter(othis,lineThat,subject,area.x[0],randomNumber)[0];
+								var dy=evaluateGetter(othis,lineThat,subject,area.y[0],randomNumber)[0];
+								var newsprite=addSprite(toids[spawnId]);
+								newsprite.x=othis.x-inArea.x+dx;
+								newsprite.y=othis.y-inArea.y+dy;
+								newLineThis.push(newsprite);
+							}
+						})						
+					});
+
+					lineThis=newLineThis;
 
 				}
 
-				if (line.randomize) randomNumber=-1;
-				else randomNumber=Math.random();
 
 				lineThis.forEach(othis=>{
 
@@ -936,18 +963,7 @@ function RewtroEngine(parent,CFG) {
 							othis.y=inArea.y+(ox*othis.height);
 						}
 					}
-					if (line.areaCopy) {
-						var fromids=line.areaCopy[0].fromIds,toids=line.areaCopy[0].toIds;
-						var spawnId=fromids.indexOf(othis.id);
-						if ((spawnId!=-1)&&(toids[spawnId])) {
-							var dx=evaluateGetter(othis,lineThat,subject,line.areaCopy[0].x[0],randomNumber)[0];
-							var dy=evaluateGetter(othis,lineThat,subject,line.areaCopy[0].y[0],randomNumber)[0];
-							var newsprite=addSprite(toids[spawnId]);
-							newsprite.x=othis.x-inArea.x+dx;
-							newsprite.y=othis.y-inArea.y+dy;
-						}
-					}
-
+					
 					// Placement
 					if (line.placeAt) {
 						var pos=evaluateGetter(othis,lineThat,subject,line.placeAt[0],randomNumber)[0];
@@ -1012,13 +1028,6 @@ function RewtroEngine(parent,CFG) {
 					});
 
 					// Audio
-					if (line.playAudio) {
-						var sound;
-						line.playAudio.forEach(audio=>{
-							sound=sounds[evaluateGetter(othis,lineThat,subject,audio,randomNumber)[0]];	
-							if (sound) playAudio(effectsChannel,sound.data,sound.channel);
-						});				
-					}
 					if (line.stopChannel) {
 						var channel;
 						line.stopChannel.forEach(channel=>{
@@ -1027,6 +1036,13 @@ function RewtroEngine(parent,CFG) {
 						});
 					}
 					if (line.stopAudio) stopAudio(effectsChannels);
+					if (line.playAudio) {
+						var sound;
+						line.playAudio.forEach(audio=>{
+							sound=sounds[evaluateGetter(othis,lineThat,subject,audio,randomNumber)[0]];	
+							if (sound) playAudio(effectsChannel,sound.data,sound.channel);
+						});				
+					}
 
 					// Music
 					if (line.stopSong) stopSong();
