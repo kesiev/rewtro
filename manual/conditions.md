@@ -68,11 +68,23 @@ _TODO_
 { key:"not", flag:true },
 ```
 
-## Physics
+## Sprite lifecycle events
 
 _TODO_
 
 ```
+"isSpawn","isRemoved",
+{
+	key:"event", value:EVENTS
+},
+```
+
+## Physics events
+
+_TODO - Reference to collidingWith_
+
+```
+"hitWall"
 {
 	key:"event", value:EVENTS
 },
@@ -94,6 +106,7 @@ _TODO_
 ## Custom events
 
 ```
+"event0","event1","event2","event3","event4",
 {
 	key:"event", value:EVENTS
 }

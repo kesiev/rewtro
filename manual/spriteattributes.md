@@ -534,7 +534,7 @@ The Rewtro physics engine can let sprites interact with each other when collidin
             "when":[{
                "event":"hitWall","flags":"W","if":[{"is":"collidingWith","id":"X"}]
             }],
-            "then":[{"bounce":[{"speedY":[{"_":-1}],"speedX":[{"_":-1}]}]}]
+            "then":[{"bounce":[{"speedY":[{"smallInteger":-1}],"speedX":[{"smallInteger":-1}]}]}]
          },
          {
             "when":[{"id":"A","sublist":"touchDown"}],

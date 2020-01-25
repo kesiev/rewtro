@@ -105,7 +105,7 @@ Finally, the third line `ids` get the sprites with `id` set to `B` and `C` and t
 
 ### Advanced ID and flags
 
-_(Added in [version 0.2](rewtrochangelog.md) of Rewtro)_
+_(Rewtro [v0.2+](rewtrochangelog.md)+)_
 
 The `id` and `flags` getters have their search criteria _hardcoded_. While this method requires less space in your cartridge, it can lead to a lot of duplicated code when you need some sprites to interact together in the same way.
 
@@ -657,7 +657,7 @@ The `keyboard` [special object](specialobjects.md) holds the game controller sta
       "title":"My first game"
    },
    "data":[{
-      "id":"AB",
+      "id":"A",
       "sprites":[
          {"id":"A"},
          {"id":"B","backgroundColor":5,"restitutionX":0,"restitutionY":0,"x":76,"y":68}
@@ -749,6 +749,8 @@ This cartridge plays a simple song and a beat. The screen displays the notes pla
 </div>
 
 The `M0` subgetter gets the currently playing notes on the first row of the `music`, that's the theme, and `M1` the ones from the second row of the `music`, that's the beat. The `code` block will assign these values to `A` and `B` `text` keys, making them appear on the screen.
+
+Notice that the notes read from `songRow` are 4 symbols long instead of 3: the first letter is the instrument `id` that's playing that note.
 
 ### List
 
@@ -851,31 +853,292 @@ Take your time to understand how a _set of elements_ and a _single list of eleme
 
 ### Sprites
 
-_TODO_
+Some subgetters accept another getter and calculate a relation between the picked sprite and them.
+
+  * `angleTo` returns the angle between the currently picked sprite and the specified getter.
+  * `distanceTo` returns the distance between the currently picked sprite and the specified getter.
+  * `nearest` returns the nearest sprite of the specified getter.
+  * `farthest` returns the farthest sprite of the specified getter.
+
+The `inArea` subgetter accepts an object that describes a rectangular area and returns the subset of the picked sprites that are into that area. The area is described this way:
+
+  * `x` is a getter that defines the vertical position of the area.
+  * `y` is a getter that defines the horizontal position of the area.
+  * `width` is a getter that defines the width of the area.
+  * `height` is a getter that defines the height of the area.
 
 ```
-{ key:"angleTo", values:"*GETTERS*" },
-{ key:"distanceTo", values:"*GETTERS*" },
-{ key:"nearest", values:"*GETTERS*" },
-{ key:"farthest", values:"*GETTERS*" },
-{ key:"inArea", values:AREA },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","x":76,"y":68,"backgroundColor":2,"text":"A"},
+         {"id":"B","flags":"F","backgroundColor":5,"restitutionX":0,"restitutionY":0,"x":76,"y":44,"text":"B"},
+         {"id":"C","flags":"F","backgroundColor":6,"x":108,"y":100,"text":"C"},
+         {"id":"D","x":0,"y":0},
+         {"id":"E","x":0,"y":8},
+         {"id":"F","x":0,"y":16},
+         {"id":"G","x":0,"y":24},
+         {"id":"H","x":0,"y":32}
+      ],
+      "tilemaps":[{"map":["ABCDEFGH"]}],
+      "code":[
+         {
+            "then":[
+               {"id":"D","set":[{"text":[{"id":"A","angleTo":[{"id":"B"}]}]}]},
+               {"id":"E","set":[{"text":[{"id":"A","distanceTo":[{"id":"B"}]}]}]},
+               {
+                  "id":"A","nearest":[{"flags":"F"}],
+                  "code":[{
+                     "then":[{"id":"F","set":[{"text":[{"as":"that","attribute":"id"}]}]}]
+                  }]
+               },
+               {
+                  "id":"A","farthest":[{"flags":"F"}],
+                  "code":[{
+                     "then":[{"id":"G","set":[{"text":[{"as":"that","attribute":"id"}]}]}]
+                  }]
+               },
+               {
+                  "id":"H",
+                  "set":[{
+                     "text":[{"id":"B","inArea":[{
+                        "x":[{"smallInteger":60}],
+                        "y":[{"smallInteger":52}],
+                        "width":[{"smallInteger":40}],
+                        "height":[{"smallInteger":40}]
+                     }],"count":true}]
+                  }]
+               }
+            ]
+         },
+         {
+            "when":[{"as":"keyboard","attribute":"left","if":[{"is":"down"}]}],
+            "then":[{"id":"B","set":[{"speedX":[{"smallInteger":-5}]}]}]
+         },
+         {
+            "when":[{"as":"keyboard","attribute":"right","if":[{"is":"down"}]}],
+            "then":[{"id":"B","set":[{"speedX":[{"smallInteger":5}]}]}]
+         },
+         {
+            "when":[{"as":"keyboard","attribute":"up","if":[{"is":"down"}]}],
+            "then":[{"id":"B","set":[{"speedY":[{"smallInteger":-5}]}]}]
+         },
+         {
+            "when":[{"as":"keyboard","attribute":"down","if":[{"is":"down"}]}],
+            "then":[{"id":"B","set":[{"speedY":[{"smallInteger":5}]}]}]
+         }
+      ]
+   }]
+}
 ```
+
+This cartridge displays three squares labeled `A`, `B`, and `C`. Moving the `B` square with the controller the numbers on the top left of the screen changes:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/getters-subgetter-sprite.png"></p>
+</div>
+
+The first line of code gets `A` and calculates the `angleTo` the sprite `B` and display it on the first row on the screen. The second line does the same but calculates the `distanceTo` the sprite `B` and prints it on the second row.
+
+The third and fourth lines of code are getting the sprite `B` and then the `nearest` or `farthest` sprite with flag `F`, which are the `B` and `C` sprite. The sprite is iterated and its `id` is printed, so you'll see the nearest and farthest sprites `id` on the third and fourth row of the screen.
+
+The fifth line of code gets all the `F` flagged sprites that are into the area at 60,52 with a width and height of 40 and then counts them. It's a squared area around the `A` sprite, so moving the `A` sprite near it the counter on the fifth row of the screen will go up to `1` and leaving it the counter will go down to `0`.
+
+### Text processing
+
+There are few subgetters for text processing:
+
+  * `prefix` accepts a string of symbols and prepends some text to the picked value.
+  * `suffix` accepts a string of symbols and appends some text to the picked value.
+
+They are mostly used to make simple UI.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A"},
+         {"id":"B","x":0,"y":8},
+         {"id":"C","x":0,"y":16}
+      ],
+      "tilemaps":[{"map":["ABC"]}],
+      "code":[
+         {
+            "then":[
+               {"as":"scene","set":[{
+                  "value0":[{"smallInteger":100}],
+                  "value1":[{"smallInteger":3}],
+                  "value2":[{"smallInteger":120}]
+               }]},
+               {"id":"A","set":[{"text":[{"as":"scene","attribute":"value0","prefix":"SCORE: "}]}]},
+               {"id":"B","set":[{"text":[{"as":"scene","attribute":"value1","suffix":" LIVES LEFT"}]}]},
+               {"id":"C","set":[{"text":[{"as":"scene","attribute":"value2","prefix":"BEST SCORE IS ","suffix":"!!"}]}]}
+            ]
+         }
+      ]
+   }]
+}
+```
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/getters-subgetter-text.png"></p>
+</div>
+
+The first line initializes the `value0`, `value1`, and `value2` variables of the `scene`. The following code shows how to add a `prefix`, a `suffix`, and both of them in order to make a simple game UI.
 
 ### Math and logic
 
-_TODO_
+Rewtro supports a number of number processing subgetters that applies a function on the picked number. To enable them just set their key to `true`.
+
+  * `abs` returns the absolute value of the picked number. On both `-3` and `3` it returns `3`.
+  * `sqrt` returns the square root of the picked value. On `9`  it returns `3`.
+  * `sin` returns the sine of the picked value. On `0` it returns `0`.
+  * `cos` returns the cosine of the picked value. On `0` it returns `1`.
+  * `acos` returns the arccosine of the picked value. On `0` it returns `1.5707...`.
+  * `floor` returns the largest integer less than or equal to the picked value. On both `1.9` and `1.3` it returns `1`.
+  * `negate` returns the logic _not_ of the value. On `0` it returns `1` and for any other value returns `0`.
+  * `ceil` _(Rewtro [v0.3+](rewtrochangelog.md)+)_ always rounds the picked value up to the next largest whole number or integer. On both `1.9` and `1.3` returns `2`.
+  * `round` _(Rewtro [v0.3+](rewtrochangelog.md)+)_ returns the value of a number rounded to the nearest integer. On `1.9` returns `2` but on `1.3` returns `1`.
+
+These subgetters are quite straightforward and boring. Let's try making an interesting example out of it:
 
 ```
-LIST:
-
-{ key:"abs", flag:true },
-{ key:"sqrt", flag:true },
-{ key:"sin", flag:true },
-{ key:"cos", flag:true },
-{ key:"acos", flag:true },
-{ key:"limit", listNumbers:RANGES.INTEGER },
-{ key:"oneRandom", flag:true },
-{ key:"prefix", string:SYMBOLS },
-{ key:"suffix", string:SYMBOLS },
-{ key:"negate", flag:true },
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","backgroundColor":4,"height":144}
+      ],
+      "tilemaps":[{
+         "y":68,
+         "map":["AAAAAAAAAAAAAAAAAAAA"]
+      }],
+      "code":[
+         {
+            "when":[{"id":"A"}],
+            "then":[
+               {
+                  "set":[{"value0":[{"attribute":"x"}]}],
+                  "sum":[{"value0":[{"attribute":"timer"}]}],
+                  "divide":[{"value0":[{"smallInteger":10}]}]
+               },
+               {
+                  "sum":[{"y":[{"attribute":"value0","sin":true}]}]
+               }
+            ]            
+         }
+      ]
+   }]
+}
 ```
+
+This cartridge show an animated rough sea!
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/getters-subgetter-math.png"></p>
+</div>
+
+The `tilemaps` spawn a row of `A` sprites in the middle of the screen. Each `A` sprite is a tall blue rectangle. Then the `code` iterates all of them and copies its `x` position into `value0` and then `sum` their `timer`. That makes the `value0` a number that has a growing starting value depending on the sprite `x` position and goes up over time. The `divide` statement smoothes the `value0` a little.
+
+The resulting `value0` is `sum` to each sprite `y` moving them vertically, but first `sin` subgetter is applied making `value0` a number oscillating between `-1` and `1`. Since `value0` starting value is different for each sprite `x` a wavy pattern is displayed. Adding the `timer` value every frame will keep increasing `value0' over time animating our sea.
+
+### Limit
+
+While getting a number can ensure that's within a range adding the `limit` subgetter. It accepts two numbers from `-127` to `128` that are the lowest and highest allowed number.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A"},
+         {"id":"B","x":0,"y":8}
+      ],
+      "tilemaps":[{"map":["AB"]}],
+      "code":[
+         {
+            "then":[
+               {"id":"A","set":[{"text":[{"as":"scene","attribute":"timer","limit":[0,80]}]}]},
+               {"id":"B","set":[{"text":[{"as":"scene","attribute":"timer","limit":[50,100]}]}]}
+            ]            
+         }
+      ]
+   }]
+}
+```
+
+This cartridge shows two numbers going up:
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/getters-subgetter-limit.png"></p>
+</div>
+
+The first number will go from `0` to `50` alone. Then the two numbers will go together from `50` to `80` and finally the first one will stop and the second one will go to `100`. That's because the `code` show the same timer but applying two different `limit` to them.
+
+# Execution order
+
+Getters are executed following a fixed order. This is the list of all getters and subgetters sorted by execution priority.
+
+  * Main getter
+     * `emptyList`
+     * `integer`
+     * `smallinteger`
+     * `number`
+     * `smallnumber`
+     * `float`
+     * `largenumber`
+     * `list`
+     * `string`
+     * `character`
+     * `numbers`
+     * `undefined`
+     * `ids` or `id`
+     * `flags`
+     * `idByName`
+     * `flagsByName`
+     * `as`
+  * Subgetters
+      * `distanceTo`
+      * `angleTo`
+      * `nearest` or `farthest`
+      * `inArea`
+      * `oneRandom`
+      * `sublist`
+      * `attribute`
+      * `randomValue`
+      * `randomNumber`
+      * `index`
+      * `sqrt`
+      * `sin`
+      * `cos`
+      * `acos`
+      * `limit`
+      * `negate`
+      * `abs`
+      * `floor`
+      * `ceil`
+      * `round`
+      * `max`
+      * `min`
+      * `count`
+      * `prefix`
+      * `suffix`
+      * `_DEBUG`

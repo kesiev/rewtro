@@ -39,3 +39,23 @@ First released version. That's the one I used for my Christmas greeting cards in
 ### Changes
 
   * Added `idsByName` and `flagsByName` [getters](getters.md).
+
+## Version 0.3
+
+Updated command set.
+
+### Minimal cartridge
+
+```
+{
+   "systemVersion":"0.3",
+   "metadata":{
+     "title":"My first game"
+   },
+   "data":[]
+}
+```
+
+### Changes
+
+  * Added `ceil` and `round` [getters](getters.md).
