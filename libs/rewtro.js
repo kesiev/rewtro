@@ -67,9 +67,16 @@ function RewtroEngine(parent,CFG) {
 	}
 
 	function applyAssignValue(othis,othat,otarget,operator,line,randomNumber) {
+		var linevalues;
 		line.forEach(line=>{
 			for (var key in line) {
-				applyAssign(othis,othat,otarget,operator,key,evaluateGetter(othis,othat,otarget,line[key][0],randomNumber)[0]);			
+				line[key].forEach(linekey=>{
+					linevalues=evaluateGetter(othis,othat,otarget,linekey,randomNumber);
+					linevalues.forEach(linevalue=>{
+						applyAssign(othis,othat,otarget,operator,key,linevalue);
+					})
+				})
+				
 			}
 		});
 	}
@@ -633,7 +640,7 @@ function RewtroEngine(parent,CFG) {
 				subjects.forEach(subject=>{ if (subject<out) out=subject; });
 				subjects=[out];
 			}
-			if (line.count) subjects=[subjects.length];
+			if (line.count) subjects=[subjects.length||0];
 			// Decorators
 			if (line.prefix) subjects=subjects.map(subject=>line.prefix+subject);
 			if (line.suffix) subjects=subjects.map(subject=>subject+line.suffix);
@@ -690,7 +697,7 @@ function RewtroEngine(parent,CFG) {
 										var fromvalue=othis,value=ofsubjects[0];
 										if (fromvalue&&condition.itsAttribute) fromvalue=fromvalue[condition.itsAttribute];
 										switch (condition.is) {
-											case "existing":{ linetrue=linetrue&&(!!fromvalue); break; }
+											case "existing":{ linetrue=linetrue&&(!!fromvalue&&(fromvalue.length===undefined||fromvalue.length)); break; }
 											case ">":{ linetrue=linetrue&&(fromvalue>value); break; }
 											case ">=":{ linetrue=linetrue&&(fromvalue>=value); break; }
 											case "<":{ linetrue=linetrue&&(fromvalue<value); break; }
