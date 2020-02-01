@@ -487,7 +487,9 @@ There are three ways to get lists in Rewtro:
   * A _set of numbers_ from `-511` to `512` with `numbers`
   * A _single list of numbers_ from `-511` to `512` with `list`
 
-The `list` gets a _single object_ that collects all of the numbers while `numbers` get all its numbers, one by one. I'll try to better explain with an example.
+The `list` gets a _single object_ that collects all of the numbers while `numbers` get all its numbers, one by one. You can read more about lists in the [list and iterators](listiterators.md) chapter.
+
+I'll try to explain `numbers` and `list` with an example.
 
 ```
 {
