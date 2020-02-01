@@ -86,9 +86,7 @@
 							"as":"target",
 							"code":[								
 								{
-									"when":[{"if":[{"itsAttribute":"value1","is":"existing"}]}],
-									"then":[{"set":[{"animation":[{"_":1}]}]}],
-									"else":[{"set":[{"animation":[{"_":0}]}]}]
+									"then":[{"set":[{"animation":[{"attribute":"value1"}]}]}]
 								},
 								{
 									"when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],
