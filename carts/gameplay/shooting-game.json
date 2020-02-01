@@ -72,7 +72,7 @@
 		{
 			"when":[
 				{"as":"scene","if":[{"itsAttribute":"value2","is":"<","_":0}]},
-				{"id":"E","if":[{"is":"existing"}]}
+				{"id":"E"}
 			],
 			"then":[
 				{"spawn":[{
@@ -133,7 +133,7 @@
 		},
 		{
 			"when":[
-				{"not":true,"id":"D","if":[{"is":"existing"}]},
+				{"not":true,"id":"D"},
 				{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}
 			],
 			"then":[
