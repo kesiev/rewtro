@@ -999,7 +999,6 @@ Code statements are executed following a fixed order. This is the list of all co
     * `moveTo`
     * `speedTo`
     * `setSpeedTo`
-    * `playAudio`
     * `stopChannel`
     * `stopAudio`
     * `playAudio`
