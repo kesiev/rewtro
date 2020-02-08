@@ -39,31 +39,33 @@ function RewtroEngine(parent,CFG) {
 	function limit(val,min,max) { return val<min?min:val>max?max:val; }
 
 	function applyAssign(othis,othat,otarget,operator,key,value,randomNumber) {
-		var prev=othis[key];
-		switch (operator) {
-			case "push":{ othis[key].push(value); break; }
-			case "set":{ othis[key]=value; break; }
-			case "sum":{ othis[key]+=value; break; }
-			case "subtract":{ othis[key]-=value; break; }
-			case "multiply":{ othis[key]*=value; break; }
-			case "divide":{ othis[key]/=value; break; }
-			case "module":{ othis[key]=othis[key]%value; break; }
-			case "invert":{ if (!!value) othis[key]=!othis[key]; break; }
-		}
-		if (prev!=othis[key])
-			switch (key) {
-				case "flags":
-				case "id":{
-					// If sprite id or flags are changed, the sprites index is updated
-					updateIndex(othis,key,prev,othis[key]);
-					break;
-				}
-				case "animation":{
-					// If animation is changed, the animation timer is reset
-					resetAnimation(othis);
-					break;
-				}
+		if (othis) {
+			var prev=othis[key];
+			switch (operator) {
+				case "push":{ othis[key].push(value); break; }
+				case "set":{ othis[key]=value; break; }
+				case "sum":{ othis[key]+=value; break; }
+				case "subtract":{ othis[key]-=value; break; }
+				case "multiply":{ othis[key]*=value; break; }
+				case "divide":{ othis[key]/=value; break; }
+				case "module":{ othis[key]=othis[key]%value; break; }
+				case "invert":{ if (!!value) othis[key]=!othis[key]; break; }
 			}
+			if (prev!=othis[key])
+				switch (key) {
+					case "flags":
+					case "id":{
+						// If sprite id or flags are changed, the sprites index is updated
+						updateIndex(othis,key,prev,othis[key]);
+						break;
+					}
+					case "animation":{
+						// If animation is changed, the animation timer is reset
+						resetAnimation(othis);
+						break;
+					}
+				}
+		}
 	}
 
 	function applyAssignValue(othis,othat,otarget,operator,line,randomNumber) {
