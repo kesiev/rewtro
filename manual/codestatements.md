@@ -44,7 +44,7 @@ Then the next line picks the `A` sprite again, becoming the local `this`. A bran
 
 ## Changings variables
 
-The most powerful and yet the simplest statement in Rewtro is `set`: it accepts a list of keys and getters and it sets the current picked object keys to the getter values. Used together with [getters](getters.md) and subgetters you can change sprites direction, text, colors, and more.
+The most powerful and yet the simplest statement in Rewtro is `set`: it accepts a list of keys and getters and it sets the current picked object keys to the getter values. Used together with [getters](getters.md) and sub-getters you can change sprites direction, text, colors, and more.
 
 ```
 {
@@ -776,9 +776,9 @@ Finally, the `2` data block will set `A` as the next scene, ending our game and 
 
 ## Events
 
-Rewtro features a tiny event system that uses [code conditions](conditions.md): when an event is triggered on a sprite all the `code` lines with a matching `event` key and targeting that sprite is executed.
+Rewtro features a tiny event system. Events are identified by a name and can be triggered on a sprite by its life cycle, the physics engine or by you using the `triggerEvent` statement. Events are caught by `when` commands and you can read more on the [code commands](codecommands.md) chapter.
 
-These events can be triggered both by the physics engine when a collision happens and manually from your code. To trigger an event set the `triggerEvent` to `event0`, `event1`, `event2`, `event3`, or `event4`. You can also trigger the system events `hitWall`, `isSpawn`, and `isRemoved`.
+To trigger an event from your code set the `triggerEvent` to `event0`, `event1`, `event2`, `event3`, or `event4`. You can also trigger the system events `hitWall`, `isSpawn`, and `isRemoved`.
 
 An event can be triggered on a sprite _just once_ per game frame. If you want to override this behavior set the `forceEvent` key to `true` in your `triggerEvent` call.
 

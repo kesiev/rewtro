@@ -88,7 +88,7 @@ The last line doesn't have any `when` condition so it will _always_ run its code
 
 In Rewtro [getters](getters.md) are the most important part of its programming language. Getters are used to _pick_ a game object or its [attributes](spriteattributes.md) in order to check or manipulate it.
 
-And getters are _so important_ that _every line of code is a getter_. Let's have a look to a slice of our tiny shooter game code:
+And getters are _so important_ that _every line of code is a getter_. Let's have a look at a slice of our tiny shooter game code:
 
 ```
 {
@@ -287,52 +287,294 @@ The first line prints the text on the `C` sprite and the second one on the `D` s
 
 ### Events
 
-_TODO_
+Rewtro features a tiny event system. Events are identified by a name and can be triggered on a sprite by its life cycle, the physics engine or by you using the `triggerEvent` [statement](codestatements.md). You can read more about triggering events in the [code statements](codestatements.md) chapter.
+
+When an event is triggered on one or more sprites all of the loaded `code` blocks are executed from the beginning but some lines are executed:
+
+  * They must be on your `code` root, so no sub-code
+  * They must have a `when` command
+  * Its condition must target the specified sprite
+  * Its condition must have an `event` key matching the event name
+
+Lines with conditions having the `event` set key are never executed by your game except when a matching event is triggered.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","width":4,"height":4,"backgroundColor":2},
+         {"id":"B","width":2,"height":2,"backgroundColor":8,"gravityY":1}
+      ],
+      "tilemaps":[{"map":["AAAAAAAA"]}],
+      "code":[
+         {
+            "when":[{"id":"A","event":"isSpawn"}],
+            "then":[{
+               "randomize":true,
+               "set":[{
+                  "y":[{"smallInteger":-4}],
+                  "speedX":[{"list":[-4,4],"randomNumber":true}],
+                  "speedY":[{"list":[1,4],"randomNumber":true}]
+               }]
+            }]
+         },
+         {
+            "when":[{"id":"A","event":"event0"}],
+            "then":[{"code":[{
+               "times":[{"smallNumber":5}],
+               "then":[{"spawn":[{"ids":[{"character":"B"}]}]}]
+            }]}]
+         },
+         {
+            "when":[{"id":"B","event":"isSpawn"}],
+            "then":[{
+               "randomize":true,
+               "set":[{
+                  "speedX":[{"list":[-2,2],"randomNumber":true}],
+                  "speedY":[{"list":[-2,-6],"randomNumber":true}]
+               }]
+            }]
+         },
+         {
+            "when":[{
+               "id":"A",
+               "event":"hitWall",
+               "bounds":[{
+                  "modeLeft":"warp",
+                  "modeRight":"warp",
+                  "modeBottom":"bound",
+                  "x":[{"smallInteger":-4}],
+                  "y":[{"smallInteger":-4}],
+                  "width":[{"number":168}],
+                  "height":[{"number":148}]
+               }]
+            }],
+            "then":[
+               { "triggerEvent":"event0" },
+               { "triggerEvent":"isSpawn" }
+            ]
+         },
+         {
+            "when":[{"id":"B"}],
+            "then":[{"code":[
+               {
+                  "when":[{"if":[{"itsAttribute":"y","is":">","number":144}]}],
+                  "then":[{"remove":true}]
+               }
+            ]}]
+         }
+      ]
+   }]
+}
+```
+
+This cartridge shows a rainy scene. Some blue squares are falling like drops from the top of the screen and makes a little splash of white squares when hitting the bottom of the screen.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/commands-events.png"></p>
+</div>
+
+This time we'll talk about this example in the following paragraphs.
 
 #### Sprite lifecycle events
 
-_TODO_
+The `isSpawn` and `isRemoved` events are triggered when a sprite is added to the scene and when it's removed.
+
+In our rain example, the 8 drops sprites `A` are spawned by `tilemaps` at game start and the event `isSpawn` is immediately triggered on each of them. A `when` command _catches_ this event in order and places them on the top of the screen and gives them a random direction.
 
 ```
-"isSpawn","isRemoved",
 {
-   key:"event", value:EVENTS
-},
+  "when":[{"id":"A","event":"isSpawn"}],
+  "then":[{
+     "randomize":true,
+     "set":[{
+        "y":[{"smallInteger":-4}],
+        "speedX":[{"list":[-4,4],"randomNumber":true}],
+        "speedY":[{"list":[1,4],"randomNumber":true}]
+     }]
+  }]
+}
 ```
+
+`when` the `isSpawn` event is triggered on sprites with `id` `A` (which are the blue squares) `then` place it on the top of the screen and randomly change its speed. But that's not all: when a drop falls on the bottom of the screen _it's not removed_ as you may think...
+
+```
+{ "triggerEvent":"isSpawn" }
+```
+
+The life cycle event `isSpawn` is _manually_ called again on that drop, placing it again to the top and giving the drop another direction. So it looks like that new drops are falling but they are _recycled_ instead: we're seeing the same 8 drops falling and going back to the top.
+
+Why you should do that? This way you'll be sure that you'll never have more than 8 drops on the screen_ even if some of them are taking more time than the others to fall. That means that your scene will never be crowded by rain and that keeps your game performances predictable and stable.
 
 #### Physics events
 
-_TODO - Reference to collidingWith_
+The `hitWall` event is triggered when a sprite is hitting the edges of a defined rectangular area. You can define that area adding a `bounds` key containing an object with these keys:
+
+  * `x` and `y` are [getters](getters.md) to the top-left coordinates of the area
+  * `width` and `height` are [getters](getters.md) to the area width and height
+  * `modeTop`, `modeBottom`, `modeLeft`, and `modeRight` defines how each edge works:
+    * `warp` will move the sprite from that edge to the opposite one. The `hitWall` event _is not triggered_ in this case.
+    * `bound` will stop the sprite on that edge as it collided to a wall. The `hitWall` event _is triggered_ in this case.
+    * If the key is not defined that edge is ignored and won't trigger any event.
+
+In our rainy scene cartridge `bounds` are used to both warp the blue drops from the left side of the screen to the right and vice versa and to make them splash on the bottom of the screen.
 
 ```
-"hitWall"
 {
-   key:"event", value:EVENTS
-},
-{
-   key:"bounds",
-   values:System.padWithUnused(debug,"bounds",16,[
-      { key:"modeTop", value:BOUNDSMODES},
-      { key:"modeRight", value:BOUNDSMODES},
-      { key:"modeBottom", value:BOUNDSMODES},
-      { key:"modeLeft", value:BOUNDSMODES},
-      { key:"x", values:GETTERS },
-      { key:"y", values:GETTERS },
-      { key:"width", values:GETTERS },
-      { key:"height", values:GETTERS }
-   ])
+  "when":[{
+     "id":"A",
+     "event":"hitWall",
+     "bounds":[{
+        "modeLeft":"warp",
+        "modeRight":"warp",
+        "modeBottom":"bound",
+        "x":[{"smallInteger":-4}],
+        "y":[{"smallInteger":-4}],
+        "width":[{"number":168}],
+        "height":[{"number":148}]
+     }]
+  }],
+  "then":[
+     { "triggerEvent":"event0" },
+     { "triggerEvent":"isSpawn" }
+  ]
 }
 ```
+
+`when` the blue drop sprites `A` are receiving the `hitWall` event for hitting the edges of an area that's slightly bigger than the screen the `triggerEvent` [statements](codestatements.md) are executed. But not all of the edges are generating the `hitWall` event:
+
+  * the left and right sides are set to `warp` so no event is triggered but the sprites will warp from a side to the other one.
+  * the bottom side is `bound` so it will trigger the `hitWall` event. That's why the drops are _stopped_ when trying to go outside the bottom of the screen.
+  * the top side is ignored since no `modeTop` key is defined.
 
 #### Custom events
 
+As we've previously seen, the `triggerEvent` [statement](codestatements.md) can be used to trigger any of the system events, like `onSpawn`. In addition to system events, there are 5 of them, named from `event0` to `event4`, that are never triggered by the Rewtro system and you can use to create custom events.
+
+In our rain example we used `event0` to make the `A` drops spawn the white squares `B` when are popped.
+
 ```
-"event0","event1","event2","event3","event4",
 {
-   key:"event", value:EVENTS
+  "when":[{"id":"A","event":"event0"}],
+  "then":[{"code":[{
+     "times":[{"smallNumber":5}],
+     "then":[{"spawn":[{"ids":[{"character":"B"}]}]}]
+  }]}]
+},
+```
+
+`when` the event `event0` is triggered on sprites with `id` `A` then spawn 5 white squares. This event is triggered when the `hitWall` event is triggered on the drop sprites.
+
+```
+{
+  "when":[{
+     "id":"A",
+     "event":"hitWall",
+     ...
+  }],
+  "then":[
+     { "triggerEvent":"event0" },
+     { "triggerEvent":"isSpawn" }
+  ]
 }
 ```
 
+We have an _event chain_ here: when an `A` sprite falls to the bottom of the screen the `hitWall` event is triggered by Rewtro and caught by `code`. The `then` condition triggers the custom event `event0`, so a white splash is spawned, and then the `isSpawn` event is triggered, so the drop is displaced to the top of the screen and randomly tilted to fall to the bottom again.
+
+#### Avoiding events
+
+Events are handy and they can make your code tidy and readable... but sadly they weren't created for this purpose.
+
+They may take a lot of space in your Rewtro cartridge so you should use them _just when you need them_. When the _right moment_ for an event is? You probably need to wrap some [code statements](codestatements.md) or sub-code in an _event_ if you've to execute them _on multiple conditions you can't standardize_.
+
+In our rain example, the white splashes are removed from the scene when they go outside the screen but no `event` nor `bounds` were used this time:
+
+```
+{
+  "when":[{"id":"B"}],
+  "then":[{"code":[
+     {
+        "when":[{"if":[{"itsAttribute":"y","is":">","number":144}]}],
+        "then":[{"remove":true}]
+     }
+  ]}]
+}
+```
+
+Instead of using an `event`, we used the `when` command as in iterator on all of the white splashes `B` and once its vertical position surpasses the bottom of the screen it's `remove`d from the scene. Avoiding events we've made our code more compact, sparing a lot of precious space from our cartridge.
+
 ## Then and Else
 
-_TODO - Reference to [code statements](codestatements.md) - Mention that else picked object is the one from the current code block. On root code note is undefined._
+The `then` and `else` commands are structured in a very similar way: they both collect a sequence of [code statements](codestatements.md) lines. The main differences are:
+
+  * `then` commands are executed on true `when` command conditions or no `when` command. The _default object_ of its code will be the _picked object_ of the last condition in `when`.
+  * `else` commands are executed on false `when` command conditions only. The _default object_ of its code is the current `code` block _picked object_. On `code` root the `else` picked object is `undefined`.
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[
+         {"id":"A","text":"AM I AT Y=0?"},
+         {"id":"B","text":"AM I AT Y=50?","x":0,"y":8},
+         {"id":"C","text":"AM I AT Y=100?","x":0,"y":16},
+         {"id":"D","text":"AM I AT Y=120?","x":0,"y":24}
+      ],
+      "tilemaps":[{"map":["ABCD"]}],
+      "code":[
+         {
+            "when":[{"id":"A","if":[{"itsAttribute":"y","is":"==","smallNumber":0}]}],
+            "then":[{"set":[{"textColor":[{"smallNumber":3}]}]}],
+            "else":[{"set":[{"textColor":[{"smallNumber":5}]}]}]
+         },
+         {
+            "when":[{"id":"B","if":[{"itsAttribute":"y","is":"==","smallNumber":50}]}],
+            "then":[{"set":[{"textColor":[{"smallNumber":3}]}]}],
+            "else":[{"set":[{"textColor":[{"smallNumber":5}]}]}]
+         },
+         {
+            "when":[{"id":"C","if":[{"itsAttribute":"y","is":"==","smallNumber":100}]}],
+            "then":[{"set":[{"textColor":[{"smallNumber":3}]}]}],
+            "else":[{"id":"C","set":[{"textColor":[{"smallNumber":5}]}]}]
+         },
+         {
+            "when":[{"id":"D"}],
+            "then":[{"code":[
+               {
+                  "when":[{"id":"D","if":[{"itsAttribute":"y","is":"==","smallNumber":120}]}],
+                  "then":[{"set":[{"textColor":[{"smallNumber":3}]}]}],
+                  "else":[{"set":[{"textColor":[{"smallNumber":5}]}]}]
+               }
+            ]}]
+         }
+      ]
+   }]
+}
+```
+
+This cartridge shows four questions answered by `code` conditions: when the condition is true the sentence is colored to green else to red. But it looks like that the middle one is broken...
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/commands-thenelse.png"></p>
+</div>
+
+The first `when` command [condition](conditions.md) picks the `A` sprite and checks if its `y` coordinate is `0` and, since it's on the top of the screen, that's true. This means that the `then` command will be executed and the `else` command will be ignored.
+
+The condition picked object is the `A` sprite so the `then` command _default object_ will be that sprite. The `textColor` statement has no [getter](getters.md) instructions so the _default object_ will be picked (the `A` sprite) and its color will be changed.
+
+The second `when` command does the same on the `B` sprite but its condition is false: the `B` sprite `y` coordinate is not `50` but `8`. The root `else` command _default object_ is `undefined` so the `textColor` change won't have any effect and the `B` sprite text will remain white.
+
+The third `when` command works on the `C` sprite and it's a _fixed version_ of the previous line. This time the `else` command picks the `C` sprite again so the sprite `textColor` is changed as expected.
+
+The fourth `when` command works on the `D` sprite, it's very similar to the _broken_ code we've used before but this time it works. Since the `else` command is _inside_ a `code` block and its line picked the `D` sprite it will use that picked sprite as _default object_ so the `textColor` statement will work as expected.
+
+You can see examples and more about `then` and `else` at the beginning of the [conditions](conditions.md) chapter.

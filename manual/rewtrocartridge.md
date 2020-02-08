@@ -11,7 +11,7 @@ I'm not going to dwell into this nerdy protocol part: what I'd like you to know 
 Let's start making an _empty cartridge_.
 
   * Rewtro supports multiple _core versions_ which are a combination of a game engine and its configuration. Right now the latest version of Rewtro is `0.2`, which uses the custom `RewtroEngine` with extended commands set.
-  * Then there is a `metadata` section, which includes several extra details of your game. This part is never encoded in cartridges data but is useful to configure text printed on QR-Carts and more. The only mandatory key of `metadata` is your game name, which is used as file name in exports and displayed by the debugger.
+  * Then there is a `metadata` section, which includes several extra details of your game. This part is never encoded in cartridges data but is useful to configure text printed on data storages and more. The only mandatory key of `metadata` is your game name, which is used as file name in exports and displayed by the debugger.
   * There is a `data` section, which holds all your game contents grouped in [data blocks](datablocks.md). Unsurprisingly enough, it's a mandatory section too. Since we're creating a minimal cartridge, let's keep that empty.
 
 That's all. Our minimal cartridge is this one:
@@ -352,7 +352,7 @@ The background color of this blank loading screen is the `defaultColor` you defi
 
 ## Cartridge metadata
 
-You can set some extra attributes to your game cartridge adding keys to the `metadata` attribute. All data in `metadata` is _never encoded in your game cartridge_ and it's mostly used to define printing labels and layouts.
+You can set some extra attributes to your game cartridge adding keys to the `metadata` attribute. All of the values in `metadata` are _never encoded in your game cartridge storage_ and it's mostly used to customize multiple [data storage](datastorage.md) layouts.
 
 ```
 {
@@ -371,15 +371,17 @@ We already know the mandatory `title` key. It's a string containing your game na
 
 ### Printing layout
 
-Rewtro cartridge covers are usually blank: doodling your cover by hand is _a hell of fun_ and makes all your cartridges unique! Sometimes you need that _professional feeling_ that makes your games extra _cringey_ and that's what these optional `metadata` keys are for:
+Rewtro supports some [data storages](datastorage.md) to distribute your games, each one with its layout and _maximum capacity_. Because Rewtro stores your game data _on a papercraft_ so different layouts may fit larger games than the others!
 
-  * `centerTitle` set your cartridge main title.
+By design its covers are usually blank: doodling your cover by hand is _a hell of fun_ and makes all of your physical data storages unique! Sometimes you need that _professional details_ that make your games extra _cringey_. These are some of the `metadata` keys that may help you with that:
+
+  * `centerTitle` prints your game main title.
   * `upperTitle` prints some small text over the title.
   * `lowerTitle` prints some small text under the title.
-  * `legalText` prints some very small text on the bottom of your cartridge label.
-  * `sizeData` prints some fancy text on the bottom right corner of your cartridge. If left blank, it prints your game size in kilobytes _because cartridge sizes were cool in the 90s_.
+  * `legalText` prints some very small text on the bottom of your data storage label.
+  * `sizeData` prints some fancy text on the bottom right corner of your data storage cover. If left blank, it prints your game size in kilobytes _because data storage sizes were cool in the 90s_.
 
-Probably we just need the right example:
+Different [data storage](datastorage.md) may have different keys.
 
 ```
 {
@@ -400,13 +402,15 @@ Probably we just need the right example:
 }
 ```
 
-Now our _Hello, World!_ cartridge has a fancy printed cover:
+Printing this our _Hello, World!_ game on a [QR-Cart](datastorage.md) you'll get this _fancy cover_:
 
 <div align="center" style="margin:60px 0">
     <p><img src="images/helloworld-cart.png"></p>
 </div>
 
-You can download your cartridge SVG version from the SDK home hitting the _printer_ icon under your game JSON file name. If you want to spare some ink you can change the printing layout from a combo box on the top of the SDK home.
+You can download your cartridge SVG version from the SDK home by selecting the data storage you want from the printer combo box on the top of the screen and hitting the _printer_ icon under your game JSON file name.
+
+If you want to learn more about Rewtro data storages have a look at [this chapter](datastorage.md).
 
 ## Data blocks
 

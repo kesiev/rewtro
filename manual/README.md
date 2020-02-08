@@ -21,12 +21,12 @@ I'm a little verbose, sorry, but I also love examples-filled documentation too. 
         * [Conditions](conditions.md): When this stuff happens...
         * [Statements](codestatements.md): ...do that.
     * [Special objects](specialobjects.md): Move the virtual camera, save data across your game scenes and more!
-  * [Compiler helpers](compilerhelpers.md): Make your game modular and write code a little faster!
+  * [Special symbols](specialsymbols.md): Make your game modular and write code a little faster!
   * Extras: A collection of in-depth articles.
     * [Lists and iterators](listiterators.md): You can make most of your games without knowing how these works but one day you'll want _more_...
     * [Advanced Rewtro](advanced.md): Know Rewtro even better and learn some development tricks.
-    * _SDK Manual_: How to use the Rewtro SDK software.
-    * _Printing and folding_: A collection of tips on how to print and fold Rewtro QR-Carts.
+    * _SDK Tool Manual_: How to use the Rewtro SDK software.
+    * [Data storage](datastorage.md): The complete list of the Rewtro supported _data storages_ both digital and physical.
     * _Physics_: How to work with the tiny Rewtro physics engine.
     * [Neat ideas for the future](ideas.md): A collection of ideas I've collected from people around the _internet_ to make Rewtro better.
     * [Rewtro changelog](rewtrochangelog.md): Differences between different Retro core versions.

@@ -65,7 +65,7 @@ This cartridge displays some colored letters:
     <p><img src="images/sprites-idflags.png"></p>
 </div>
 
-Let's have a look to what happened. The data block defines these `sprites`:
+Let's have a look at what happened. The data block defines these `sprites`:
 
   * Sprite with `A` id and text have no flags.
   * Sprite with `B` id and text have the `A` and `B` flags.

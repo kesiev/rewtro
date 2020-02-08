@@ -374,13 +374,13 @@ List counts and iterators work in the same exact way of getters even on the buil
 
 ## Working with the song player
 
-The [special object](specialobjects.md) `songRow` returns the playing note. The `CURRENT NOTE` test asks for the playing note on the first music channel so its row values will change following the song in real-time:
+The [special object](specialobjects.md) `songRow` returns the playing note. The `CURRENT NOTE` test asks for the playing note on the first music track so its row values will change following the song in real-time:
 
 <div align="center" style="margin:60px 0">
     <p><img src="images/iterators-5.png"></p>
 </div>
 
-When the song player plays a note on the requested channel it will return that playing note. When no note is playing it returns an `undefined` note so the `count` value will be `1` all the time.
+When the song player plays a note on the requested track it will return that playing note. When no note is playing it returns an `undefined` note so the `count` value will be `1` all the time.
 
 ## The existing condition
 

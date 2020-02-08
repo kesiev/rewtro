@@ -192,7 +192,7 @@ The key `as` is a getter that's used to get special objects or sprites. You can 
   * `keyboard`: it gets the `keyboard` [special object](specialobjects.md). It knows which controller buttons the player is hitting.
   * `songRow`: it gets the `songRow` [special object](specialobjects.md). It knows what the song player is playing.
 
-In many cases these getters are not useful alone: they are used together with _subgetters_ that we will see later.
+In many cases these getters are not useful alone: they are used together with _sub-getters_ that we will see later.
 
 It's time for an example. Get ready because this one is not going to be so straightforward.
 
@@ -256,7 +256,7 @@ There is a lot going on the screen... and some audio is even playing!
     <p><img src="images/getters-direct.png"></p>
 </div>
 
-This time we need to have a look to the _debugger status_ too below the game screen:
+This time we need to have a look at the _debugger status_ too below the game screen:
 
 <div align="center" style="margin:60px 0">
     <p><img src="images/getters-direct-debugger.png"></p>
@@ -357,7 +357,7 @@ Then the `allSprites` getter gets all the spawned sprites and sets its `textColo
 
 The `D` sprite now displaying a `0` but... try holding down the _button A_ (that's mapped on the `Z` key of your [keyboard](specialobjects.md)). The number will raise! That's because the code is setting the `D` sprite `text` to the `buttonA` sub-value of the `keyboard` object which contains for how many game frames the button has been held down.
 
-Finally, the `E` sprite is displaying... the note the song player is currently playing! The direct getter `songRow` gets the current row of notes played by the song player and its key `M0` returns the note on the first row. If you want to know more about `music` and `songs` have a look to [data blocks](datablocks.md).
+Finally, the `E` sprite is displaying... the note the song player is currently playing! The direct getter `songRow` gets the current row of notes played by the song player and its key `M0` returns the note on the first row. If you want to know more about `music` and `songs` have a look at [data blocks](datablocks.md).
 
 Let's add the last two lines:
 
@@ -387,7 +387,7 @@ Let's add the last two lines:
 }
 ```
 
-Nothing changes on the screen but let's have a look to the _debugger status_:
+Nothing changes on the screen but let's have a look at the _debugger status_:
 
 <div align="center" style="margin:60px 0">
     <p><img src="images/getters-direct-debugger.png"></p>
@@ -401,11 +401,11 @@ Another kind of getters we've seen a lot around this manual examples are the _co
 
 Constructors can get _primitive values_ like characters, text strings, numbers, and lists. You can use them to _construct_ a value on the fly and change a sprite key from your `code` in order to change its `text`, movement speed, color, etc.
 
-There are a lot of _constructor_ getters in Rewtro but luckily you're not going to use all of them... and there is a [compiler helper](compilerhelpers.md) that guesses the constructor you need for you, so you'll going to _forget about them_ soon. But _cool people know internals_ and learning them may give you some flexibility in the future.
+There are a lot of _constructor_ getters in Rewtro but luckily you're not going to use all of them... and there is the `_` [special symbol](specialsymbols.md) that guesses the constructor you need for you, so you'll going to _forget about them_ soon. But _cool people know internals_ and learning them may give you some flexibility in the future.
 
 ### Text
 
-There are two types of text getters: `character` which gets a single symbol and `string` that gets a string of symbols. While the `string` getter can be used for getting a single symbol too it occupies a little more space in your QR-Cart so use the `character` getter as much as you can.
+There are two types of text getters: `character` which gets a single symbol and `string` that gets a string of symbols. While the `string` getter can be used for getting a single symbol too it occupies a little more space in your [data storage](datastorage.md) so use the `character` getter as much as you can.
 
 ```
 {
@@ -428,7 +428,7 @@ There are two types of text getters: `character` which gets a single symbol and 
 }
 ```
 
-This cartridge does nothing on the screen but sets some text into the [game object](scenegameobject.md) variables. Let's have a look to the _debugger status_:
+This cartridge does nothing on the screen but sets some text into the [game object](scenegameobject.md) variables. Let's have a look at the _debugger status_:
 
 <div align="center" style="margin:60px 0">
     <p><img src="images/getters-text.png"></p>
@@ -447,7 +447,7 @@ In order to use the fitting amount of space when storing a number in your cartri
   * `float` gets single decimal float number from `-25` to `26.1`
   * `largeNumber` gets values from `0` to `2047`
 
-Choosing the right getter may be difficult and that's why I strongly suggest you use [compiler helpers](compilerhelpers.md) instead of these getters.
+Choosing the right getter may be difficult and that's why I strongly suggest you use the `_` [special symbol](specialsymbols.md) instead of these getters.
 
 ```
 {
@@ -588,9 +588,9 @@ The `C` sprite is spawned in a quite peculiar way. Instead of being spawned by `
 
 Finally, you can get an _empty_ value with the `undefined` key. Just set the `undefined` key to `true`. You'll rarely need this.
 
-## Subgetters
+## Sub-getters
 
-Getting a sprite, a list, or a [special object](specialobjects.md) it's nice... but most of the time you'll need to manipulate one of its key values: changing a sprite `speedX` can change its direction, timing a `backgroundColor` can make a sprite blink, etc. _Subgetters_ are _special getters that get key values from the current picked object_.
+Getting a sprite, a list, or a [special object](specialobjects.md) it's nice... but most of the time you'll need to manipulate one of its key values: changing a sprite `speedX` can change its direction, timing a `backgroundColor` can make a sprite blink, etc. _Sub-getters_ are _special getters that get key values from the current picked object_.
 
 ```
 {
@@ -626,13 +626,13 @@ Let's explain this block:
 {"id":"A","attribute":"text"}
 ```
 
-The getter `id` gets the sprite with `id` `A` and then the _subgetter_ `attribute` gets its `text` key value, which is `HELLO!`. This value is then `set` to the `text` key of `B` sprite, _copying_ its value.
+The getter `id` gets the sprite with `id` `A` and then the _sub-getter_ `attribute` gets its `text` key value, which is `HELLO!`. This value is then `set` to the `text` key of `B` sprite, _copying_ its value.
 
 ### Attribute
 
-The `attribute` subgetter gets the key value of any of the [sprite attributes](spriteattributes.md) from the picked object. Just set its value to the attribute you want.
+The `attribute` sub-getter gets the key value of any of the [sprite attributes](spriteattributes.md) from the picked object. Just set its value to the attribute you want.
 
-In the previous example, we used the `attribute` subgetter to get the `text` key of a sprite.
+In the previous example, we used the `attribute` sub-getter to get the `text` key of a sprite.
 
 ```
 {"id":"A","attribute":"text"}
@@ -650,7 +650,7 @@ Some objects may have some special attributes sprites don't have. Let's see them
 
 #### Keyboard
 
-The `keyboard` [special object](specialobjects.md) holds the game controller status. In order to query a specific button, you've to set the `attribute` subgetter to `up`, `down`, `left`, `right`, `buttonA`, `buttonB`, `buttonC`, or `buttonD`. The button's availability depends on the [system configuration](rewtrocartridge.md) of your game.
+The `keyboard` [special object](specialobjects.md) holds the game controller status. In order to query a specific button, you've to set the `attribute` sub-getter to `up`, `down`, `left`, `right`, `buttonA`, `buttonB`, `buttonC`, or `buttonD`. The button's availability depends on the [system configuration](rewtrocartridge.md) of your game.
 
 ```
 {
@@ -698,7 +698,7 @@ This cartridge shows a controllable red square in the middle of the screen! Ther
     <p><img src="images/getters-keyboard.png"></p>
 </div>
 
-The [special object](specialobjects.md) `keyboard` is used together with the `attribute` subgetter to get the `up`, `down`, `left`, and `right` keys and change the `B` sprite speed. The number on the top left of the screen reveals what the `keyboard` keys are containing: there are numbers that go up when holding one button down and then go back to `0` when that button is released.
+The [special object](specialobjects.md) `keyboard` is used together with the `attribute` sub-getter to get the `up`, `down`, `left`, and `right` keys and change the `B` sprite speed. The number on the top left of the screen reveals what the `keyboard` keys are containing: there are numbers that go up when holding one button down and then go back to `0` when that button is released.
 
 #### Song row
 
@@ -750,13 +750,13 @@ This cartridge plays a simple song and a beat. The screen displays the notes pla
     <p><img src="images/getters-songrow.png"></p>
 </div>
 
-The `M0` subgetter gets the currently playing notes on the first row of the `music`, that's the theme, and `M1` the ones from the second row of the `music`, that's the beat. The `code` block will assign these values to `A` and `B` `text` keys, making them appear on the screen.
+The `M0` sub-getter gets the currently playing notes on the first row of the `music`, that's the theme, and `M1` the ones from the second row of the `music`, that's the beat. The `code` block will assign these values to `A` and `B` `text` keys, making them appear on the screen.
 
 Notice that the notes read from `songRow` are 4 symbols long instead of 3: the first letter is the instrument `id` that's playing that note.
 
 ### List
 
-There is a number of subgetters you can use to work with a _set of elements_:
+There is a number of sub-getters you can use to work with a _set of elements_:
 
   * `max` gets the maximum number of the set.
   * `min` gets the maximum number of the set.
@@ -771,7 +771,7 @@ There is a number of subgetters you can use to work with a _set of elements_:
   
 Some objects may have a _single list of elements_ as key values, like the `touchUp` or `touchLeft` keys we've seen in [sprite attributes](spriteattributes.md) or when setting a `list` to a sprite key like in the `list` and `numbers` example of this chapter.
 
-The `sublist` getter _goes inside_ a _single list of elements_ turning it in a _set of elements_. This way you can use iterators and `max`, `min`, and `count` subgetters on its elements.
+The `sublist` getter _goes inside_ a _single list of elements_ turning it in a _set of elements_. This way you can use iterators and `max`, `min`, and `count` sub-getters on its elements.
 
 I've another example that may be a little hard. I'll try my best on explaining:
 
@@ -835,34 +835,34 @@ This cartridge does a lot of stuff:
 
 Let's explain the `code` line by line:
 
-  * As we've seen before `numbers` gets a _set of elements_ so calling its subgetter `count` will result on the elements count of the set, that's `5`.
+  * As we've seen before `numbers` gets a _set of elements_ so calling its sub-getter `count` will result on the elements count of the set, that's `5`.
   * The same happens for the `min`imum value of the set, that's `1`...
   * ...and the `max`imum one, that's `10`.
   * The `oneRandom` gets a random element from the set.
 
-  * Then the `list` key creates a _single list of elements_ this time and the subgetter `index` gets its `2`nd element, that's 4. (positions starts from 0)
+  * Then the `list` key creates a _single list of elements_ this time and the sub-getter `index` gets its `2`nd element, that's 4. (positions starts from 0)
   * The next line generates a `randomNumber` from `2` to `6`, ignoring the other values...
   * ...and the next one picks any `randomValue` from the `list`.
 
   * Then a `list`, that's a _single list of elements_, is set to the `value0` of sprite `A`.
-  * The next line uses the `attribute` to get that list and prints the `count` subgetter. The result is `1` because we are manipulating a _single list of elements_ but...
+  * The next line uses the `attribute` to get that list and prints the `count` sub-getter. The result is `1` because we are manipulating a _single list of elements_ but...
   * ...the `sublist` getter it _goes inside_ the list instead, turning the `list` from a _single list of elements_ to a _set of elements_. That's why the `count` subkey returns `5` this time.
 
   * The iterators work the same. Using the `attribute` getter there will be just one iteration on the _single list object_ so the whole `list` is printed...
-  * ...but the `sublist` subgetter _goes inside_ the list and iterates its element one by one. Even if all of the list elements are iterated one by one we will just see the last element `5` because the screen frame is rendered just when the code has been fully executed.
+  * ...but the `sublist` sub-getter _goes inside_ the list and iterates its element one by one. Even if all of the list elements are iterated one by one we will just see the last element `5` because the screen frame is rendered just when the code has been fully executed.
 
-Take your time to understand how a _set of elements_ and a _single list of elements_ works and how their subgetters behave and feel free to experiment. After working on some games you'll get when the difference matters and eventually forget everything about the _internals_. Nothing to see here. _Let's move on._
+Take your time to understand how a _set of elements_ and a _single list of elements_ works and how their sub-getters behave and feel free to experiment. After working on some games you'll get when the difference matters and eventually forget everything about the _internals_. Nothing to see here. _Let's move on._
 
 ### Sprites
 
-Some subgetters accept another getter and calculate a relation between the picked sprite and them.
+Some sub-getters accept another getter and calculate a relation between the picked sprite and them.
 
   * `angleTo` returns the angle between the currently picked sprite and the specified getter.
   * `distanceTo` returns the distance between the currently picked sprite and the specified getter.
   * `nearest` returns the nearest sprite of the specified getter.
   * `farthest` returns the farthest sprite of the specified getter.
 
-The `inArea` subgetter accepts an object that describes a rectangular area and returns the subset of the picked sprites that are into that area. The area is described this way:
+The `inArea` sub-getter accepts an object that describes a rectangular area and returns the subset of the picked sprites that are into that area. The area is described this way:
 
   * `x` is a getter that defines the vertical position of the area.
   * `y` is a getter that defines the horizontal position of the area.
@@ -953,7 +953,7 @@ The fifth line of code gets all the `F` flagged sprites that are into the area a
 
 ### Text processing
 
-There are few subgetters for text processing:
+There are few sub-getters for text processing:
 
   * `prefix` accepts a string of symbols and prepends some text to the picked value.
   * `suffix` accepts a string of symbols and appends some text to the picked value.
@@ -1000,7 +1000,7 @@ The first line initializes the `value0`, `value1`, and `value2` variables of the
 
 ### Math and logic
 
-Rewtro supports a number of number processing subgetters that applies a function on the picked number. To enable them just set their key to `true`.
+Rewtro supports a number of number processing sub-getters that applies a function on the picked number. To enable them just set their key to `true`.
 
   * `abs` returns the absolute value of the picked number. On both `-3` and `3` it returns `3`.
   * `sqrt` returns the square root of the picked value. On `9`  it returns `3`.
@@ -1012,7 +1012,7 @@ Rewtro supports a number of number processing subgetters that applies a function
   * `ceil` _(Rewtro [v0.3+](rewtrochangelog.md)+)_ always rounds the picked value up to the next largest whole number or integer. On both `1.9` and `1.3` returns `2`.
   * `round` _(Rewtro [v0.3+](rewtrochangelog.md)+)_ returns the value of a number rounded to the nearest integer. On `1.9` returns `2` but on `1.3` returns `1`.
 
-These subgetters are quite straightforward and boring. Let's try making an interesting example out of it:
+These sub-getters are quite straightforward and boring. Let's try making an interesting example out of it:
 
 ```
 {
@@ -1056,11 +1056,11 @@ This cartridge show an animated rough sea!
 
 The `tilemaps` spawn a row of `A` sprites in the middle of the screen. Each `A` sprite is a tall blue rectangle. Then the `code` iterates all of them and copies its `x` position into `value0` and then `sum` their `timer`. That makes the `value0` a number that has a growing starting value depending on the sprite `x` position and goes up over time. The `divide` statement smoothes the `value0` a little.
 
-The resulting `value0` is `sum` to each sprite `y` moving them vertically, but first `sin` subgetter is applied making `value0` a number oscillating between `-1` and `1`. Since `value0` starting value is different for each sprite `x` a wavy pattern is displayed. Adding the `timer` value every frame will keep increasing `value0' over time animating our sea.
+The resulting `value0` is `sum` to each sprite `y` moving them vertically, but first `sin` sub-getter is applied making `value0` a number oscillating between `-1` and `1`. Since `value0` starting value is different for each sprite `x` a wavy pattern is displayed. Adding the `timer` value every frame will keep increasing `value0' over time animating our sea.
 
 ### Limit
 
-While getting a number can ensure that's within a range adding the `limit` subgetter. It accepts two numbers from `-127` to `128` that are the lowest and highest allowed number.
+While getting a number can ensure that's within a range adding the `limit` sub-getter. It accepts two numbers from `-127` to `128` that are the lowest and highest allowed number.
 
 ```
 {
@@ -1097,7 +1097,7 @@ The first number will go from `0` to `50` alone. Then the two numbers will go to
 
 # Execution order
 
-Getters are executed following a fixed order. This is the list of all getters and subgetters sorted by execution priority.
+Getters are executed following a fixed order. This is the list of all getters and sub-getters sorted by execution priority.
 
   * Main getter
      * `emptyList`
@@ -1117,7 +1117,7 @@ Getters are executed following a fixed order. This is the list of all getters an
      * `idByName`
      * `flagsByName`
      * `as`
-  * Subgetters
+  * Sub-getters
       * `distanceTo`
       * `angleTo`
       * `nearest` or `farthest`

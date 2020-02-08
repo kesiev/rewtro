@@ -61,7 +61,7 @@ An image has the following mandatory keys:
 
   * `id`: How the image is referenced in code. It must be one of these values: `font`,`graphics`, `graphics0`, `graphics1`, `graphics2`, `graphics3`, `graphics4`, `graphics5`. The `font` image is used as custom font for your game. The `graphics` image is used as default spritesheet for sprites rendering.
   * `image`: The image data. It has two sub-keys:
-    * `data`: The raw image data. Since you can't type in raw binary data you can load an external PNG file using the [compiler helper](compilerhelpers.md) `_file`.
+    * `data`: The raw image data. Since you can't type in raw binary data you can load an external PNG file using the `_file` [special symbol](specialsymbols.md).
     * `format`: The image format. We're going to talk about them later.
 
 We deserve an example. I've drawn this [sample.png](images/sample.png) 32x16 image and saved it into the `carts/` directory, just in the same place our cartridge JSON file is. It looks like this:
@@ -434,7 +434,7 @@ A `music` block is identified by a single letter `id`, a grid of `note`s and a d
 }
 ```
 
-The `notes` are arranged in rows of the same length of notes and each one is played by an instrument, defined by the `instrument` key. The first row is played by the `A` `instrument` and the second row is played by the `B` `instrument`. The instruments are just the `sounds` we talked about before: they are played modulating the `frequency` according to the note to be played. The notes in the rows are played simultaneously and at the same speed, so notes in different rows at the same position are played at the same time.
+The `notes` are arranged in rows of the same length of notes called _track_ and each one is played by an instrument, defined by the `instrument` key. The first row is played by the `A` `instrument` and the second row is played by the `B` `instrument`. The instruments are just the `sounds` we talked about before: they are played modulating the `frequency` according to the note to be played. The notes in the rows are played simultaneously and at the same speed, so notes in different rows at the same position are played at the same time.
 
 ```
 "sounds":[
