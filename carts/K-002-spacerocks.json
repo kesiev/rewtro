@@ -2,7 +2,19 @@
 	"metadata":{
 		"title":"K002 - Space Rocks",
 		"centerTitle":"SPACE ROCKS",
-		"legalText":"(c)2019 by KesieV - www.kesiev.com/rewtro"
+		"legalText":"(c)2019 by KesieV - www.kesiev.com/rewtro",
+		"page1Title":"The story",
+		"page1Text":"Space, 2099. A huge asteroid exploded nearby the Earth orbit, shattering in pieces and covering the sun. You're one of the brave pilots of the Rockany spaceship. Your mission is to destroy the space rocks and bring back the sun.",
+		"page2Title":"The game",
+		"page2Text":"Zip around the asteroid fields with your spaceship and fire at them to make them break. When the area is clear a new more difficult stage starts. Lose all of your 3 ships and it's game over!",
+		"page3Title":"How to play",
+		"page3Text":"Use LEFT/RIGHT to rotate your spaceship. Hit the A BUTTON to fire and hold down the B BUTTON or the C BUTTON to activate the spaceship brakes and thrusters.",
+		"page4Title":"Scores",
+		"page4Text":"Large asteroid: 9pts. Medium asteroid: 3pts. Small asteroid: 1pts. You can't earn lives in Space Rocks so do your best, soldier!",
+		"page5Title":"History and Wikipedia",
+		"page5Text":"Space Rocks is inspired by the original 1979 Atari game \"Asteroids\" by Lyle Rains, Ed Logg, and Dominic Walsh. Upon release, it displaced Space Invaders by popularity in the US, with over 70,000 units sold.",
+		"page6Title":"Coder's Review",
+		"page6Text":"This game was launched with Rewtro in December 2019 as a QR-Cart. It was the first game implementing the concept of multiple scenes with different data and the same logic. It worked, so Rewtro games now may feature multiple levels!"
 	},
 	"systemVersion":"0.1",
 	"systemConfiguration":[{"controllerModel":2}],
