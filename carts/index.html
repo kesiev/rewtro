@@ -115,11 +115,7 @@ function selected(option,file,isclick) {
 	if (!option) option="home";
 	window.localStorage["_REWTRODEV_OPTION"]=option;
 	window.localStorage["_REWTRODEV_FILE"]=file;
-	if (document.getElementById("qrcount")) window.localStorage["_REWTRODEV_QRCOUNT"] = document.getElementById("qrcount").value;
-	if (document.getElementById("cellSize")) window.localStorage["_REWTRODEV_CELLSIZE"] = document.getElementById("cellSize").value;
 	if (document.getElementById("printmode")) window.localStorage["_REWTRODEV_PRINTMODE"] = document.getElementById("printmode").value;
-	var qrcount=(window.localStorage["_REWTRODEV_QRCOUNT"]*1||undefined);
-	var cellSize=(window.localStorage["_REWTRODEV_CELLSIZE"]*1||undefined);
 	var printMode=(window.localStorage["_REWTRODEV_PRINTMODE"]*1||0);
 	switch (option) {
 		case "home":{
@@ -131,17 +127,18 @@ function selected(option,file,isclick) {
 			break;
 		}
 		case "debug":{
-			var qrcart=new QRCart({ QRCOUNT: qrcount });
+			var qrcart=new QRCart();
 			document.body.innerHTML=header()+"<div class='filerow' id='game'></div><div class='filerow debug' id='debug'></div><div class='filerow debug' id='stats'></div>";
 
 			compile(file,compressed=>{
-				var lastdebug,qrmode=qrcart.suggestConfiguration(compressed.data);
+				var lastdebug,qrmode=qrcart.getQrConfiguration(printModes[printMode].config,compressed.data);
 				System.unpack(compressed.data,cart=>{
 					document.getElementById('stats').innerHTML=
 							"<i class='fas fa-cog'></i> "+compressed.metadata.title+" (Rewtro "+cart.system.VERSION+" using "+cart.system.ENGINE+")<br>"+
 							(cart.system.WARNING?"<i class='fas fa-exclamation-circle'></i> <span class='error'>"+cart.system.WARNING+"</span><br>":"")+
 							"<i class='fas fa-expand'></i> "+cart.system.RESOLUTION.screenWidth+" &times; "+cart.system.RESOLUTION.screenHeight+" ("+cart.system.RESOLUTION.renderWidth+" &times; "+cart.system.RESOLUTION.renderHeight+") @ "+cart.system.FPS+"fps. "+cart.system.PALETTE.length+" colors.<br>"+
-							"<i class='fas fa-qrcode'></i> <span class='"+(qrmode.carts>3?"error":"")+"'>&times;"+qrmode.carts+"</span> <span class='"+(qrmode.type>17?"error":"")+"'>Lv."+qrmode.type+"</span> Correction: "+qrmode.correctionLevel+"<br>"+
+							"<i class='fas fa-qrcode'></i> "+printModes[printMode].name+"<br>"+
+							"<i class='fas fa-qrcode'></i> <span class='"+(qrmode.carts>=qrmode.cartsWarning?"error":"")+"'>&times;"+qrmode.carts+"/"+qrmode.cartsLimit+"</span> <span class='"+(qrmode.type>=qrmode.typeWarning?"error":"")+"'>Lv."+qrmode.type+"/"+qrmode.typeLimit+"</span> Correction: "+qrmode.correctionLevel+"<br>"+
 							"<i class='fas fa-compress'></i> "+compressed.bestMethod.label+": "+compressed.data.length+" byte(s)<br>"+
 							"<i class='fas fa-save'></i> "+qrmode.occupied+"/"+qrmode.fullSpace+" byte(s) - "+qrmode.free+"/"+qrmode.chunkSize+" bytes free ("+Math.floor((qrmode.free/qrmode.chunkSize)*100)+"%)";
 					if (cart.cart&&cart.cart.data) {
@@ -190,13 +187,13 @@ function selected(option,file,isclick) {
 			
 			break;
 		}
-		case "svg":{
-			var template={media:"svg"};
+		case "media":{
+			var template={};
 			for (var k in printModes[printMode].config)
 				template[k]=printModes[printMode].config[k];
 
-			var qrcart = new QRCart({ QRCOUNT: qrcount });
-			document.body.innerHTML=header()+"Preparing SVG...";
+			var qrcart = new QRCart();
+			document.body.innerHTML=header()+"Preparing media...";
 			compile(file,compressed=>{
 				for (var k in compressed.metadata)
 					template[k]=compressed.metadata[k];
@@ -205,22 +202,6 @@ function selected(option,file,isclick) {
 					size=Math.round(size * 10) / 10;
 					template.sizeData=size+"kb";
 				}
-				qrcart.createQRCart(template,compressed.data,qrcart=>{
-					qrcart.download();
-					selected();
-				});
-			});
-			break;
-		}
-		case "gif":{
-			var template={media:"gif",cellSize:cellSize};
-			
-
-			var qrcart = new QRCart({ QRCOUNT: qrcount });
-			document.body.innerHTML=header()+"Preparing GIF...";
-			compile(file,compressed=>{
-				for (var k in compressed.metadata)
-					template[k]=compressed.metadata[k];
 				qrcart.createQRCart(template,compressed.data,qrcart=>{
 					qrcart.download();
 					selected();
@@ -359,11 +340,15 @@ function compile(file,cb) {
 }
 
 var printModes=[
-	{name:"Default",config:{}},
-	{name:"Name + Cart + Label",config:{hideInstructions:true}},
-	{name:"Cart + Label",config:{hideInstructions:true,hideName:true}},
-	{name:"Name + Cart",config:{hideInstructions:true,hideDefaultCover:true}},
-	{name:"Cart",config:{hideInstructions:true,hideName:true,hideDefaultCover:true}},
+	{name:"QR-Cart: Default",config:{model:"qrcart"}},
+	{name:"QR-Cart: Name + Cart + Label",config:{model:"qrcart",hideInstructions:true}},
+	{name:"QR-Cart: Cart + Label",config:{model:"qrcart",hideInstructions:true,hideName:true}},
+	{name:"QR-Cart: Name + Cart",config:{model:"qrcart",hideInstructions:true,hideDefaultCover:true}},
+	{name:"QR-Cart: Cart",config:{model:"qrcart",hideInstructions:true,hideName:true,hideDefaultCover:true}},
+	{name:"Animated GIF: 2px per cell",config:{model:"gif",cellSize:2}},
+	{name:"Animated GIF: 3px per cell",config:{model:"gif",cellSize:3}},
+	{name:"Animated GIF: 4px per cell",config:{model:"gif",cellSize:4}},
+	{name:"QR-Booklet: Default",config:{model:"qrbooklet"}}
 ]
 
 function cartSelector() {
@@ -379,13 +364,6 @@ function cartSelector() {
 		html+="<div class='button' onclick=\"selected('settings',0,true)\"><i class='fas fa-cogs'></i></div>";
 		html+="<div class='button' onclick=\"selected('noisemaker',0,true)\"><i class='fas fa-music'></i></div>";
 		html+="</div><div class='filerow'>";
-		html+="<i class='fas fa-qrcode'></i> &times;";
-		html+=" <select id='qrcount'><option value='0'>Default</option>";
-		for (var i=1;i<8;i++) html+="<option value='"+i+"' "+(i== window.localStorage["_REWTRODEV_QRCOUNT"]?"selected":"")+">"+i+"</option>";
-		html+="</select>";
-		html+=" @ <select id='cellSize'><option value='0'>Default</option>";
-		for (var i=1;i<8;i++) html+="<option value='"+i+"' "+(i== window.localStorage["_REWTRODEV_CELLSIZE"]?"selected":"")+">"+i+"px</option>";
-		html+="</select> ";
 		html+="<i class='fas fa-print'></i>";
 		html+=" <select id='printmode'>";
 		printModes.forEach((mode,id)=>html+="<option "+(window.localStorage["_REWTRODEV_PRINTMODE"]==id?"selected":"")+" value='"+id+"'>"+mode.name+"</option>");
@@ -393,8 +371,7 @@ function cartSelector() {
 		list.forEach((file,pos)=>{
 			html+="<div class='filerow'><div class='filename'>"+file+"</div><div class='actions'>";
 			html+="<div class='button' onclick=\"selected('debug','"+file+"',true)\"><i class='fas fa-bug'></i></div>";
-			html+="<div class='button' onclick=\"selected('svg','"+file+"',true)\"><i class='fas fa-print'></i></div>";
-			html+="<div class='button' onclick=\"selected('gif','"+file+"',true)\"><i class='fas fa-images'></i></div>";
+			html+="<div class='button' onclick=\"selected('media','"+file+"',true)\"><i class='fas fa-print'></i></div>";
 			html+="<div class='button' onclick=\"selected('torewtro','"+file+"',true)\"><i class='fas fa-gamepad'></i></div>";
 			html+="</div></div>";
 		});

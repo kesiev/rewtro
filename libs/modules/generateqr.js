@@ -7,7 +7,7 @@ function ModuleGenerateQR(label,qrcart) {
 			var dialog=gameConsole.getDialog();
 
 			qrcart.createQRCart({
-				media:"screen",
+				model:"screen",
 				name:LOC._("label_sharedgame")
 			},gameConsole.getStorage("LASTGAME"),cart=>{
 

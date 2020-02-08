@@ -1,15 +1,9 @@
 var QRCart=function(cfg){
   if(!cfg) cfg={};
   if (cfg.QRCARTSPEED===undefined) cfg.QRCARTSPEED=1000;
-  if (cfg.QRHEADERSIZE===undefined) cfg.QRHEADERSIZE=12;
   if (cfg.QRCARTHEADERSIZE===undefined) cfg.QRCARTHEADERSIZE=10;
-  if (cfg.QRGIFFOOTERSIZE === undefined) cfg.QRGIFFOOTERSIZE=30;
-  if (cfg.QRGIFLOGOSIZE === undefined) cfg.QRGIFLOGOSIZE=10;
+  if (cfg.QRHEADERSIZE===undefined) cfg.QRHEADERSIZE=12;
   if (cfg.ASSETROOT === undefined) cfg.ASSETROOT="qrcart/";
-  if (cfg.QRGIFNOTES === undefined) cfg.QRGIFNOTES="kesiev.com/rewtro";
-  if (cfg.QRGIFNOTESSIZE === undefined) cfg.QRGIFNOTESSIZE=15;
-  if (cfg.QRTYPETHRESHOLD === undefined) cfg.QRTYPETHRESHOLD = 19;
-  if (cfg.QRCOUNT === undefined) cfg.QRCOUNT = 3;
 
   this.QRCARTSPEED = cfg.QRCARTSPEED;
 
@@ -29,9 +23,95 @@ var QRCart=function(cfg){
   		[2566, 1992, 1426, 1096],[2702, 2102, 1502, 1142],[2812, 2216, 1582, 1222],[2956, 2334, 1666, 1276]
     ],
     CACHEFILES=[
-      {id:"svg",url:cfg.ASSETROOT+"qrcart.svg",type:"text"},
-      { id: "logo", url: cfg.ASSETROOT +"logo.png",type:"image"}
+      {id:"svg-qrcart",url:cfg.ASSETROOT+"qrcart.svg",type:"text"},
+      {id:"svg-qrbooklet",url:cfg.ASSETROOT+"qrbooklet.svg",type:"text"},
+      {id:"logo",url: cfg.ASSETROOT +"logo.png",type:"image"}
     ],
+    MODELS={
+      qrcart:{
+        type:"print",
+        template:"svg-qrcart",
+        extension:"svg",
+        qr:{
+          suggestedCount:3,
+          typeWarning:17,
+          typeThreshold:19
+        },
+        qrslots:["qr-right","qr-left","qr-bottom"],
+        layers:[
+          {label:"Default cover",flag:"hideDefaultCover"},
+          {label:"Instructions",flag:"hideInstructions"},
+          {label:"Cartridge name",flag:"hideName"},
+        ],
+        replaces:[
+          {replace:/>Cart name</g,using:"title"},
+          {replace:/>Upper Title</g,using:"upperTitle"},
+          {replace:/>Center Title</g,using:"centerTitle"},
+          {replace:/>Lower Title</g,using:"lowerTitle"},
+          {replace:/>Legal Text</g,using:"legalText"},
+          {replace:/>Sz_DT</g,using:"sizeData"}
+        ]
+      },
+      qrbooklet:{
+        type:"print",
+        template:"svg-qrbooklet",
+        extension:"svg",
+        qr:{
+          suggestedCount:6,
+          typeWarning:17,
+          typeThreshold:19
+        },
+        qrslots:["qr-1","qr-2","qr-3","qr-4","qr-5","qr-6"],
+        layers:[
+          {label:"Default cover",flag:"hideDefaultCover"},
+          {label:"Instructions",flag:"hideInstructions"}
+        ],
+        replaces:[
+          {replace:/>Cart name</g,using:"title"},
+          {replace:/>Upper Title</g,using:"upperTitle"},
+          {replace:/>Center Title</g,using:"centerTitle"},
+          {replace:/>Lower Title</g,using:"lowerTitle"},
+          {replace:/>Legal Text</g,using:"legalText"},
+          {replace:/>Sz_DT</g,using:"sizeData"},
+          {replace:/>Title-A</g,using:"page1Title"},
+          {replace:/>Text-A</g,using:"page1Text"},
+          {replace:/>Title-B</g,using:"page2Title"},
+          {replace:/>Text-B</g,using:"page2Text"},
+          {replace:/>Title-C</g,using:"page3Title"},
+          {replace:/>Text-C</g,using:"page3Text"},
+          {replace:/>Title-D</g,using:"page4Title"},
+          {replace:/>Text-D</g,using:"page4Text"},
+          {replace:/>Title-E</g,using:"page5Title"},
+          {replace:/>Text-E</g,using:"page5Text"},
+          {replace:/>Title-F</g,using:"page6Title"},
+          {replace:/>Text-F</g,using:"page6Text"}
+        ]
+      },
+      gif:{
+        type:"gif",
+        extension:"gif",
+        cellSize:2,
+        notesSize:15,
+        footerSize:30,
+        logoSize:10,
+        notes:"kesiev.com/rewtro",
+        qr:{
+          suggestedCount:4,
+          typeWarning:17,
+          typeThreshold:19
+        }
+      },
+      screen:{
+        type:"screen",
+        extension:"scr",
+        qr:{
+          suggestedCount:4,
+          typeWarning:17,
+          typeThreshold:19
+        }
+      }
+    },
+
     CACHE={};
 
     function getCache(cb) {
@@ -77,18 +157,18 @@ var QRCart=function(cfg){
 
     function replaceImage(content,id,data) {
   		if (data) {
-  			content=content.replace(new RegExp("<image[^id]*id=\""+id+"\"[^>]*>","m"),function(a,b){
+  			content=content.replace(new RegExp("<image[^>]+?id=\""+id+"\"[^>]*>","m"),function(a,b){
           var parts=a.split("\n");
           var map={};
           parts.forEach(row=>{
             row=row.trim().split("=");
-            if (row[1]) map[row[0]]=row[1].substr(1,row[1].length-2);
+            if (row[1]) map[row[0]]=row[1].split("\"")[1];
           });
           var svg=createQRSvg(data,map.x*1,map.y*1,map.width,map.height);
           return svg;
         });
   		} else {
-  			content=content.replace(new RegExp("<image[^id]*id=\""+id+"\"[^>]*>","m"),function(a,b){
+  			content=content.replace(new RegExp("<image[^>]+?id=\""+id+"\"[^>]*>","m"),function(a,b){
   				return "";
   			});
   		}
@@ -119,25 +199,19 @@ var QRCart=function(cfg){
       return qrSvg;
     }
 
-  	function createSVG(qrs,gencfg,cb){
+  	function createSVG(qrs,gencfg,model,cb){
       getCache(cache=>{
-        var content=replaceImage(cache.svg,"qr-right",qrs[0]?qrs[0]:0);
-        content=replaceImage(content,"qr-left",qrs[1]?qrs[1]:0);
-        content=replaceImage(content,"qr-bottom",qrs[2]?qrs[2]:0);
-        content=content.replace(/>Cart name</g,">"+gencfg.title+"<");
-        content=content.replace(/>Upper Title</g,">"+(gencfg.upperTitle||"")+"<");
-        content=content.replace(/>Center Title</g,">"+(gencfg.centerTitle||"")+"<");
-        content=content.replace(/>Lower Title</g,">"+(gencfg.lowerTitle||"")+"<");
-        content=content.replace(/>Legal Text</g,">"+(gencfg.legalText||"")+"<");
-        content=content.replace(/>Sz_DT</g,">"+(gencfg.sizeData||"")+"<");
-        content=content.replace(/label="Default cover"([^style]*)style="display:([^"]+)"/m,function(m,a){ //=
-          return "label=\"Default Cover\""+a+"style=\"display:"+(gencfg.hideDefaultCover?"none":"inline")+"\"";
+        var content=cache[model.template];
+        model.qrslots.forEach((slot,id)=>{
+          content=replaceImage(content,slot,qrs[id]?qrs[id]:0);
         });
-        content=content.replace(/label="Instructions"([^style]*)style="display:([^"]+)"/m,function(m,a){ //=
-          return "label=\"Instructions\""+a+"style=\"display:"+(gencfg.hideInstructions?"none":"inline")+"\"";
+        model.replaces.forEach(replace=>{
+          content=content.replace(replace.replace,">"+(gencfg[replace.using]||"")+"<");
         });
-        content=content.replace(/label="Cartridge name"([^style]*)style="display:([^"]+)"/m,function(m,a){ //=
-          return "label=\"Cartridge name\""+a+"style=\"display:"+(gencfg.hideName?"none":"inline")+"\"";
+        model.layers.forEach(layer=>{
+          content=content.replace(new RegExp("label=\""+layer.label+"\"([^style]*)style=\"display:([^\"]+)\"","m"),function(m,a){
+            return "label=\""+layer.label+"\""+a+"style=\"display:"+(gencfg[layer.flag]?"none":"inline")+"\"";
+          });
         });
         cb(content);
       });
@@ -145,8 +219,10 @@ var QRCart=function(cfg){
 
     // GIF Generator
 
-    function createGIF(qrs,label,cellSize,cb){
+    function createGIF(qrs,gencfg,model,cb){
       getCache(cache=>{        
+          var cellSize=gencfg.cellSize||model.cellSize;
+          var label=gencfg.title;
           var margin=cellSize*4;
           var size=qrs[0].getModuleCount() * cellSize + margin * 2;              
           var gif = new GIF({
@@ -166,7 +242,7 @@ var QRCart=function(cfg){
                   imgs.forEach(img=>{
                      var canvas=document.createElement("canvas");
                       canvas.width=size;
-                    canvas.height = size + cfg.QRGIFFOOTERSIZE + cfg.QRGIFNOTESSIZE;
+                    canvas.height = size + model.footerSize + model.notesSize;
                       var context=canvas.getContext("2d");
                     var logoy = 
                       context.fillStyle = 'white';
@@ -177,20 +253,20 @@ var QRCart=function(cfg){
                       context.moveTo(margin, size+0.5);
                       context.lineTo(canvas.width-margin, size+0.5);
                       context.stroke();
-                      context.fillRect(0,size+cfg.QRGIFFOOTERSIZE,canvas.width,canvas.height);
+                      context.fillRect(0,size+model.footerSize,canvas.width,canvas.height);
                       context.drawImage(
                         cache.logo,
                         0,0,cache.logo.width,cache.logo.height,
-                        margin, size + ((cfg.QRGIFFOOTERSIZE - cfg.QRGIFLOGOSIZE ) / 2),
-                        cache.logo.width*(cfg.QRGIFLOGOSIZE/cache.logo.height),cfg.QRGIFLOGOSIZE
+                        margin, size + ((model.footerSize - model.logoSize ) / 2),
+                        cache.logo.width*(model.logoSize/cache.logo.height),model.logoSize
                       );
                     context.textBaseline = "middle";
                       context.textAlign = "right";
                       context.font = "10px Helvetica";
-                    context.fillText(label, canvas.width - margin, size + (cfg.QRGIFFOOTERSIZE/2));
+                    context.fillText(label, canvas.width - margin, size + (model.footerSize/2));
                     context.textAlign = "center";
                     context.fillStyle = 'white';
-                    context.fillText(cfg.QRGIFNOTES, canvas.width / 2, size + cfg.QRGIFFOOTERSIZE + (cfg.QRGIFNOTESSIZE / 2));
+                    context.fillText(model.notes, canvas.width / 2, size + model.footerSize + (model.notesSize / 2));
                       context.drawImage(img,0,0);
                       gif.addFrame(canvas,{delay: cfg.QRCARTSPEED});
                   });
@@ -207,46 +283,53 @@ var QRCart=function(cfg){
 
     // General
 
-    
   	function pad(num,pad) {
   		var num=num+"";
   		while (num.length<pad) num="0"+num;
   		return num;
   	}
 
-    // Basic QR
+    function suggestConfiguration(code,qr) {
+      var codesize=code.length;
+      var headersize=cfg.QRHEADERSIZE+cfg.QRCARTHEADERSIZE;
 
-  this.suggestConfiguration = function(code,qrcount) {
-    if (!qrcount) qrcount = cfg.QRCOUNT;
-  		var codesize=code.length;
-  		var headersize=cfg.QRHEADERSIZE+cfg.QRCARTHEADERSIZE;
-
-  		var best;
-  		CAPACITY.forEach((cap,type)=>{
-        if (type < cfg.QRTYPETHRESHOLD)
+      var best;
+      CAPACITY.forEach((cap,type)=>{
+        if (type < qr.typeThreshold)
           CORRECTIONLEVEL.forEach((label,cid)=>{
             // Calculate optimal carts number without headers
             var carts=Math.ceil(codesize/cap[cid]);
             // Add headers
             carts=Math.ceil(((carts*headersize)+codesize)/cap[cid]);
             // Calculate score
-            var score = Math.abs(((qrcount-carts)*1000)+cid*100)+type;
+            var score = Math.abs(((qr.suggestedCount-carts)*1000)+cid*100)+type;
             // Calculate chunkSize
             var chunkSize=cap[cid]-headersize;
             if (!best||(score<best.score)) best={
               type:type+1,
+              typeWarning:qr.typeWarning,
+              typeLimit:qr.typeThreshold,
               correctionLevel:label,
               chunkSize:chunkSize,
               fullSpace:chunkSize*carts,
               occupied:codesize,
               free:chunkSize-(codesize%chunkSize),
               carts:carts,
+              cartsWarning:qr.suggestedCount,
+              cartsLimit:qr.suggestedCount,
               score:score
             }
           })
-  		});
-  		return best;
-  	}
+      });
+      return best;
+    }
+
+    // Basic QR
+
+    this.getQrConfiguration = function(gencfg,compressed){
+      var model=MODELS[gencfg.model]||MODELS.qrcart;
+      return suggestConfiguration(compressed,model.qr);
+    }
 
   	function generateQR(data,config) {
   		var chunks=Math.ceil(data.length/config.chunkSize);
@@ -266,28 +349,17 @@ var QRCart=function(cfg){
   			qrs.push(qr)
       }
       return qrs;
+    }
 
-  }
-
-  // Cart generator
-
+    // Cart generator
 
     this.createQRCart=function(gencfg,compressed,cb) {
+        var file;
+        var model=MODELS[gencfg.model]||MODELS.qrcart;
+        
+        var config=suggestConfiguration(compressed,model.qr);
+        var file=gencfg.title+"."+model.extension;
 
-        var config,file;
-        switch (gencfg.media) {
-          case "screen":
-          case "gif":{
-            config=self.suggestConfiguration(compressed);
-            file=gencfg.title+".gif";            
-            break;
-          }
-          case "svg":{
-            config=self.suggestConfiguration(compressed,Math.min(3,cfg.QRCOUNT));
-            file=gencfg.title+".svg";
-            break;
-          }
-        }
         console.log("COMPILE: Generating QRs...")
         console.log("COMPILE:",config);
         var qrs=generateQR(compressed,config);
@@ -297,13 +369,13 @@ var QRCart=function(cfg){
           qrCount:function() { return qrs.length; },
           download:function(asfile) {
             if (!asfile) asfile=file;
-            switch (gencfg.media) {
+            switch (model.type) {
               case "gif":{
-                createGIF(qrs,gencfg.title,gencfg.cellSize||2,function(gif){ Stream.downloadFile(asfile,0,gif); });
+                createGIF(qrs,gencfg,model,function(gif){ Stream.downloadFile(asfile,0,gif); });
                 break;
               }
-              case "svg":{
-                createSVG(qrs,gencfg,function(svg){ Stream.downloadFile(asfile,"image/svg+xml",svg); });
+              case "print":{
+                createSVG(qrs,gencfg,model,function(svg){ Stream.downloadFile(asfile,"image/svg+xml",svg); });
                 break;
               }
             }
