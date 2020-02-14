@@ -1,0 +1,915 @@
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"K008 - Bubby Pop",
+      "centerTitle":"BUBBY POP",
+      "legalText":"(c)2020 by KesieV - www.kesiev.com/rewtro",
+      "page1Title":"The story",
+      "page1Text":"An ancient legend says that there is a cave somewhere hiding unlimited richness. Bubby the dragon loves mysteries so he started traveling the world in search of the cave... and finally, he found it!",
+      "page2Title":"The game",
+      "page2Text":"Clear from enemies as many cave rooms as you can! Bubby can fire bubbles from its mouth and trap enemies inside. When an enemy is inside a bubble you can pop it to scatter him around and turn him in a diamond!",
+      "page3Title":"How to play",
+      "page3Text":"Use LEFT/RIGHT to move Bubby. Hit the A BUTTON to jump and the B BUTTON to fire a bubble. Keeping the A BUTTON down Bubby can jump over bubbles to go higher. Bubby can also spawn from the bottom of the screen from the top!",
+      "page4Title":"Scores",
+      "page4Text":"Pop a bubble with an enemy inside to earn 5 points but each diamond worth 50 points! Take them as soon as possible and don't make them disappear!",
+      "page5Title":"History and Wikipedia",
+      "page5Text":"Bubby Pop is inspired by the original 1986 Taito game \"Bubble Bobble\". The designer Fukio Mitsuji intended the game to be played by couples, leading to the creation of the multiple endings, which differ based on player performance. It's one of the first!",
+      "page6Title":"Coder's Review",
+      "page6Text":"With few not-breaking improvements to the game engine, Rewtro now allows jump through platforms and bit-wise operations. A nice opportunity to port a slice of my favorite game and explore procedural level generation!"
+   },
+   "systemConfiguration":[{"fontModel":4,"controllerModel":1}],
+   "data":[
+      {
+         "id":"A",
+         "sounds":[
+            {"id":"J","wave":"sine","attack":5,"sustain":81,"release":127,"pitch":153},
+            {"id":"P","wave":"sine","sustain":81,"release":127,"tremoloFrequency":186,"tremoloDepth":119,"pitch":197},
+            {"id":"B","wave":"sine","sustain":20,"decay":12,"release":56,"tremoloFrequency":109,"tremoloDepth":234,"pitch":197,"frequencyJump1onset":40,"frequencyJump1amount":175},
+            {"id":"K","wave":"sine","sustain":219,"release":142,"frequency":81,"tremoloFrequency":109,"tremoloDepth":234,"pitch":153,"bitCrush":63,"bitCrushSweep":175}
+         ],
+         "images":[
+            {"id":"graphics","image":{"data":{"_file":"graphics/bubble.png"},"format":"monocolor"}}
+         ],
+         "sprites":[
+            {"id":"A","x":59,"y":48,"width":42,"height":16,"backgroundColor":7,"text":"BUBBY~POP","textAlignment":"center","textColor":6,"scale":2,"zIndex":1},
+            {"id":"B","x":76,"y":112,"textAlignment":"center","textColor":8},
+            {"id":"C","graphicsX":49,"graphicsY":105,"width":14,"height":14,"scale":6}
+         ],
+         "tilemaps":[{"x":-63,"y":48,"tileWidth":54,"map":["ABCC"]}],
+         "code":[
+            {
+               "then":[{
+                  "id":"B",
+                  "set":[{"text":[{"as":"game","attribute":"value3","prefix":"HI-","suffix":"~~(C)2020 KESIEV"}]}]
+               }]
+            },
+            {
+               "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],
+               "then":[{
+                  "as":"game",
+                  "set":[{
+                     "value0":[{"_":0}],
+                     "value1":[{"_":9}]
+                  }],                     
+                  "playAudio":[{"_":"J"}],
+                  "runScene":[{"_":"I0G"}]
+               }]
+            }
+         ]
+      },
+
+
+      {
+         "id":"0",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXXXXXXX",
+            "    G G ",
+            "        ",
+            "        ",
+            "XX  XXXX",
+            "        ",
+            "        ",
+            "        ",
+            "XX  XXXX",
+            "        ",
+            "        ",
+            "        ",
+            "XX  XXXX",
+            "        ",
+            "        ",
+            "        ",
+            "XXXXXXXX"
+         ]}]
+      },
+      {
+         "id":"1",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXXXXXXX",
+            "        ",
+            "     G  ",
+            "        ",
+            "     XXX",
+            "        ",
+            "    G   ",
+            "        ",
+            "   XXXX ",
+            "        ",
+            "   G    ",
+            "        ",
+            "  XXXXXX",
+            "        ",
+            "        ",
+            "        ",
+            "XXXXXXXX"
+         ]}]
+      },
+      {
+         "id":"2",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXX   XX",
+            "        ",
+            "    G   ",
+            "        ",
+            "   XXX  ",
+            "   X    ",
+            "   XG   ",
+            "   X    ",
+            "   XXX  ",
+            "        ",
+            "        ",
+            "        ",
+            "XX  XX  ",
+            "        ",
+            "        ",
+            "        ",
+            "XXX   XX"
+         ]}]
+      },
+      {
+         "id":"3",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXX   XX",
+            "  X     ",
+            "  XX    ",
+            "        ",
+            "  XXXXX ",
+            "  XG    ",
+            "  X     ",
+            "  XXX   ",
+            "        ",
+            "        ",
+            "  XXX   ",
+            "  X G   ",
+            "  X     ",
+            "  XXXXX ",
+            "        ",
+            "        ",
+            "XXX   XX"
+         ]}]
+      },
+      {
+         "id":"4",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXX   XX",
+            "        ",
+            "    G   ",
+            "  X     ",
+            "  XXXXXX",
+            "        ",
+            "    G   ",
+            "  X     ",
+            "  XXXXXX",
+            "        ",
+            "    G   ",
+            "  X     ",
+            "  XXXXXX",
+            "        ",
+            "        ",
+            "        ",
+            "XXX   XX"
+         ]}]
+      },
+      {
+         "id":"5",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXX   XX",
+            "        ",
+            " G      ",
+            "   X    ",
+            "XXXX    ",
+            "        ",
+            "      XX",
+            "X       ",
+            "XXXX    ",
+            "        ",
+            " G    XX",
+            "   X    ",
+            "XXXX    ",
+            "        ",
+            "        ",
+            "        ",
+            "XXX   XX"
+         ]}]
+      },
+      {
+         "id":"6",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXX   XX",
+            "        ",
+            "     G  ",
+            "  X     ",
+            "  X  XX ",
+            "  X  G  ",
+            "  X     ",
+            "  X  XX ",
+            "  X     ",
+            "        ",
+            "      XX",
+            "        ",
+            "        ",
+            "XXX     ",
+            "        ",
+            "        ",
+            "XXX   XX"
+         ]}]
+      },
+      {
+         "id":"7",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXX   XX",
+            "        ",
+            "   G    ",
+            "        ",
+            "X XXX   ",
+            "   XX   ",
+            "    X V ",
+            "XXX X   ",
+            "    XX  ",
+            "     X  ",
+            "XXXX X  ",
+            "        ",
+            "        ",
+            "XXX XX  ",
+            "      G ",
+            "        ",
+            "XXX   XX"
+         ]}]
+      },
+      {
+         "id":"8",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXX   XX",
+            "      G ",
+            "  V     ",
+            "     XXX",
+            " V  XXXX",
+            "   XX XX",
+            "  XXXXXX",
+            "    XXX ",
+            "     X  ",
+            "        ",
+            "        ",
+            "  XX   X",
+            "        ",
+            "        ",
+            "       X",
+            "       X",
+            "XXX   XX"
+         ]}]
+      },
+      {
+         "id":"9",
+         "tilemaps":[{"x":16,"y":136,"map":[
+            "XXX   XX",
+            "        ",
+            "        ",
+            "     XX ",
+            "    X  X",
+            "   X    ",
+            "  X  V  ",
+            "  X     ",
+            "  X     ",
+            "   X    ",
+            " V  X   ",
+            "     X  ",
+            "      X ",
+            "       X",
+            "        ",
+            "        ",
+            "XXX   XX"
+         ]}]
+      },
+
+
+      {    
+         "id":"D",
+         "sprites":[{"id":"A","x":44,"y":68,"text":"GAME OVER"}],
+         "tilemaps":[{"map":["A"]}],
+         "code":[
+            {
+               "when":[{"as":"game","if":[{"itsAttribute":"value0","is":">","as":"game","attribute":"value3"}]}],
+               "then":[
+                  {"as":"game","set":[{"value3":[{"attribute":"value0"}]}]}
+               ]
+            },
+            {
+               "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"down"}]},{}],
+               "then":[{"playAudio":[{"_":"J"}],"runScene":[{"_":"A"}]}]
+            }
+         ]
+      },
+
+
+      {
+         "id":"I",
+         "sprites":[
+            {"id":"S","x":0,"y":136,"width":160,"zIndex":10,"backgroundColor":1},
+            {"id":"L","x":128,"y":136,"zIndex":11,"textColor":3},
+            {"id":"X","flags":"HN","value4":0},
+            {"id":"Y","flags":"HN","value4":-1,"value5":"SM","graphicsWidth":8,"graphicsHeight":8,"width":16,"height":16},
+            {
+               "backgroundColor":1,"zIndex":2,
+               "id":"A","flags":"PWAI","graphicsX":0,"graphicsY":45,"x":24,"y":113,"width":16,"height":15,"gravityY":1,
+               "flipXtoSpeedX":true,"restitutionX":0.1,"speedLimitYBottom":-10,
+               "value4":5,
+               "animations":[
+                  {"frames":[0]},
+                  {"frames":[0,1],"speed":2},
+                  {"frames":[1]},
+                  {"frames":[2]}
+               ]
+            },
+            {
+               "id":"C","flags":"P","value7":"PYI","graphicsX":49,"graphicsY":150,"width":8,"height":8,"graphicsWidth":14,"graphicsHeight":14
+            },
+            {
+               "id":"O","graphicsX":48,"graphicsY":150,"width":16,"height":15,"gravityY":-1,"speedLimitYBottom":-1
+            },
+            {
+               "id":"J","flags":"PAI","gravityY":0.2,"speedY":-8,"width":16,"height":15,"value2":-1
+            },
+            {
+               "id":"B","flags":"PIY","speedY":1,"width":13,"height":11,"graphicsX":112
+            },
+            {
+               "backgroundColor":1,
+               "zIndex":1,
+               "flags":"XKHSEG",
+               "value5":"WAL",
+               "value2":-1,
+               "id":"G","graphicsX":64,"graphicsY":75,"width":16,"height":15,
+               "speedLimitYBottom":-10,
+               "flipXtoSpeedX":true,
+               "animations":[
+                  {"frames":[0]},
+                  {"frames":[0,1],"speed":2},
+                  {"frames":[1]}
+               ]
+            },
+            {
+               "backgroundColor":1,
+               "zIndex":1,
+               "flags":"XKHSE",
+               "value5":"Y",
+               "id":"V","graphicsX":96,"graphicsY":90,"width":16,"height":15,
+               "flipXtoSpeedX":true,
+               "value1":1,
+               "value3":-1
+            }
+         ],
+         "tilemaps":[{
+            "y":120,
+            "tileWidth":48,
+            "tileHeight":16,
+            "map":["YSLY"]
+         }]
+      },
+
+
+      {
+         "id":"G",
+         "code":[
+            {
+               "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"==","_":1}]}],
+               "then":[
+                  {
+                     "set":[{"value5":[{"attribute":"value4"}]}],
+                     "code":[
+                        {
+                           "when":[{"if":[{"itsAttribute":"value5","is":"%%","_":2}]}],
+                           "then":[{                              
+                              "id":"X","inArea":[{
+                                 "x":[{"_":16}],
+                                 "y":[{"_":216}],
+                                 "width":[{"_":80}],
+                                 "height":[{"_":48}]
+                              }],
+                              "areaFlipX":true
+                           }]
+                        }
+                     ]
+                  },
+                  {
+                     "divide":[{"value5":[{"_":2}]}],
+                     "code":[
+                        {
+                           "when":[{"if":[{"itsAttribute":"value5","is":"%%","_":2}]}],
+                           "then":[{
+                              "flags":"H","inArea":[{
+                                 "x":[{"_":16}],
+                                 "y":[{"_":172}],
+                                 "width":[{"_":80}],
+                                 "height":[{"_":72}]
+                              }],                   
+                              "areaFlipY":true
+                           }]
+                        }
+                     ]
+                  },
+                  {
+                     "divide":[{"value5":[{"_":2}]}],
+                     "code":[
+                        {
+                           "when":[{"if":[{"itsAttribute":"value5","is":"%%","_":2}]}],
+                           "then":[{
+                              "id":"X","inArea":[{
+                                 "x":[{"_":32}],
+                                 "y":[{"_":184}],
+                                 "width":[{"_":64}],
+                                 "height":[{"_":64}]
+                              }],
+                              "areaRotate":[{"as":"scene","attribute":"value5"}]
+                           }]
+                        }
+                     ]
+                  },       
+                  {
+                     "inArea":[{
+                        "x":[{"_":0}],
+                        "y":[{"_":136}],
+                        "width":[{"_":16}],
+                        "height":[{"_":144}]
+                     }],
+                     "fillAreaWithPattern":["Y"]
+                  },
+                  {
+                     "flags":"H","inArea":[{
+                        "x":[{"_":0}],
+                        "y":[{"_":136}],
+                        "width":[{"_":80}],
+                        "height":[{"_":144}]
+                     }],"areaCopy":[{
+                        "x":[{"_":80}],
+                        "y":[{"_":136}]
+                     }]
+                  },
+                  {
+                     "flags":"H","inArea":[{
+                        "x":[{"_":80}],
+                        "y":[{"_":136}],
+                        "width":[{"_":80}],
+                        "height":[{"_":144}]
+                     }],
+                     "areaFlipX":true
+                  },
+                  {
+                     "flags":"N",
+                     "code":[{"then":[
+                        {
+                           "set":[{
+                              "graphicsX":[{"as":"scene","attribute":"value4"}],
+                              "graphicsY":[{"as":"scene","attribute":"value4"}],
+                              "backgroundColor":[{"as":"scene","attribute":"value4"}]
+                           }],
+                           "module":[{
+                              "graphicsX":[{"_":16}],
+                              "graphicsY":[{"_":7}],
+                              "backgroundColor":[{"_":7}]
+                           }]
+                        },
+                        {
+                           "multiply":[{
+                              "value4":[{"_":16}],
+                              "graphicsX":[{"_":8}],
+                              "graphicsY":[{"_":16}]
+                           }]
+                        },
+                        {
+                           "sum":[{
+                              "backgroundColor":[{"_":9}],
+                              "graphicsY":[{"_":32}]
+                           }],
+                           "set":[{"flags":[{"_":"SM"}]}]
+                        }
+                     ]}]
+                  }
+               ]
+            },
+
+
+            {
+               "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":">","_":60}]}],
+               "then":[
+                  {
+                     "flags":"G",
+                     "set":[{"gravityY":[{"_":1}]}]
+                  },                  
+                  {
+                     "flags":"E",
+                     "randomize":true,
+                     "set":[{
+                        "speedX":[{"list":[-1,1],"randomValue":true}],
+                        "speedY":[{"attribute":"value1"}],
+                        "flags":[{"attribute":"value5","prefix":"PXKI"}],
+                        "value4":[{"list":[50,125],"randomNumber":true}]
+                     }],
+                     "multiply":[{
+                        "speedY":[{"list":[-1,1],"randomValue":true}]
+                     }]
+                  }
+               ]
+            },
+
+
+            {
+               "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"<","_":35}]}],
+               "then":[
+                  {
+                     "flags":"S",
+                     "subtract":[{"y":[{"_":4}]}],
+                     "code":[{
+                        "when":[{"if":[{"itsAttribute":"y","is":"<","attribute":"value4"}]}],
+                        "then":[{"remove":true}]
+                     }]
+                  }
+               ],
+               "else":[{                  
+                  "code":[
+                  	{
+                  		"when":[{"id":"A","if":[{"is":"existing"}]}],
+                  		"then":[
+                  			{
+                              "set":[{
+                                 "value1":[{"_":0}]
+                              }],
+                  				"code":[
+                                 {
+                                    "when":[
+                                       {"if":[{"itsAttribute":"timer","is":"<","_":51}]}
+                                    ],
+                                    "then":[{"invert":[{"visible":[{"_":1}]}]}],
+                                    "else":[{"code":[
+                                       {
+                                          "when":[
+                                             {"if":[{"is":"collidingWith","flags":"K"}]}                                 
+                                          ],
+                                          "then":[
+                                             {"playAudio":[{"_":"K"}],"as":"game","subtract":[{"value1":[{"_":1}]}]},
+                                             {"remove":true}
+                                          ]
+                                       }
+                                    ]}]
+                                 },                           
+                                 {
+                                    "when":[{"flags":"X"}],
+                                    "then":[{"as":"scene","set":[{"value2":[{"_":125}]}]}],
+                                    "else":[{"as":"scene","subtract":[{"value2":[{"_":1}]}]}]
+                                 },
+                                 {
+                                    "when":[{"as":"scene","if":[{"itsAttribute":"value2","is":"<","_":0}]}],
+                                    "then":[                                  
+                                       {"flags":"P","remove":true},
+                                       {
+                                          "sum":[{
+                                             "value4":[{"_":1}],
+                                             "value3":[{"_":1}]
+                                          }],
+                                          "module":[{"value3":[{"_":10}]}],
+                                          "set":[{"timer":[{"_":0}]}],"load":[{"attribute":"value3","suffix":"G"}]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "when":[{"as":"keyboard","attribute":"left","if":[{"is":"down"}]},{}],
+                                    "then":[{"set":[{"value1":[{"_":1}],"value4":[{"_":-5}],"speedX":[{"_":-2}]}]}]
+                                 },
+                                 {
+                                    "when":[{"as":"keyboard","attribute":"right","if":[{"is":"down"}]},{}],
+                                    "then":[{"set":[{"value1":[{"_":1}],"value4":[{"_":5}],"speedX":[{"_":2}]}]}]
+                                 },
+                                 {
+                                    "when":[{"if":[{"itsAttribute":"value2","is":">","_":0}]}],
+                                    "then":[{"subtract":[{"value2":[{"_":1}]}]}],
+                                    "else":[{"code":[
+                                       {
+                                          "when":[{"sublist":"touchDown","if":[{"is":"existing"}]},{}],
+                                          "then":[{
+                                             "set":[{
+                                                "animation":[{"attribute":"value1"}]
+                                             }],
+                                             "code":[                      
+                                                {
+                                                   "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"down"}]},{}],
+                                                   "then":[{"playAudio":[{"_":"J"}],"set":[{"speedY":[{"_":-9}]}]}]
+                                                }
+                                             ]
+                                          }],
+                                          "else":[{"set":[{"animation":[{"_":2}]}]}]
+                                       },
+                                       {
+                                          "when":[{"as":"keyboard","attribute":"buttonB","if":[{"is":"hit"}]},{}],
+                                          "then":[
+                                             {"set":[{"animation":[{"_":3}],"value2":[{"_":9}]}]},
+                                             {
+                                                "spawn":[
+                                                   {"ids":[{"_":"C"}]}
+                                                ],
+                                                "set":[{
+                                                   "speedX":[{"as":"target","attribute":"value4"}]
+                                                }]
+                                             }
+                                          ]
+                                       }
+                                    ]}]
+                                 }
+                  				]
+                  			}
+                  		],
+                  		"else":[
+                  			{"spawn":[{"ids":[{"_":"A"}]}]}
+                  		]
+                  	}
+               ]}]
+            },
+
+
+            {
+               "when":[{"id":"J"}],
+               "then":[{
+                  "sum":[{"rotate":[{"_":90}]}],
+                  "code":[
+                     {
+                        "when":[{"if":[{"itsAttribute":"timer","is":">","_":75}]}],
+                        "then":[
+                           {
+                              "spawn":[{"ids":[{"_":"B"}]}],
+                              "set":[{
+                                 "graphicsY":[{"list":[2,8],"randomNumber":true}]
+                              }],
+                              "multiply":[{
+                                 "graphicsY":[{"_":15}]
+                              }]
+                           },
+                           {"remove":true}
+                        ]
+                     }
+                  ]
+               }]
+            },
+
+
+            {
+               "when":[{"id":"C"}],
+               "then":[
+                  {
+                     "code":[
+                        {
+                           "when":[{"if":[{"itsAttribute":"timer","is":">","_":7}]}],
+                           "then":[{"set":[{"value1":[{"_":1}]}]}]
+                        },
+                        {
+                           "when":[
+                              {"if":[{"is":"collidingWith","flags":"M"}]},
+                              {"if":[{"itsAttribute":"timer","is":">","_":3}]}
+                           ],
+                           "then":[{"set":[{"value1":[{"_":1}]}]}]
+                        },
+                        {
+                           "when":[
+                              {"if":[{"itsAttribute":"x","is":">","_":24}]},
+                              {"if":[{"itsAttribute":"x","is":"<","_":128}]}
+                           ],
+                           "else":[{"set":[{"value1":[{"_":1}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"is":"collidingWith","flags":"K"}]}],
+                           "then":[
+                              {"set":[{
+                                 "value1":[{"_":1}],
+                                 "value7":[{"_":"PYXI"}],
+                                 "value9":[{"as":"that","attribute":"graphicsX"}],
+                                 "value8":[{"as":"that","attribute":"id"}],
+                                 "graphicsY":[{"as":"that","attribute":"graphicsY"}]
+                              }]},
+                              {"as":"that","remove":true}
+                           ]
+                        },
+                        {
+                           "when":[{"if":[{"itsAttribute":"value1","is":"!=","_":0}]}],
+                           "then":[
+                              {
+                                 "spawn":[{"ids":[{"_":"O"}]}],
+                                 "set":[{
+                                    "speedX":[{"as":"target","attribute":"speedX"}],
+                                    "graphicsY":[{"as":"target","attribute":"graphicsY"}],
+                                    "flags":[{"as":"target","attribute":"value7"}],
+                                    "value8":[{"as":"target","attribute":"value8"}],
+                                    "value9":[{"as":"target","attribute":"value9"}]
+                                 }],
+                                 "divide":[{"speedX":[{"_":6}]}]
+                              },
+                              {"remove":true}
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+
+
+            {
+               "when":[{"id":"B"}],
+               "then":[
+                  {
+                     "code":[
+                        {
+                           "when":[{"if":[{"itsAttribute":"timer","is":">","_":100}]}],
+                           "then":[{"invert":[{"visible":[{"_":1}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"itsAttribute":"timer","is":">","_":125}]}],
+                           "then":[{"remove":true}]
+                        },
+                        {
+                           "when":[{"if":[{"is":"collidingWith","id":"A"}]}],
+                           "then":[
+                              {
+                                 "playAudio":[{"_":"B"}],
+                                 "as":"game",
+                                 "sum":[{"value0":[{"_":50}]}]
+                              },
+                              {"remove":true}
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+
+
+            {
+               "when":[{"id":"O"}],
+               "then":[
+                  {
+                     "code":[
+                        {
+                           "when":[{"if":[{"itsAttribute":"timer","is":">","_":100}]}],
+                           "then":[{"invert":[{"visible":[{"_":1}]}]}]
+                        },
+                        {
+                           "when":[{"if":[{"itsAttribute":"timer","is":">","_":125}]}],
+                           "then":[{"set":[{"value1":[{"_":1}]}]}]
+                        },
+                        {
+                           "when":[
+                              {"if":[{"is":"collidingWith","id":"A"}]},
+                              {"if":[{"itsAttribute":"timer","is":">","_":10}]}
+                           ],
+                           "then":[{"code":[
+                              {
+                                 "when":[
+                                    {"as":"keyboard","attribute":"buttonA","if":[{"is":"down"}]},
+                                    {"id":"A","if":[{"itsAttribute":"speedY","is":">","_":0}]}
+                                 ],
+                                 "then":[{"playAudio":[{"_":"J"}],"set":[{"speedY":[{"_":-9}]}]}],
+                                 "else":[{"set":[{"value1":[{"_":2}]}]}]
+                              }
+                           ]}]
+                        },
+                        {
+                           "when":[{"if":[{"itsAttribute":"value1","is":"==","_":1}]}],
+                           "then":[
+                              {"spawn":[{"ids":[{"attribute":"value8"}]}]}
+                           ] 
+                        },
+                        {
+                          "when":[
+                              {"if":[{"itsAttribute":"value1","is":"==","_":2}]},
+                              {"if":[{"itsAttribute":"value8","is":"!=","_":""}]}
+                           ],
+                           "then":[
+                              {"as":"game","sum":[{"value0":[{"_":5}]}]},
+                              {
+                              "playAudio":[{"_":"P"}],
+                              "spawn":[{"ids":[{"_":"J"}]}],
+                              "set":[{
+                                 "speedX":[{"list":[-3,3],"randomNumber":true}],
+                                 "graphicsY":[{"as":"target","attribute":"graphicsY"}],
+                                 "graphicsX":[{"as":"target","attribute":"value9"}]
+                              }]
+                           }] 
+                        },
+                        {
+                           "when":[{"if":[{"itsAttribute":"value1","is":">","_":0}]}],
+                           "then":[{"remove":true}] 
+                        }
+                     ]
+                  }
+               ]
+            },
+
+
+            {
+               "when":[{"flags":"L"}],
+               "then":[
+                  {
+                     "code":[
+                        {
+                           "when":[{"sublist":"touchDown","if":[{"is":"existing"}]},{}],
+                           "then":[
+                              {
+                                 "subtract":[{"value4":[{"_":1}]}],
+                                 "set":[{"animation":[{"_":1}]}],
+                                 "code":[
+                                    {
+                                       "when":[{"if":[{"itsAttribute":"value4","is":"<","_":25}]}],
+                                       "then":[
+                                          {
+                                             "set":[{
+                                                "speedX":[{"_":0}],
+                                                "animation":[{"_":0}]
+                                             }],
+                                             "code":[{
+                                                "when":[{"if":[{"itsAttribute":"timer","is":"%%","_":5}]}],
+                                                "then":[{"invert":[{"flipX":[{"_":1}]}]}]
+                                             }]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "when":[{"if":[{"itsAttribute":"value4","is":"==","_":0}]}],
+                                       "then":[
+                                          {
+                                             "set":[{
+                                                "speedY":[{"_":-9}]
+                                             }]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "when":[{"if":[{"itsAttribute":"value4","is":"<","_":0}]}],
+                                       "then":[
+                                          {
+                                             "set":[{
+                                                "flags":[{"_":"WE"}]
+                                             }]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "else":[{
+                              "set":[{"animation":[{"_":2}]}]
+                           }]
+                        }
+                     ]
+                  }
+               ]
+            },
+
+
+            {
+               "when":[
+                  {"event":"hitWall","flags":"W","if":[{"itsAttribute":"speedY","is":">","_":0}]},
+                  {"event":"hitWall","flags":"W","if":[{"itsAttribute":"y","is":">","_":0}]},
+                  {"event":"hitWall","flags":"W","if":[{"is":"collidingWith","id":"X"}]}
+               ],
+               "then":[{
+                  "bounce":[{"speedY":[{"attribute":"value3"}],"speedX":[{"attribute":"value2"}]}]
+               }]
+            },
+            {
+               "when":[
+                  {"event":"hitWall","flags":"A","if":[{"is":"collidingWith","id":"Y"}]}
+               ],
+               "then":[{
+                  "bounce":[{"speedY":[{"attribute":"value3"}],"speedX":[{"attribute":"value2"}]}]
+               }]
+            },
+
+            {
+               "when":[
+                  {"event":"hitWall","flags":"Y","if":[{"is":"collidingWith","flags":"M"}]}
+               ],
+               "then":[{
+                  "bounce":[{"speedY":[{"attribute":"value3"}],"speedX":[{"_":-1}]}]
+               }]
+            },
+            
+            {
+               "when":[
+                  {"event":"hitWall","flags":"I","bounds":[{
+                     "modeBottom":"warp",
+                     "modeTop":"warp",
+                     "x":[{"_":0}],
+                     "y":[{"_":-20}],
+                     "width":[{"_":160}],
+                     "height":[{"_":161}]
+                  }]}
+               ]
+            },
+            {
+               "when":[{"as":"game","if":[{"itsAttribute":"value1","is":"<=","_":0}]}],
+               "then":[{"runScene":[{"_":"D"}]}]
+            },
+            {
+               "then":[
+                  {"id":"S","set":[{"text":[{"as":"game","attribute":"value0","prefix":" 1UP-"}]}]},
+                  {"id":"L","set":[{"text":[{"as":"game","attribute":"value1","prefix":"L:"}]}]}
+               ]
+            } 
+         ]
+      }
+   ]
+}
