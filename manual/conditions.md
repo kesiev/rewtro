@@ -144,7 +144,7 @@ You can create a condition that triggers on specific values or a range of values
   * `<=` triggers when the picked value is less or equal than the condition picked value.
   * `!=` triggers when the picked value is not equal to the condition picked value.
   * `==` triggers when the picked value is equal to the condition picked value.
-  * `%%` triggers when the picked value module the picked condition picked value is equal to 0.
+  * `%%` triggers when the picked value module the picked condition picked value is less than 1.
 
 If you've coded in other languages before you'll probably recognize these conditions and know how to use them.
 
