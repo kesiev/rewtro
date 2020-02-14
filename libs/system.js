@@ -287,8 +287,11 @@ var System={
 		}
 		return model;
 	},
-
 	clone:function(a) { return JSON.parse(JSON.stringify(a)); },
+	patch:function(patch,org){
+		if (patch) patch.forEach(getter=>org.push(getter));
+		return org
+	},
 	solveReferences:function(struct,map,done) {
 		if (!done) done=[]
 		if (done.indexOf(struct)==-1) {
@@ -725,7 +728,7 @@ System.versions["0.1"]={
 		];
 
 		// General getters (sprites, global objects, numbers etc.)
-		var GETTERS=[
+		var GETTERS=System.patch(mods.GETTERS,[
 			{ key:"as", value:System.padWithUnused(debug,"as",16,["this","that","target","scene","game","keyboard","songRow","allSprites"])},
 			{ key:"list", listNumbers:RANGES.INTEGER },
 			{ key:"numbers", listNumbers:RANGES.INTEGER },
@@ -767,8 +770,7 @@ System.versions["0.1"]={
 			{ key:"max", flag:true },
 			{ key:"min", flag:true },
 			{ key:"count", flag:true },
-		];
-		if (mods.GETTERS) mods.GETTERS.forEach(getter=>GETTERS.push(getter));
+		]);
 		if (mods.QUIRKS.unshift)
 			SPRITEGETTERS.forEach(attr=>GETTERS.unshift(attr));
 		else
@@ -886,7 +888,7 @@ System.versions["0.1"]={
 												">", ">=", "<", "<=", "!=", "==", "%%", // Logic
 												"collidingWith", // Scene (to check object, just use {ids:"A"} as when clause)
 												"up", "down", "hit", // Keyboard
-												"under", "over", "onRightOf", "onLeftOf" // Relative position
+												"under", "over", "onRightOf", "onLeftOf" // Relative position												
 											])},
 											{
 												key:"itsAttribute",
