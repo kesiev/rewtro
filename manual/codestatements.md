@@ -307,7 +307,7 @@ There are two methods to spawn maps of sprites that both of them accepts a map i
 Then you can copy an area of already spawned sprites using `areaCopy`. The sprites to be copied must be _already picked_ by the current `code` line [getter](getters.md) so make sure to specify the `id`, `ids`, or `tags` of the sprites you want to copy along with the `inArea` key. The `areaCopy` key accepts multiple instances of objects structured this way:
 
   * `x` and `y` are two getters to the copy destination
-  * `fromIds` and `toIds` are two strings that define which sprite `id` (`toIds`) must be spawned for every sprite `id` to copy (`toIds`). For example `"fromIds":"AB","toIds":"DE"` instructs `areaCopy` to copy every sprite with `id` `A` using a sprite with `id` `D` and every sprite with `id` `B` using a sprite with `id` `E`.
+  * `fromIds` and `toIds` are two strings that define which sprite `id` (`toIds`) must be spawned for every sprite `id` to copy (`toIds`). For example `"fromIds":"AB","toIds":"DE"` instructs `areaCopy` to copy every sprite with `id` `A` using a sprite with `id` `D` and every sprite with `id` `B` using a sprite with `id` `E`. If `toIds` is omitted no conversion map is applied and if `fromIds` is omitted too all of the picked objects will be copied.
 
 `fillAreaWithPattern`, `outlineAreaWithPattern`, and `areaCopy` are special statements that change the current picked objects to the already spawned sprites so you can manipulate them in the same code line.
 
