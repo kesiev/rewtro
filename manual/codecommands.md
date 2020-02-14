@@ -120,7 +120,7 @@ Long story short, this `when` command is checking if the spaceship is hitting th
 "when":[{"if":[{"is":"collidingWith","id":"B"}],"id":"A"}]
 ```
 
-Code is more readable if you try to arrange it in a natural way_:
+Code is more readable if you try to arrange it in a _natural way_:
 
 ```
 "when":[{"id":"A","if":[{"is":"collidingWith","id":"B"}]}]
