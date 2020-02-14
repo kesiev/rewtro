@@ -399,7 +399,6 @@ function RewtroEngine(parent,CFG) {
 	}
 
 	function runBlocks(blocks,mem) {
-		
 		memory = loadBlocks(blocks,mem);
 
 		// Load tilemaps
@@ -504,25 +503,23 @@ function RewtroEngine(parent,CFG) {
 
 	// --- SPRITE COLLISIONS
 
-	function getSpriteHitbox(sprite) {
+	function getSpriteHitbox(sprite,x,y) {
 		if (sprite.noCamera) return sprite;
-		else return { x:sprite.x-scene.x, y:sprite.y-scene.y, width:sprite.width, height:sprite.height }
+		else return { x:x-scene.x, y:y-scene.y, width:sprite.width, height:sprite.height }
 	}
 
-	function checkCollision(sprite,sprite2,ignoreenabled,dx,dy) {
+	function checkCollision(sprite,x,y,sprite2,ignoreenabled) {
 		if (
 			(sprite!=sprite2)&&
 			sprite._alive&&sprite2._alive&&
 			(ignoreenabled||(sprite.collisionsEnabled&&sprite2.collisionsEnabled))
 		) {
-			var hitbox=getSpriteHitbox(sprite),hitbox2=getSpriteHitbox(sprite2);
-			dx+=hitbox.x;
-			dy+=hitbox.y;
+			var hitbox=getSpriteHitbox(sprite,x,y),hitbox2=getSpriteHitbox(sprite2,sprite2.x,sprite2.y);
 			return !(
-					(dx>hitbox2.x+hitbox2.width-1)||
-					(dx+hitbox.width-1<hitbox2.x)||
-					(dy>hitbox2.y+hitbox2.height-1)||
-					(dy+hitbox.height-1<hitbox2.y)
+					(hitbox.x>hitbox2.x+hitbox2.width-1)||
+					(hitbox.x+hitbox.width-1<hitbox2.x)||
+					(hitbox.y>hitbox2.y+hitbox2.height-1)||
+					(hitbox.y+hitbox.height-1<hitbox2.y)
 				);
 		} else return false;
 	}
@@ -608,7 +605,7 @@ function RewtroEngine(parent,CFG) {
 				var out=[];
 				var rect=getArea(othis,othat,otarget,randomNumber,line.inArea[0]);
 				subjects.forEach(subject=>{
-					if (checkCollision(subject,rect,true,0,0)) out.push(subject);
+					if (checkCollision(subject,subject.x,subject.y,rect,true)) out.push(subject);
 				});
 				subjects=out;
 			}
@@ -655,8 +652,8 @@ function RewtroEngine(parent,CFG) {
 		return subjects;
 	}
 
-	function evaluateCondition(condition,subject,that,allcollisions,event,randomNumber) {
-		var istrue=true,ignoreCollision,linetrue,collisionTrue,codeThis;
+	function evaluateCondition(condition,subject,that,allcollisions,event,oldx,oldy,randomNumber) {
+		var istrue=true,ignoreCollision,linetrue,collisionTrue,codeThis,localCollisions={};
 
 		condition.forEach(line=>{
 
@@ -705,7 +702,7 @@ function RewtroEngine(parent,CFG) {
 											case "<":{ linetrue=linetrue&&(fromvalue<value); break; }
 											case "<=":{ linetrue=linetrue&&(fromvalue<=value); break; }
 											case "==":{ linetrue=linetrue&&(fromvalue==value); break; }
-											case "%%":{ linetrue=linetrue&&(fromvalue%value==0); break; }
+											case "%%":{ linetrue=linetrue&&(fromvalue%value<1); break; }
 											case "!=":{ linetrue=linetrue&&(fromvalue!=value); break; }
 											case "down": { linetrue=linetrue&&(value>0); break; }
 											case "up": { linetrue=linetrue&&(value==0); break; }
@@ -730,13 +727,17 @@ function RewtroEngine(parent,CFG) {
 												linetrue=linetrue&&((p<(270+ANGLETOLLERANCE))&&(p>(270-ANGLETOLLERANCE)));
 												break;
 											}
-											case "collidingWith":{												
+											case "collidingWith":{
+												var nothitting=oldx===undefined;
 												var collided=false;
 												var dx=condition.deltaX?evaluateGetter(othis,that,subject,condition.deltaX[0],randomNumber)[0]:0;
 												var dy=condition.deltaY?evaluateGetter(othis,that,subject,condition.deltaY[0],randomNumber)[0]:0;
 												ofsubjects.forEach(dest=>{
-													if (checkCollision(fromvalue,dest,false,dx,dy)) {
-														allcollisions[dest._uid]=that[dest._uid]=dest;
+													if (
+														checkCollision(fromvalue,fromvalue.x+dx,fromvalue.y+dy,dest,false)&&
+														(nothitting||(!checkCollision(fromvalue,oldx+dx,oldy+dy,dest,false)))
+													) {
+														localCollisions[dest._uid]=that[dest._uid]=dest;
 														collided=true;
 													}
 												});
@@ -831,7 +832,10 @@ function RewtroEngine(parent,CFG) {
 			} else istrue=false;
 		});
 
-		return istrue?codeThis:false;
+		if (istrue) {
+			for (var a in localCollisions) allcollisions[a]=localCollisions[a];
+			return codeThis
+		} else return false;
 	}
 
 	function executeInstructions(instructions,subject,codeThat,codeThis,speed,restitution,restitutionSpeed,randomNumber) {
@@ -924,11 +928,12 @@ function RewtroEngine(parent,CFG) {
 					lineThis.forEach(othis=>{
 						line.areaCopy.forEach(area=>{
 							var fromids=area.fromIds,toids=area.toIds;
-							var spawnId=fromids.indexOf(othis.id);
-							if ((spawnId!=-1)&&(toids[spawnId])) {
+							var spawnId=fromids?fromids.indexOf(othis.id):1;
+							var toSpawn=toids?toids[spawnId]:othis.id;
+							if ((spawnId!=-1)&&toSpawn) {
 								var dx=evaluateGetter(othis,lineThat,subject,area.x[0],randomNumber)[0];
 								var dy=evaluateGetter(othis,lineThat,subject,area.y[0],randomNumber)[0];
-								var newsprite=addSprite(toids[spawnId]);
+								var newsprite=addSprite(toSpawn);
 								newsprite.x=othis.x-inArea.x+dx;
 								newsprite.y=othis.y-inArea.y+dy;
 								newLineThis.push(newsprite);
@@ -1097,7 +1102,7 @@ function RewtroEngine(parent,CFG) {
 		return isBreaking;
 	}
 
-	function executeCode(code,subject,event,size,coord,speed,restitution,restitutionSpeed) {
+	function executeCode(code,subject,event,oldx,oldy,size,coord,speed,restitution,restitutionSpeed) {
 		
 		var times,codeThat,codeThis,randomNumber,allcollisions={},run,isBreaking=false;
 
@@ -1115,7 +1120,7 @@ function RewtroEngine(parent,CFG) {
 				else times=1;
 
 				// Evaluate condition
-				if (statement.when) codeThis=evaluateCondition(statement.when,subject,codeThat,allcollisions,event,randomNumber);
+				if (statement.when) codeThis=evaluateCondition(statement.when,subject,codeThat,allcollisions,event,oldx,oldy,randomNumber);
 				else if (!event) codeThis=[subject]; // Conditions without subject are executed at least once on subject
 				// For non-event executions, if the condition is not true executes the else statement
 				if (!event&&!codeThis&&statement.else) {
@@ -1143,10 +1148,10 @@ function RewtroEngine(parent,CFG) {
 		var collided=false;
 		var oldspeed=sprite[speed];
 		if (oldspeed) {
-			var side,otherdelta,delta=sprite[size]*(oldspeed>0);
+			var side,otherdelta,oldx=sprite.x,oldy=sprite.y,delta=sprite[size]*(oldspeed>0);
 			sprite[coord]+=oldspeed;
 
-			var collisions=executeCode(memory.code,sprite,"hitWall",size,coord,speed,restitution,restitutionSpeed);
+			var collisions=executeCode(memory.code,sprite,"hitWall",oldx,oldy,size,coord,speed,restitution,restitutionSpeed);
 
 			sprite[touchDown]=[];
 			sprite[touchUp]=[];
