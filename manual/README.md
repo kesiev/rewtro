@@ -1,10 +1,14 @@
-# Rewtro developer manual
+<div align="center" style="margin:60px 0">
+    <p><img src="images/logo.png"></p>
+</div>
 
-_NOTE: I'm writing this manual in random slices of spare time and it's far from being complete right now. Anyway, I hope you'll find this useful in the meanwhile. Some chapters are quite long so I'll split them once the manual is nearing completion._
+---
+
+# Rewtro developer manual
 
 Rewtro is a fantasy console inspired game engine thought to load games from a very small amount of data. While coding a game in Rewtro can be a little more difficult than other fantasy consoles and game engines due to its self-imposed limits, Rewtro allows you to distribute your games in unusual ways. Right now, the [Rewtro fake console](https://kesiev.com/rewtro) can load games from papercraft cartridges you can build using a computer, any printer, scissors, a cutter, and some foldings. The fake console is thought for mobile devices but it just works on desktop computers too.
 
-To run the Rewtro SDK you just need to download the [Rewtro project](https://github.com/kesiev/rewtro), host its folder on an Apache/PHP server and then load the `carts/` folder in your browser. If everything works, open your favorite editor, create a new JSON file in that `carts/` folder and you're ready to go!
+To run the Rewtro SDK you just need to download the [Rewtro project](https://github.com/kesiev/rewtro), host its folder on an Apache/PHP server and then load the `carts/` folder in your browser. If everything works, open your favorite editor, create a new JSON file in that `carts/` folder and you're ready to go! If you prefer to learn from the code have a look to the JSON files into the `carts/` directory (I suggest you to start with `K-005-sdong.json` which is a self-contained mini-Pong clone) and get inspired.
 
 Rewtro origins are humble and it's not thought as a full-fledged project. It exists just because I needed some nice greeting cards for 2019 Christmas. Then I published the whole code as open-source as I usually do with all of my pet projects. Since my parents and friends liked the idea and few _internets_ were curious about how this works, I decided to write this tiny manual.
 
@@ -30,3 +34,7 @@ I'm a little verbose, sorry, but I also love examples-filled documentation too. 
     * _Physics_: How to work with the tiny Rewtro physics engine.
     * [Neat ideas for the future](ideas.md): A collection of ideas I've collected from people around the _internet_ to make Rewtro better.
     * [Rewtro changelog](rewtrochangelog.md): Differences between different Retro core versions.
+
+---
+
+_NOTE: All about Rewtro is covered by the manual right now but some extra chapters that may be useful are not available yet. I'll keep the manual up-to-date but I'll write extra chapters on enough demand - or I'll accept contributions!_

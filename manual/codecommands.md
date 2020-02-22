@@ -74,7 +74,7 @@ This cartridge is a very basic shooter game! Move the green diamond left and rig
     <p><img src="images/commands.png"></p>
 </div>
 
-The loaded `code` blocks are executed _before_ updating the screen so, since the [default frame rate](rewtrocartirdge.md) is 25 frames per second, the following actions will _keep happening_ 25 times per second.
+The loaded `code` blocks are executed _before_ updating the screen so, since the [default frame rate](rewtrocartridge.md) is 25 frames per second, the following actions will _keep happening_ 25 times per second.
 
 The first three lines of `code` handle the player controller, moving the ship sprite `A` when the player holds down `left` and `right`, and firing the bullet sprite `D` from the ship when the `buttonA` is `hit`.
 

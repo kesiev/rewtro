@@ -377,4 +377,4 @@ Moving the green square around you'll discover that there are 4 quadrants around
 
 ### Existence
 
-The `existing` value is used to check if the picked element is defined and to check if it contains at least one element on lists. To learn more about how `existing` works have a look at the [iterators](iterators.md) chapter.
+The `existing` value is used to check if the picked element is defined and to check if it contains at least one element on lists. To learn more about how `existing` works have a look at the [iterators](listiterators.md) chapter.

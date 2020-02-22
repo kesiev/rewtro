@@ -428,7 +428,7 @@ There are two types of text getters: `character` which gets a single symbol and 
 }
 ```
 
-This cartridge does nothing on the screen but sets some text into the [game object](scenegameobject.md) variables. Let's have a look at the _debugger status_:
+This cartridge does nothing on the screen but sets some text into the [game object](specialobjects.md) variables. Let's have a look at the _debugger status_:
 
 <div align="center" style="margin:60px 0">
     <p><img src="images/getters-text.png"></p>

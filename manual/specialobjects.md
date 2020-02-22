@@ -258,7 +258,7 @@ In this cartridge you move a red square around the screen using the up, down, le
     <p><img src="images/conditions-keyboard.png"></p>
 </div>
 
-The `keyboard` special object is queried multiple times by the `when` [commands](codecommands.md) asking for specific controller keys and key states. Once a `when` command [condition](conditions.md) is true the game reacts executing the `then` [command](commands.md) and making it interactive.
+The `keyboard` special object is queried multiple times by the `when` [commands](codecommands.md) asking for specific controller keys and key states. Once a `when` command [condition](conditions.md) is true the game reacts executing the `then` [command](codecommands.md) and making it interactive.
 
 ## Song row
 

@@ -79,7 +79,7 @@ You can have a look at a read-only version of the SDK [here](https://www.kesiev.
 
 ## The developer manual
 
-I'm slowly putting together a developer manual, which can be found [here](manual/README.md).
+There is a developer [manual](manual/README.md) with explanations and a lot of code examples that cover everything Rewtro! See you there!
 
 ## Released games
 
@@ -104,7 +104,7 @@ Rewtro QR-Carts are cheap to print and contain the _whole_ game data, are _physi
 
 *Q: I want to make a Rewtro game too!*
 
-A: Ok! You need an Apache server with PHP support and writing access to the `carts/` directory. You'll probably need a manual and I'm working on it: you can read a work in progress version [here](manual/README.md). If you prefer to learn from the code have a look to the JSON files into the `carts/` directory (I suggest you to start with `K-005-sdong.json` which is a self-contained mini-Pong clone) and get inspired.
+A: Have a look to the developer [manual](manual/README.md) to learn how to setup your development environment and start developing!
 
 *Q: Which browser I can use for running Rewtro games?*
 

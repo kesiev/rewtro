@@ -17,3 +17,72 @@ The sound editor has a _Paste this in code_ section that shows a more verbose JS
 ## Rewtro console in developer mode
 
 Your local Rewtro console can be switched to _developer mode_ from the settings screen of the SDK. Hit the _cogs icon_ on the top and toggle the _Rewtro console in developer mode_.
+
+## Reusing picked objects
+
+This code does a number of things on the `A` sprite:
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A"}],
+      "tilemaps":[{"map":["A"]}],
+      "code":[
+         {
+            "when":[{"as":"keyboard","attribute":"right","if":[{"is":"down"}]}],
+            "then":[{"id":"A","sum":[{"x":[{"_":1}]}]}]
+         },
+         {
+            "when":[{"as":"keyboard","attribute":"left","if":[{"is":"down"}]}],
+            "then":[{"id":"A","subtract":[{"x":[{"_":1}]}]}]
+         },
+         {
+            "then":[
+               {"id":"A","set":[{"backgroundColor":[{"list":[3,8],"randomNumber":true}]}]}
+            ]
+         }
+      ]
+   }]
+}
+```
+
+You can gather all of the code related to a [getter](getters.md) in a single block avoiding repeated getters, making the code tidy, and earning an iterator:
+
+```
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"My first game"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A"}],
+      "tilemaps":[{"map":["A"]}],
+      "code":[
+         {
+            "when":[{"id":"A"}],
+            "then":[{
+               "set":[{"backgroundColor":[{"list":[3,8],"randomNumber":true}]}],
+               "code":[
+                  {
+                     "when":[{"as":"keyboard","attribute":"right","if":[{"is":"down"}]},{}],
+                     "then":[{"sum":[{"x":[{"_":1}]}]}]
+                  },
+                  {
+                     "when":[{"as":"keyboard","attribute":"left","if":[{"is":"down"}]},{}],
+                     "then":[{"subtract":[{"x":[{"_":1}]}]}]
+                  }
+               ]
+            }]
+         }
+      ]
+   }]
+}
+```
+
+Notice that the `when` commands on `keyboard` are now ending with an empty `{}` condition. This condition is always true, it doesn't interfere with the other conditions since they are always in _and_ and it picks the previous `code` call object as mentioned in the [code commands](codecommands.md) chapter. This way it makes the `then` command picked object the more useful `A` sprite instead of the `keyboard` [special object](specialobjects.md).
