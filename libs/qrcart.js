@@ -297,15 +297,13 @@ var QRCart=function(cfg){
       CAPACITY.forEach((cap,type)=>{
         if (type < qr.typeThreshold)
           CORRECTIONLEVEL.forEach((label,cid)=>{
-            // Calculate optimal carts number without headers
-            var carts=Math.ceil(codesize/cap[cid]);
-            // Add headers
-            carts=Math.ceil(((carts*headersize)+codesize)/cap[cid]);
+            // Calculate chunkSize
+            var chunkSize=cap[cid]-headersize;            
+            // Calculate number of carts
+            var carts=Math.ceil(codesize/chunkSize);           
             // Calculate score
             var score = Math.abs(((qr.suggestedCount-carts)*1000)+cid*100)+type;
-            // Calculate chunkSize
-            var chunkSize=cap[cid]-headersize;
-            if (!best||(score<best.score)) best={
+            if ((chunkSize>0)&&(!best||(score<best.score))) best={
               type:type+1,
               typeWarning:qr.typeWarning,
               typeLimit:qr.typeThreshold,
