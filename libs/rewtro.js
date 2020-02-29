@@ -780,10 +780,10 @@ function RewtroEngine(parent,CFG) {
 								var x,y,width,height,collided;
 								line.bounds.forEach(rect=>{
 									collided=false;
-									x=evaluateGetter(0,that,subject,rect.x[0],randomNumber)[0];
-									y=evaluateGetter(0,that,subject,rect.y[0],randomNumber)[0];
-									width=evaluateGetter(0,that,subject,rect.width[0],randomNumber)[0];
-									height=evaluateGetter(0,that,subject,rect.height[0],randomNumber)[0];
+									x=rect.x===undefined?scene.x:evaluateGetter(0,that,subject,rect.x[0],randomNumber)[0];
+									y=rect.y===undefined?scene.y:evaluateGetter(0,that,subject,rect.y[0],randomNumber)[0];
+									width=rect.width===undefined?scene.width:evaluateGetter(0,that,subject,rect.width[0],randomNumber)[0];
+									height=rect.height===undefined?scene.height:evaluateGetter(0,that,subject,rect.height[0],randomNumber)[0];
 									if (othis.x+othis.width>x+width) {
 										if (rect.modeRight=="warp") othis.x=x;
 										else if (rect.modeRight=="bound") {

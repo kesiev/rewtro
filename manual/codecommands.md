@@ -415,8 +415,8 @@ Why you should do that? This way you'll be sure that you'll never have more than
 
 The `hitWall` event is triggered when a sprite is hitting the edges of a defined rectangular area. You can define that area adding a `bounds` key containing an object with these keys:
 
-  * `x` and `y` are [getters](getters.md) to the top-left coordinates of the area
-  * `width` and `height` are [getters](getters.md) to the area width and height
+  * `x` and `y` are [getters](getters.md) to the top-left coordinates of the area. If omitted the `scene` [special object](specialobjects.md) `x` and `y` will be used instead.
+  * `width` and `height` are [getters](getters.md) to the area width and height. If omitted the `scene` [special object](specialobjects.md) `width` and `height` will be used instead.
   * `modeTop`, `modeBottom`, `modeLeft`, and `modeRight` defines how each edge works:
     * `warp` will move the sprite from that edge to the opposite one. The `hitWall` event _is not triggered_ in this case.
     * `bound` will stop the sprite on that edge as it collided to a wall. The `hitWall` event _is triggered_ in this case.
