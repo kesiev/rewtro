@@ -1,0 +1,597 @@
+{
+   "systemVersion":"0.2",
+   "metadata":{
+      "title":"K008 - Star Fire",
+      "centerTitle":"STAR FIRE",
+      "legalText":"(c)2020 by KesieV - www.kesiev.com/rewtro",
+      "page1Title":"The story",
+      "page1Text":"2030. A hostile alien race suddenly appeared in our solar system. You are one of the few pilots of the RW-7R0 Space Fire fighter and your mission is to eliminate the menace and discover where the alien came from. Good luck, pilot!",
+      "page2Title":"The game",
+      "page2Text":"Fly in your RW-7R0 Space Fire fighter, dodge twisty walls, evil enemies and barrages of bullets, fire at the aliens and collect power-ups to improve your ship and score. You have 9 lives but use them the less than you can!",
+      "page3Title":"How to play",
+      "page3Text":"Use UP/DOWN/LEFT/RIGHT to move your spaceship. Hit the A BUTTON to fire. Collect the power-ups to earn points and improve your fighter firepower and speed.",
+      "page4Title":"Scores",
+      "page4Text":"Every enemy you take down is 5 points and every power-up is 1 point. The power-up value increases every time a new one is collected and goes back to 1 when you die so try to survive as much as you can for higher scores!",
+      "page5Title":"History and Wikipedia",
+      "page5Text":"There is no consensus on which design elements compose a shoot'em up game nor which is the earliest. Is it the MIT's 1961 \"Spacewar!\", one of the first videogames, or the 1978 Tomohiro Nishikado legendary \"Space invaders\"?",
+      "page6Title":"Coder's Review",
+      "page6Text":"I love Japanese arcade games and the Bubby Pop release feedback on Twitter ignited some shmup passion back. I had to put some in-game music, boss battles, and handcrafted stages as they are a must in a shooter so I used a smaller screen to stay under 3kb."
+   },
+   "systemConfiguration":[{"screenHeight":128,"renderHeight":128,"fontModel":3}],
+   "data":[
+       {
+         "id":"A",            
+         
+         "images":[
+            {"id":"graphics","image":{"data":{"_file":"graphics/shmup.png"},"format":"monocolor"}}
+         ],
+         "sounds":[
+            {"id":"A","wave":"square","attack":2,"sustain":135,"release":127},
+            {"id":"B","wave":"whitenoise","decay":17,"release":91},
+            
+            {"id":"G","wave":"square","attack":2,"release":124,"pitch":172},
+            {"id":"F","wave":"whistle","attack":2,"release":22,"frequency":255,"pitch":0},
+            {"id":"X","wave":"whitenoise","attack":2,"release":193,"frequency":255,"pitch":0},
+            {"id":"K","wave":"whitenoise","attack":2,"decay":20,"frequency":255,"pitch":0}
+
+         ],
+          "music":[
+            {
+               "id":"A",
+               "notes":[
+                  [
+                     "A4-","---","---","   ","   ","   ",
+                     "A4-","G4-","---","---","   ","   ",
+                     "   ","   ","   ","   "
+                  ],
+                  [
+                     "F3-","F2-","F3-","F2-","F3-","F2-",
+                     "F3-","F2-","F3-","F2-","F3-","F2-",
+                     "F3-","F2-","F3-","F2-"
+                  ],
+                  [
+                     "C4-","   ","G6-","   ","C4-","   ",
+                     "G6-","   ","C4-","   ","G6-","   ",
+                     "C4-","   ","G6-","   "
+                  ]
+               ],
+               "instruments":"AAB"
+            },{
+               "id":"B",
+               "notes":[
+                  [
+                     "F4-","---","---","   ","   ","   ",
+                     "F4-","G4-","---","---","   ","   ",
+                     "   ","   ","   ","   "
+                  ],
+                  [
+                     "D3-","D2-","D3-","D2-","D3-","D2-",
+                     "D3-","D2-","D3-","D2-","D3-","D2-",
+                     "D3-","D2-","D3-","D2-"
+                  ],
+                  [
+                     "C4-","   ","G6-","   ","C4-","   ",
+                     "G6-","   ","C4-","   ","G6-","   ",
+                     "C4-","G6-","G6-","G6-"
+                  ]
+               ],
+               "instruments":"AAB"
+            },
+            {
+               "id":"C",
+               "notes":[
+                  [
+                     "F3-","F2-","F3-","F2-","F3-","F2-",
+                     "F3-","F2-","F3-","F2-","F3-","F2-",
+                     "F3-","F2-","F3-","F2-"
+                  ],
+                  [
+                     "C4-","   ","G6-","   ","C4-","   ",
+                     "G6-","   ","C4-","   ","G6-","   ",
+                     "C4-","   ","G6-","   "
+                  ]
+               ],
+               "instruments":"AB"
+            },
+            {
+               "id":"D",
+               "notes":[
+                 [
+                     "D3-","D2-","D3-","D2-","D3-","D2-",
+                     "D3-","D2-","D3-","D2-","D3-","D2-",
+                     "D3-","D2-","D3-","D2-"
+                  ],
+                  [
+                     "C4-","   ","G6-","   ","C4-","   ",
+                     "G6-","   ","C4-","   ","G6-","   ",
+                     "C4-","G6-","G6-","G6-"
+                  ]
+               ],
+               "instruments":"AB"
+            },
+
+            {
+               "id":"X",
+               "notes":[
+                  [
+                     "F5-","---","   ",
+                     "E5-","   ","   ",
+                     "D5-","   ",
+                     "F4-","---","   ",
+                     "E4-","   ","   ",
+                     "D4-","   "
+                  ],
+                  [
+                     "C4-","   ",
+                     "G6-","   ",
+                     "C4-","   ",
+                     "G6-","   ",
+                     "C4-","   ",
+                     "G6-","   ",
+                     "C4-","   ",
+                     "G6-","   "
+                  ]
+               ],
+               "instruments":"AB"
+            },
+            {
+               "id":"Y",
+               "notes":[
+                  [
+                     "D4-","---","   ",
+                     "E4-","   ","   ",
+                     "F4-","   ",
+                     "F5-","---","   ",
+                     "E5-","---","   ",
+                     "   ","   "
+                  ],
+                  [
+                     "C4-","   ",
+                     "G6-","   ",
+                     "C4-","   ",
+                     "G6-","   ",
+                     "C4-","   ",
+                     "G6-","   ",
+                     "G6-","G6-",
+                     "G6-","G6-"
+                  ]
+               ],
+               "instruments":"AB"
+            }
+            
+         ],
+         "songs":[
+            {"id":"A","music":"CCDDAABBAABBABAB","loopTo":0,"tempo":4},
+            {"id":"B","music":"XXYY","loopTo":0,"tempo":3}
+         ],
+
+         "sprites":[
+            {"id":"A","x":76,"y":32,"textAlignment":"center","text":"==STAR==~=FIRE=","textColor":4,"scale":2},
+            {"id":"B","x":76,"y":96,"textAlignment":"center","textColor":8}
+         ],
+         "tilemaps":[{"backgroundColor":2,"map":["AB"]}],
+         "code":[
+            {
+               "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],
+               "then":[{
+                  "as":"game",
+                  "set":[{
+                     "value0":[{"_":0}],
+                     "value1":[{"_":9}]
+                  }],                     
+                  "playAudio":[{"_":"X"}],
+                  "runScene":[{"_":"G1"}]
+               }],
+               "else":[{
+                  "id":"B",
+                  "set":[{"text":[{"as":"game","attribute":"value3","prefix":"HI-","suffix":"~~(C)2020 KESIEV"}]}]
+               }]
+            }
+         ]
+      },
+
+      {    
+         "id":"D",
+         "sprites":[{"id":"A","x":44,"y":60,"text":"GAME OVER"}],
+         "tilemaps":[{"map":["A"]}],
+         "code":[
+            {
+               "when":[{"as":"game","if":[{"itsAttribute":"value0","is":">","as":"game","attribute":"value3"}]}],
+               "then":[
+                  {"as":"game","set":[{"value3":[{"attribute":"value0"}]}]}
+               ]
+            },
+            {
+               "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"down"}]},{}],
+               "then":[{"playAudio":[{"_":"X"}],"runScene":[{"_":"A"}]}]
+            }
+         ]
+      },
+
+      {
+         "id":"E",
+         "sprites":[{"textAlignment":"center","id":"A","x":76,"y":52,"textColor":4,"text":"YOU SAVED HUMANS~FROM THEIR~EXPERIMENT!"}]
+      },
+
+      {
+         "id":"1",
+         "tilemaps":[{
+               "x":184,
+               "map":[
+                  "                    X     ZZYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTYTY         ",
+                  "                   X      WW                         TY                X X TY           CCC        Q",
+                  "                    X     ZZ              XX     X X TY               X X XTY            CCC    XX  ",
+                  "      XXXXX          X    WW             Q      X X XTY          II       QTY           Q CCC      Q",
+                  "                          YTYT            XX     X X TYTY    TYTYTY      X Q               CCD      ",
+                  "                         X        XX      IIYTII     TY         XTY       X Q           X   DDYTYTY ",
+                  "                        X XXX Q  Q        ZZZZZZ     TY        Q TY        X Q         X   DDDDCCDYT",
+                  "           XXXXX         X        XX        WW       TYTYTYTY   XTY         X Q            DDDDDDDYT",
+                  "                  X       YTYT         XX   ZZ       TY        Q TY          X Q       X   DDDDCCDYT",
+                  " XXXXX           X        WW          Q   IIWWII     TY         XTY           X Q       X   DDYTYTY ",
+                  "                X         ZZ           XX ZZZZZZ       X X       TY     II II              CCD      ",
+                  "                 X        WW                WW          X XTY    TYTYTYTYTYTY             CCC      Q",
+                  "                  X       ZZ        I I I   ZZ       TY    TY    TYZZZZZZZZTY          Q CCC   XX   ",
+                  "                          WWYTYTYTYTYTYTYTYTWW       TY    TY I  TYZZZZZZZZTY           CCC        Q",
+                  "          YTYTYTYTYTYTYTYTZZZZZZZZZZZZZZZZZZYTYTYTYTYTYTYTYTYTYTYTYZZZZZZZZTYTYTYTYTYTYTYTY         "
+               ],
+               "set":[{"value9":"G2"}]
+            }
+         ]
+      },
+
+      {
+         "id":"2",
+         "tilemaps":[{
+               "x":184,
+               "map":[
+                  "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK",
+                  "------KK     KK     KK     KK     KK     KK     KK     KK     KK     KK     KK     KK     KK     KK ",
+                  "                                            X   X               -  X      X X X X X         DDDDD   ",
+                  "    -----------          XXXXXX   --    KKKK  X   X            -  X      X X X X X X      DDDDDDDDD ",
+                  "                                   --   KKTYKK  X   X         -  X        X X X X X       II     TY ",
+                  "          ----------       KKK      --   KKYYK    X   X      -  X          II             II     TY ",
+                  "                           KYK             KK       X   X   -  X      III  KK             II     TY ",
+                  "                           KKK    XXXXXX            X   X  -  X       KKK  KK XX          IIDDDDDTY ",
+                  "                                                    X   X   -  X      KYK  KK XX          IICCCCCTY ",
+                  "          ----------              KKK      --      X   X     -  X     KKK                 IICCCCCTY ",
+                  "                         XXXXXX   KYK   --       X   X        -  X         - X - X -      IIDDDDDTY ",
+                  "    -----------                   KKK          X   X           -  X        X - X -        IIDDDDDTY ",
+                  "                                                II     II     II     II     II     II     IIDDDDDTY ",
+                  "------KK     KK     KK     KK     KK     KK     KK     KK     KK     KK     KK     KK     KKTYTYTKK ",
+                  "KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK"
+               ],
+               "set":[{"value9":"DE"}]
+            }
+         ]
+      },
+
+      {
+         "id":"G",
+         
+         "sprites":[
+            {"id":"S","x":0,"y":120,"width":160,"zIndex":10,"backgroundColor":1},
+            {"id":"L","x":128,"y":120,"zIndex":11,"textColor":4},
+
+            {"id":"B","width":24,"height":24,"speedX":4},
+
+            {"id":"A","value1":5,"value4":2,"x":24,"y":60,"height":5,"graphicsX":8,"graphicsY":66,"restitutionX":0,"restitutionY":0,"zIndex":2},
+            {"id":"P","width":3,"height":3,"flags":"B","speedX":10,"backgroundColor":8,"speedLimitXTop":20,"speedLimitYTop":20,"speedLimitYBottom":-20},
+            {"id":"E","width":3,"height":3,"flags":"SBK","backgroundColor":5,"zIndex":2},
+
+            {"id":"X","flags":"S","value9":"X","graphicsX":0,"graphicsY":96,                             "value2":1,  "value3":20, "value4":6,  "value8":"2"},
+            {"id":"Q","flags":"S","value9":"X","graphicsX":0,"graphicsY":112,  "value0":3,               "value2":1,  "value3":20, "value4":6,  "value8":"2"},
+            {"id":"I","flags":"S","value9":"X","graphicsX":9,"graphicsY":248,                                         "value3":10, "value4":0,  "value8":"4"},
+
+            {"id":"C","flags":"S","value9":"XJ","graphicsX":9,"graphicsY":57,                "value1":1,               "value3":15, "value4":6,  "value8":"5"},
+            {"id":"D","flags":"S","value9":"XJ","graphicsX":9,"graphicsY":57,                                          "value3":20, "value4":6,  "value8":"8"},
+            
+            {"id":"-","flags":"S","value9":"X","graphicsX":2,"graphicsY":96,   "value0":3,               "value2":2,   "value3":20, "value4":6,  "value8":"2"},     
+            
+            {"id":"W","flags":"S","backgroundColor":15},
+            {"id":"Y","flags":"S","graphicsX":0,"graphicsY":24,"backgroundColor":15},
+            {"id":"T","flags":"S","flipX":true,"graphicsX":0,"graphicsY":24,"backgroundColor":15},
+            {"id":"Z","flags":"S","flipX":true,"graphicsX":3,"graphicsWidth":3,"graphicsY":24,"backgroundColor":15},
+            {"id":"K","flags":"S","graphicsX":9,"graphicsY":104},
+
+            {"id":"1","textColor":7,"text":"*"},
+            {"id":"2","textColor":1,"value1":1,"text":"-","backgroundColor":3},
+            {"id":"3","textColor":1,"value5":"*","text":"/","backgroundColor":3},
+            {"id":"4","textColor":1,"value6":"*","text":"\\","backgroundColor":3},
+            {"id":"5","textColor":1,"value4":1,"text":">","backgroundColor":3}
+            
+         ],
+         "tilemaps":[
+            {"song":"A","map":["SL"]}
+         ],
+         "code":[
+            {
+               "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"==","_":0}]}],
+               "then":[
+                  {
+                     "flags":"S",
+                     "multiply":[{
+                        "value3":[{"_":4}],
+                        "value4":[{"_":45}]
+                     }]
+                  }
+               ]
+            },
+
+            {
+               "when":[{"id":"A","if":[{"is":"existing"}]}],
+               "then":[{
+                  "code":[
+                     {
+                        "when":[{"as":"keyboard","attribute":"right","if":[{"is":"down"}]},{}],
+                        "then":[{"set":[{"speedX":[{"attribute":"value4"}]}]}]
+                     },
+                     {
+                        "when":[{"as":"keyboard","attribute":"left","if":[{"is":"down"}]},{}],
+                        "then":[{"set":[{"speedX":[{"attribute":"value4"}]}],"multiply":[{"speedX":[{"_":-1}]}]}]
+                     },
+                     {
+                        "when":[{"as":"keyboard","attribute":"down","if":[{"is":"down"}]},{}],
+                        "then":[{"set":[{"speedY":[{"attribute":"value4"}]}]}]
+                     },
+                     {
+                        "when":[{"as":"keyboard","attribute":"up","if":[{"is":"down"}]},{}],
+                        "then":[{"set":[{"speedY":[{"attribute":"value4"}]}],"multiply":[{"speedY":[{"_":-1}]}]}]
+                     },
+                     {
+                        "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]},{}],
+                        "then":[{"set":[{"value0":[{"_":10}]}]}],
+                        "else":[{"subtract":[{"value0":[{"_":1}]}]}]
+                     },
+                     {
+                        "when":[{"if":[{"itsAttribute":"timer","is":"<","_":75}]}],
+                        "then":[{"invert":[{"visible":[{"_":1}]}]}],
+                        "else":[{
+                           "code":[{
+                              "when":[{"if":[{"is":"collidingWith","flags":"K"}]}],
+                              "then":[
+                                 {"spawn":[{"ids":[{"_":"B"}]}]},
+                                 {"as":"game","subtract":[{"value1":[{"_":1}]}]},
+                                 {"remove":true,"playAudio":[{"_":"X"}]}
+                              ]
+                           }]
+                        }]
+                     },
+                     {
+                        "when":[                           
+                           {"as":"scene","if":[{"itsAttribute":"timer","is":"%%","as":"target","attribute":"value1","limit":[2,10]}]},
+                           {"if":[{"itsAttribute":"value0","is":">","_":0}]}
+                        ],
+                        "then":[
+                           {"playAudio":[{"_":"F"}],"spawn":[{"ids":[{"_":"P"}]}]},
+                           {
+                              "code":[
+                                 {
+                                    "when":[{"if":[{"itsAttribute":"value5","is":"!=","_":""}]}],
+                                    "then":[{"spawn":[{"ids":[{"_":"P"}]}],"set":[{"speedY":[{"_":-10}]}]}]
+                                 },
+                                 {
+                                    "when":[{"if":[{"itsAttribute":"value6","is":"!=","_":""}]}],
+                                    "then":[{"spawn":[{"ids":[{"_":"P"}]}],"set":[{"speedY":[{"_":10}]}]}]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }],
+               "else":[{
+                  "spawn":[{"ids":[{"_":"A"}]}]
+               },{"as":"game","set":[{"value3":[{"_":1}]}]}]
+            },
+
+
+            {
+               "when":[{"flags":"X"}],
+               "then":[
+                  {
+                     "set":[{
+                        "value5":[{"attribute":"timer"}],
+                        "value6":[{"attribute":"timer"}],
+                        "value7":[{"attribute":"timer"}]
+                     }],
+                     "multiply":[{
+                        "value5":[{"attribute":"value0"}],
+                        "value6":[{"attribute":"value1"}],
+                        "value7":[{"attribute":"value2"}]
+                     }],
+                     "divide":[{
+                        "value5":[{"_":24}],
+                        "value6":[{"_":6}],
+                        "value7":[{"_":96}]
+                     }]
+                  },
+                  {
+                     "subtract":[{
+                        "x":[
+                           {"attribute":"value7"}
+                        ],
+                        "y":[
+                           {"attribute":"value5","sin":true},
+                           {"attribute":"value6","sin":true}
+                        ]
+                     }],
+                     "code":[
+                        {
+                           "when":[{"if":[{"itsAttribute":"value8","is":"<=","_":0}]}],
+                           "then":[
+                              {"spawn":[{"ids":[{"_":"B"}]}]},
+                              {
+                                 "spawn":[{"ids":[
+                                    {"_":"    1112345","index":[{"list":[0,10],"randomNumber":true}]}
+                                 ]}],
+                                 "set":[{"flags":[{"_":"SP"}]}]
+                              },
+                              {"as":"game","sum":[{"value0":[{"_":5}]}]},
+                              {"remove":true,"playAudio":[{"_":"X"}]}
+                           ]
+                        },
+                        {
+                           "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"%%","as":"target","attribute":"value3"}]},{}],
+                           "then":[{
+                              "spawn":[{"ids":[{"_":"E"}]}],
+                              "setSpeedTo":[{
+                                 "angle":[{"as":"target","attribute":"value4"}],
+                                 "by":[{"_":3}]
+                              }]
+                           }]
+                        }
+                     ]
+                  }             
+               ]
+            },
+
+
+            {
+               "when":[{"flags":"P"}],
+               "then":[{"code":[
+                   {
+                     "when":[{"if":[{"is":"collidingWith","id":"A"}]}],
+                     "then":[
+                        {"playAudio":[{"_":"G"}],"remove":true},                        
+                        {
+                           "as":"game",
+                           "sum":[{"value0":[{"attribute":"value3"}]}]
+                        },
+                        {
+                           "as":"game","sum":[{"value3":[{"_":1}]}]
+                        },
+                        {
+                           "id":"A",
+                           "subtract":[{
+                              "value1":[{"as":"target","attribute":"value1"}]
+                           }],
+                           "sum":[{
+                              "value5":[{"as":"target","attribute":"value5"}],
+                              "value6":[{"as":"target","attribute":"value6"}],
+                              "value4":[{"as":"target","attribute":"value4"}]
+                           }]
+                        }
+                     ]
+                  }
+               ]}]
+            },
+
+
+            {
+               "when":[{"id":"P"}],
+               "then":[{
+                  "code":[{
+                     "when":[{"if":[{"is":"collidingWith","flags":"H"}]}],
+                     "then":[
+                        {                           
+                           "as":"that",
+                           "code":[{
+                              "when":[{"if":[{"itsAttribute":"value8","is":">","_":0}]}],
+                              "then":[{"playAudio":[{"_":"K"}],"subtract":[{"value8":[{"_":1}]}]}]
+                           }]
+                        },
+                        {"remove":true}
+                     ]
+                 }]
+               }]               
+            },
+
+
+            {
+               "when":[{"id":"B"}],
+               "then":[{
+                  "subtract":[{
+                     "rotate":[{"_":40}],
+                     "scale":[{"_":0.1}]
+                  }],
+                  "set":[{"backgroundColor":[{"list":[2,8],"randomNumber":true}]}],
+                  "code":[{
+                     "when":[{"if":[{"itsAttribute":"timer","is":">","_":10}]}],
+                     "then":[{"remove":true}]
+                  }]
+               }]
+            },
+
+
+            {
+               "when":[
+                  {"as":"scene","if":[{"itsAttribute":"timer","is":"==","_":1424}]}
+               ],
+               "then":[{"runSong":[{"_":"B"}]}]
+            },
+
+            {
+               "when":[
+                  {"as":"scene","if":[{"itsAttribute":"timer","is":"<","_":1648}]},
+                  {"flags":"S"}
+               ],
+               "then":[{
+                  "subtract":[{
+                     "x":[{"_":0.5}]
+                  }],
+                  "code":[
+                     {
+                        "when":[{"if":[{"itsAttribute":"x","is":"<","_":-8}]}],
+                        "then":[{"remove":true}]
+                     },
+                     {
+                        "when":[{"if":[{"itsAttribute":"x","is":"==","_":176}]}],
+                        "then":[{
+                           "set":[{
+                              "timer":[{"_":0}],
+                              "zIndex":[{"_":2}],
+                              "flags":[{"attribute":"value9","prefix":"SHK"}]
+                           }]
+                        }]
+                     }
+                  ]
+               }],
+               "else":[{
+                  "code":[                     
+                     {
+                        "when":[{"flags":"J","count":true,"if":[{"is":"==","_":0}]}],
+                        "then":[{"runScene":[{"as":"scene","attribute":"value9"}]}]
+                     }
+                  ]
+               }]
+            },
+
+
+            {
+               "when":[
+                  {"event":"hitWall","id":"A","bounds":[{
+                     "modeBottom":"bound",
+                     "modeRight":"bound",
+                     "modeTop":"bound",
+                     "modeLeft":"bound",
+                     "height":[{"_":120}]
+                  }]}
+               ]
+            },
+            {
+               "when":[
+                  {"event":"hitWall","flags":"B","bounds":[{
+                     "modeBottom":"bound",
+                     "modeRight":"bound",
+                     "modeTop":"bound",
+                     "modeLeft":"bound",
+                     "x":[{"_":-8}],
+                     "y":[{"_":-8}],
+                     "width":[{"_":176}],
+                     "height":[{"_":136}]
+                  }]}
+               ],
+               "then":[{"remove":true}]
+            },
+            {
+               "when":[{"as":"game","if":[{"itsAttribute":"value1","is":">","_":0}]}],
+               "then":[
+                  {"id":"S","set":[{"text":[{"as":"game","attribute":"value0","prefix":" 1UP:"}]}]},
+                  {"id":"L","set":[{"text":[{"as":"game","attribute":"value1","prefix":"L:"}]}]}
+               ],
+               "else":[{"runScene":[{"_":"D"}]}]
+            }
+         ]
+      }
+   ]
+}
