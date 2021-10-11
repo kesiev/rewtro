@@ -5,7 +5,7 @@
 		"legalText":"(c)2019 by KesieV - www.kesiev.com/rewtro"
 	},
 	"systemVersion":"0.1",
-	"systemConfiguration":[{"paletteModel":1,"controllerModel":1,"fontModel":3}],
+	"systemConfiguration":[{"paletteModel":1,"controllerModel":6,"fontModel":3}],
 	"data":[
 		{
 			"id":"A",
