@@ -3,10 +3,13 @@
 // A quick and dirty way to create a working Offline Application worker :)
 
 header('Content-Type: text/javascript');
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 
 ?>
 
-var CACHE = 'rewtro-cache-v1';
+var CACHE = 'rewtro-cache-v1.1';
 var precacheFiles =
 
 <?php
