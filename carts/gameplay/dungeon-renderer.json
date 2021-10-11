@@ -1,0 +1,464 @@
+{
+  "code": [
+    {
+      "//": "Rendering unique items on X",
+      "when": [{"id":"X","if":[{"is":"collidingWith","id":"T"}]}],
+      "then": [
+        {
+          "as": "that",
+          "code": [
+            {
+              "when":[{"attribute":"value0"}],
+              "then":[
+                {"set":[
+                  {"visible":[{"_":1}]},
+                  {"width":[{"_":64}]},
+                  {"height":[{"_":32}]},
+                  {"x":[{"_":48}]},
+                  {"y":[{"_":116}]},
+                  {"zIndex":[{"_":101}]}
+                ]}]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "//": "3D rendering A",
+      "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xA"},"deltaY":{"_placeholder":"yA"}}]}],
+      "then": [{"id":"A","set":[{"visible":[{"_":1}]}]}]
+    },
+    {
+      "//": "3D rendering B",
+      "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xB"},"deltaY":{"_placeholder":"yB"}}]}],
+      "then": [{"id":"B","set":[{"visible":[{"_":1}]}]}]
+    },
+    {
+    "//": "3D rendering C",
+    "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xC"},"deltaY":{"_placeholder":"yC"}}]}],
+    "then": [
+      {"id":"C","set":[{"visible":[{"_":1}]}]},
+      {
+      "as": "that",
+      "code": [
+        {
+          "//": "Rendering special walls on C",
+          "when":[{"attribute":"value0"}],
+          "then":[
+            {"set":[
+              {"visible":[{"_":1}]},
+              {"width":[{"_":96}]},
+              {"height":[{"_":88}]},
+              {"x":[{"_":32}]},
+              {"y":[{"_":48}]},
+              {"zIndex":[{"_":92}]}
+            ]}]
+        }
+      ]
+      }],
+    "else": [
+      {
+        "code": [
+          {
+            "//": "Rendering unique items on C",
+            "when": [{"id":"X","if":[{"is":"collidingWith","id":"T","deltaX":{"_placeholder":"xC"},"deltaY":{"_placeholder":"yC"}}]}],
+            "then": [
+              {
+                "as": "that",
+                "code": [
+                  {
+                    "when":[{"attribute":"value0"}],
+                    "then":[
+                      {"set":[
+                        {"visible":[{"_":1}]},
+                        {"width":[{"_":32}]},
+                        {"height":[{"_":16}]},
+                        {"x":[{"_":64}]},
+                        {"y":[{"_":100}]},
+                        {"zIndex":[{"_":91}]}
+                      ]}]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "//": "Rendering orbs on C",
+            "when": [{"id":"X","if":[{"is":"collidingWith","id":"S","deltaX":{"_placeholder":"xC"},"deltaY":{"_placeholder":"yC"}}]}],
+            "then": [
+              {"spawn":[{"ids":[{"_":"4"}],"at":[{"list":[64,100]}]}],
+                "set":[{"width":[{"_":32}]}, {"height":[{"_":16}]},{"visible":[{"_":1}]}, {"zIndex":[{"_":91}]}]
+              }]
+          }
+        ]
+      },
+      {
+        "code": [{
+          "//": "3D rendering H",
+          "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xH"},"deltaY":{"_placeholder":"yH"}}]}],
+          "then": [
+            {"id":"H","set":[{"visible":[{"_":1}]}]},
+            {
+              "as": "that",
+              "code": [
+                {
+                  "//": "Rendering special walls on H",
+                  "when":[{"attribute":"value0"}],
+                  "then":[
+                    {"set":[
+                      {"visible":[{"_":1}]},
+                      {"width":[{"_":55}]},
+                      {"height":[{"_":44}]},
+                      {"x":[{"_":52}]},
+                      {"y":[{"_":60}]},
+                      {"zIndex":[{"_":72}]}
+                    ]}]
+                }
+              ]
+            }],
+          "else": [
+            {
+              "code": [{
+                "//": "Rendering unique items on H",
+                "when": [{"id":"X","if":[{"is":"collidingWith","id":"T","deltaX":{"_placeholder":"xH"},"deltaY":{"_placeholder":"yH"}}]}],
+                "then": [
+                  {
+                    "as": "that",
+                    "code": [
+                      {
+                        "when":[{"attribute":"value0"}],
+                        "then":[
+                          {"set":[
+                            {"visible":[{"_":1}]},
+                            {"width":[{"_":16}]},
+                            {"height":[{"_":8}]},
+                            {"x":[{"_":72}]},
+                            {"y":[{"_":90}]},
+                            {"zIndex":[{"_":71}]}
+                          ]}]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "//": "Rendering orbs on H",
+                "when": [{"id":"X","if":[{"is":"collidingWith","id":"S","deltaX":{"_placeholder":"xH"},"deltaY":{"_placeholder":"yH"}}]}],
+                "then": [{
+                  "spawn":[{"ids":[{"_":"4"}],"at":[{"list":[72,90]}]}],
+                  "set":[{"width":[{"_":16}]}, {"height":[{"_":8}]}, {"visible":[{"_":1},{"zIndex":[{"_":71}]}]}]
+                }]
+              }]
+            },
+            {
+              "code": [{
+                "//": "3D rendering O",
+                "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xO"},"deltaY":{"_placeholder":"yO"}}]}],
+                "then": [{"id":"O","set":[{"visible":[{"_":1}]}]},
+                  {
+                    "as": "that",
+                    "code": [
+                      {
+                        "//": "Rendering special walls on O",
+                        "when":[{"attribute":"value0"}],
+                        "then":[
+                          {"set":[
+                            {"visible":[{"_":1}]},
+                            {"width":[{"_":35}]},
+                            {"height":[{"_":30}]},
+                            {"x":[{"_":63}]},
+                            {"y":[{"_":64}]},
+                            {"zIndex":[{"_":62}]}
+                          ]}]
+                      }
+                    ]
+                  }]
+              }]
+            }
+          ]
+        }]
+      }
+    ]
+    },
+    {
+      "//": "3D rendering D and F",
+      "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xD"},"deltaY":{"_placeholder":"yD"}}]}],
+      "then": [{"flags":"D","set":[{"visible":[{"_":1}]}]},
+        {
+          "as": "that",
+          "code": [
+            {
+              "//": "Rendering special walls on F",
+              "when":[{"if":[{"itsAttribute":"value1","is":">","_":0}]}],
+              "then":[{"id": "?","set":[{"visible":[{"_":1}]}]}]
+            }
+          ]
+        }],
+      "else": [
+        {
+          "code": [{
+            "//": "Rendering unique items on D",
+            "when": [{"id":"X","if":[{"is":"collidingWith","id":"T","deltaX":{"_placeholder":"xD"},"deltaY":{"_placeholder":"yD"}}]}],
+            "then": [
+              {
+                "as": "that",
+                "code": [
+                  {
+                    "when":[{"attribute":"value0"}],
+                    "then":[
+                      {"set":[
+                        {"visible":[{"_":1}]},
+                        {"width":[{"_":32}]},
+                        {"height":[{"_":16}]},
+                        {"x":[{"_":4}]},
+                        {"y":[{"_":100}]},
+                        {"zIndex":[{"_":81}]}
+                      ]}]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "//": "Rendering orbs on D",
+            "when": [{"id":"X","if":[{"is":"collidingWith","id":"S","deltaX":{"_placeholder":"xD"},"deltaY":{"_placeholder":"yD"}}]}],
+            "then": [{
+              "spawn":[{"ids":[{"_":"4"}],"at":[{"list":[4,100]}]}],
+              "set":[{"width":[{"_":32}]}, {"height":[{"_":16}]},{"visible":[{"_":1}]},{"zIndex":[{"_":81}]}]
+            }]
+          }]
+        }
+      ]
+    },
+    {
+      "//": "3D rendering E and G",
+      "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xE"},"deltaY":{"_placeholder":"yE"}}]}],
+      "then": [{"flags":"E","set":[{"visible":[{"_":1}]}]},
+        {
+          "as": "that",
+          "code": [
+            {
+              "//": "Rendering special walls on G",
+              "when":[{"if":[{"itsAttribute":"value1","is":">","_":0}]}],
+              "then":[{"id": "!","set":[{"visible":[{"_":1}]}]}]
+            }
+          ]
+        }],
+      "else": [
+        {
+          "code": [
+            {
+              "//": "Rendering unique items on E",
+              "when": [{"id":"X","if":[{"is":"collidingWith","id":"T","deltaX":{"_placeholder":"xE"},"deltaY":{"_placeholder":"yE"}}]}],
+              "then": [
+                {
+                  "as": "that",
+                  "code": [
+                    {
+                      "when":[{"attribute":"value0"}],
+                      "then":[
+                        {"set":[
+                          {"visible":[{"_":1}]},
+                          {"width":[{"_":32}]},
+                          {"height":[{"_":16}]},
+                          {"x":[{"_":124}]},
+                          {"y":[{"_":100}]},
+                          {"zIndex":[{"_":81}]}
+                        ]}]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "//": "Rendering orbs on E",
+              "when": [{"id":"X","if":[{"is":"collidingWith","id":"S","deltaX":{"_placeholder":"xE"},"deltaY":{"_placeholder":"yE"}}]}],
+              "then": [{
+                "spawn":[{"ids":[{"_":"4"}],"at":[{"list":[124,100]}]}],
+                "set":[{"width":[{"_":32}]}, {"height":[{"_":16}]},{"visible":[{"_":1}]},{"zIndex":[{"_":81}]}]
+              }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "//": "3D rendering I and K",
+      "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xI"},"deltaY":{"_placeholder":"yI"}}]}],
+      "then": [{"flags":"I","set":[{"visible":[{"_":1}]}]},
+        {
+          "as": "that",
+          "code": [
+            {
+              "//": "Rendering special walls on I",
+              "when":[{"attribute":"value0"}],
+              "then":[
+                {"set":[
+                  {"visible":[{"_":1}]},
+                  {"width":[{"_":55}]},
+                  {"height":[{"_":44}]},
+                  {"x":[{"_":-12}]},
+                  {"y":[{"_":60}]},
+                  {"zIndex":[{"_":72}]}
+                ]}]
+            },
+            {
+              "//": "Rendering special walls on K",
+              "when":[{"if":[{"itsAttribute":"value1","is":">","_":0}]}],
+              "then":[{"id": ";","set":[{"visible":[{"_":1}]}]}]
+            }
+          ]
+        }],
+      "else": [
+        {
+          "code": [
+            {
+              "//": "Rendering unique items on I",
+              "when": [{"id":"X","if":[{"is":"collidingWith","id":"T","deltaX":{"_placeholder":"xI"},"deltaY":{"_placeholder":"yI"}}]}],
+              "then": [
+                {
+                  "as": "that",
+                  "code": [
+                    {
+                      "when":[{"attribute":"value0"}],
+                      "then":[
+                        {"set":[
+                          {"visible":[{"_":1}]},
+                          {"width":[{"_":16}]},
+                          {"height":[{"_":8}]},
+                          {"x":[{"_":24}]},
+                          {"y":[{"_":90}]},
+                          {"zIndex":[{"_":61}]}
+                        ]}]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "//": "Rendering orbs on I",
+              "when": [{"id":"X","if":[{"is":"collidingWith","id":"S","deltaX":{"_placeholder":"xI"},"deltaY":{"_placeholder":"yI"}}]}],
+              "then": [{
+                "spawn":[{"ids":[{"_":"4"}],"at":[{"list":[24,90]}]}],
+                "set":[{"width":[{"_":16}]}, {"height":[{"_":8}]},{"visible":[{"_":1}]},{"zIndex":[{"_":61}]}]
+              }]
+            }]
+        },
+        {
+          "code": [{
+            "//": "3D rendering P",
+            "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xP"},"deltaY":{"_placeholder":"yP"}}]}],
+            "then": [{"id":"P","set":[{"visible":[{"_":1}]}]},
+              {
+                "as": "that",
+                "code": [
+                  {
+                    "//": "Rendering special walls on P",
+                    "when":[{"attribute":"value0"}],
+                    "then":[
+                      {"set":[
+                        {"visible":[{"_":1}]},
+                        {"width":[{"_":35}]},
+                        {"height":[{"_":30}]},
+                        {"x":[{"_":21}]},
+                        {"y":[{"_":64}]},
+                        {"zIndex":[{"_":52}]}
+                      ]}]
+                  }
+                ]
+              }]
+          }]
+        }
+      ]
+    },
+    {
+      "//": "3D rendering J and L",
+      "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xJ"},"deltaY":{"_placeholder":"yJ"}}]}],
+      "then": [{"flags":"J","set":[{"visible":[{"_":1}]}]},
+        {
+          "as": "that",
+          "code": [
+            {
+              "//": "Rendering special walls on J",
+              "when":[{"attribute":"value0"}],
+              "then":[
+                {"set":[
+                  {"visible":[{"_":1}]},
+                  {"width":[{"_":55}]},
+                  {"height":[{"_":44}]},
+                  {"x":[{"_":116}]},
+                  {"y":[{"_":60}]},
+                  {"zIndex":[{"_":72}]}
+                ]}]
+            },
+            {
+              "//": "Rendering special walls on L",
+              "when":[{"if":[{"itsAttribute":"value1","is":">","_":0}]}],
+              "then":[{"id": ":","set":[{"visible":[{"_":1}]}]}]
+            }
+          ]
+        }],
+      "else": [
+        {
+          "code": [
+            {
+              "//": "Rendering unique items on J",
+              "when": [{"id":"X","if":[{"is":"collidingWith","id":"T","deltaX":{"_placeholder":"xJ"},"deltaY":{"_placeholder":"yJ"}}]}],
+              "then": [
+                {
+                  "as": "that",
+                  "code": [
+                    {
+                      "when":[{"attribute":"value0"}],
+                      "then":[
+                        {"set":[
+                          {"visible":[{"_":1}]},
+                          {"width":[{"_":16}]},
+                          {"height":[{"_":8}]},
+                          {"x":[{"_":110}]},
+                          {"y":[{"_":90}]},
+                          {"zIndex":[{"_":61}]}
+                        ]}]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "//": "Rendering orbs on J",
+              "when": [{"id":"X","if":[{"is":"collidingWith","id":"S","deltaX":{"_placeholder":"xJ"},"deltaY":{"_placeholder":"yJ"}}]}],
+              "then": [{
+                "spawn":[{"ids":[{"_":"4"}],"at":[{"list":[110,90]}]}],
+                "set":[{"width":[{"_":16}]}, {"height":[{"_":8}]},{"visible":[{"_":1}]},{"zIndex":[{"_":61}]}]
+              }]
+            }]
+        },
+        {
+          "code": [{
+            "//": "3D rendering Q",
+            "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W","deltaX":{"_placeholder":"xQ"},"deltaY":{"_placeholder":"yQ"}}]}],
+            "then": [{"id":"Q","set":[{"visible":[{"_":1}]}]},
+              {
+                "as": "that",
+                "code": [
+                  {
+                    "//": "Rendering special walls on Q",
+                    "when":[{"attribute":"value0"}],
+                    "then":[
+                      {"set":[
+                        {"visible":[{"_":1}]},
+                        {"width":[{"_":35}]},
+                        {"height":[{"_":30}]},
+                        {"x":[{"_":104}]},
+                        {"y":[{"_":64}]},
+                        {"zIndex":[{"_":52}]}
+                      ]}]
+                  }
+                ]
+              }]
+          }]
+        }
+      ]
+    }
+  ]
+}

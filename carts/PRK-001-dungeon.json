@@ -1,0 +1,1021 @@
+{
+  "//": [
+    "sprites :",
+    "X = player",
+    "  X.value0 = azimuth (up=0, right=1, down=2, left=3)",
+
+    "3D Wall sprite ID With player at X facing up",
+    "+---+---+---+---+---+",
+    "|xxx| P | O | Q |xxx|  Z=3",
+    "+---+---+---+---+---+",
+    "|  M| IK| H |LJ |N  |  Z=2", "M and N display had to be removed due to game size constraints",
+    "+---+---+---+---+---+",
+    "|xxx| DF| C |GE |xxx|  Z=1",
+    "+---+---+---+---+---+",
+    "|xxx|  A| X |B  |xxx|  Z=0",
+    "+---+---+---+---+---+",
+
+    "Flags : A = 3D sprites ; B = minimap + player token ; C = objects rendering",
+
+    "Global values :",
+    "Scene.value1 = orb counter",
+    "Scene.value2 = key found",
+    "Scene.value3 = map found",
+    "Game.value0, Game.value1 = deltaX & deltaY for front square (C)",
+    "Game.value2, Game.value3 = temporary arithmetic buffers"
+  ],
+  "systemVersion": "0.2",
+  "metadata": {
+    "title": "PRK001 - Dungeon",
+    "upperTitle": "The a-maze-ing",
+    "centerTitle": "DUNGEON!",
+    "lowerTitle": "(Dragons not included)",
+    "legalText": "V1.0 -- (c) PRK 2021",
+    "page1Title":"The story",
+    "page1Text":"You wake up in a dungeon. There is no white house nor mailbox. Good luck.",
+    "page2Title":"The game",
+    "page2Text":"Explore and try to find the way out. Misc items will help you on your way.",
+    "page3Title":"How to play",
+    "page3Text":"Use LEFT/RIGHT to turn and UP to go forward. Only cowards back off, so no BACK button. User button A to interact with environment (orbs are auto-collected).",
+    "page4Title":"Scores",
+    "page4Text":"Score? What do you mean by 'score'? Here, take 1,000 points and go away. If you want to brag, find the easter egg.",
+    "page5Title":"Tips",
+    "page5Text":"There must be some use for these orbs... It would be nice to draw a map, but I have no scroll to spare.",
+    "page6Title":"About this game",
+    "page6Text":"This game is a successful attempt at demonstrating that a faux-3D rendering was possible on rewtro. Hope you enjoy it!"
+  },
+  "systemConfiguration": [
+    {
+      "paletteModel": 1,
+      "fontModel": 2,
+      "controllerModel":5,
+      "fps":25
+    }
+  ],
+  "data": [
+    {
+      "//": "Intro screen",
+      "id": "A",
+      "sounds":[{"id":"A","wave":"whitenoise","attack":5,"sustain":255,"decay":255,"release":255,"frequency":96,"tremoloFrequency":112,"tremoloDepth":20,"pitch":51,"frequencyJump1amount":178}],
+      "tilemaps":[
+        {"map":["A"],"playAudio":"A"}
+      ],
+      "sprites":[
+        {
+          "id":"A",
+          "text":"DUNGEON~-------~~~~~A SIMPLE DUNGEON ~CRAWLER~~~~BY PREUK 2021~~-> START GAME",
+          "x":76,"y":20,
+          "textColor":2,
+          "backgroundColor":1,
+          "textAlignment":"center"
+        }
+      ],
+      "code":[
+        {"when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],"then":[{"runScene":[{"_":"B"}]}]}
+      ]
+    },
+    {
+      "//": "Main game",
+      "id": "B",
+      "images": [
+        {
+          "id": "graphics",
+          "image": {
+            "data": {
+              "_file": "graphics/dungeon-atlas.png"
+            },
+            "format": "monocolor"
+          }
+        },
+        {
+          "id": "graphics1",
+          "image": {
+            "data": {
+              "_file": "graphics/dungeon-bg.png"
+            },
+            "format": "monocolor"
+          }
+        }
+      ],
+      "sprites": [
+        {
+          "id": "A",
+          "//": "wall Z=0 left",
+          "flags": "A",
+          "x": 0,
+          "y": 20,
+          "graphicsX": 62,
+          "graphicsY": 114,
+          "graphicsWidth": 9,
+          "graphicsHeight": 57,
+          "width": 18,
+          "height": 114,
+          "zIndex": 100,
+          "backgroundColor": 1
+        },
+        {
+          "id": "B",
+          "//": "wall Z=0 right",
+          "flags": "A",
+          "x": 142,
+          "y": 20,
+          "graphicsX": 62,
+          "graphicsY": 114,
+          "graphicsWidth": 9,
+          "graphicsHeight": 57,
+          "width": 18,
+          "height": 114,
+          "zIndex": 100,
+          "backgroundColor": 1,
+          "flipX":true
+        },
+        {
+          "id": "C",
+          "//": "wall Z=1 front",
+          "flags": "A",
+          "x": 18,
+          "y": 28,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 124,
+          "height": 88,
+          "zIndex": 90,
+          "backgroundColor": 1
+        },
+        {
+          "id": "D",
+          "//": "wall Z=1 left (front)",
+          "flags": "AD",
+          "x": -106,
+          "y": 28,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 124,
+          "height": 88,
+          "zIndex": 90,
+          "backgroundColor": 1
+        },
+        {
+          "id": "E",
+          "//": "wall Z=1 right (front)",
+          "flags": "AE",
+          "x": 142,
+          "y": 28,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 124,
+          "height": 88,
+          "zIndex": 90,
+          "backgroundColor": 1
+        },
+
+        {
+          "id": "F",
+          "//": "wall Z=1 left (side)",
+          "flags": "AD",
+          "x": 18,
+          "y": 28,
+          "graphicsX": 72,
+          "graphicsY": 114,
+          "graphicsWidth": 15,
+          "graphicsHeight": 44,
+          "width": 30,
+          "height": 88,
+          "zIndex": 80,
+          "backgroundColor": 1
+        },
+        {
+          "id": "G",
+          "//": "wall Z=1 right (side)",
+          "flags": "AE",
+          "x": 112,
+          "y": 28,
+          "graphicsX": 72,
+          "graphicsY": 114,
+          "graphicsWidth": 15,
+          "graphicsHeight": 44,
+          "width": 30,
+          "height": 88,
+          "zIndex": 80,
+          "backgroundColor": 1,
+          "flipX":true
+        },
+        {
+          "id": "I",
+          "//": "wall Z=2 left (front)",
+          "flags": "AI",
+          "x": -16,
+          "y": 40,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 64,
+          "height": 44,
+          "zIndex": 70,
+          "backgroundColor": 1
+        },
+        {
+          "id": "H",
+          "//": "wall Z=2 front",
+          "flags": "A",
+          "x": 48,
+          "y": 40,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 64,
+          "height": 44,
+          "zIndex": 70,
+          "backgroundColor": 1
+        },
+        {
+          "id": "J",
+          "//": "wall Z=2 right (front)",
+          "flags": "AJ",
+          "x": 112,
+          "y": 40,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 64,
+          "height": 44,
+          "zIndex": 70,
+          "backgroundColor": 1
+        },
+
+        {
+          "id": "K",
+          "//": "wall Z=2 left (side)",
+          "flags": "AI",
+          "x": 48,
+          "y": 40,
+          "graphicsX": 87,
+          "graphicsY": 114,
+          "width": 11,
+          "height": 44,
+          "zIndex": 60,
+          "backgroundColor": 1
+        },
+        {
+          "id": "L",
+          "//": "wall Z=2 right (side)",
+          "flags": "AJ",
+          "x": 101,
+          "y": 40,
+          "graphicsX": 87,
+          "graphicsY": 114,
+          "width": 11,
+          "height": 44,
+          "zIndex": 60,
+          "backgroundColor": 1,
+          "flipX":true
+        },
+        {
+          "id": "P",
+          "//": "wall Z=3 left (front)",
+          "flags": "A",
+          "x": 17,
+          "y": 44,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 43,
+          "height": 30,
+          "zIndex": 50,
+          "backgroundColor": 1
+        },
+        {
+          "id": "O",
+          "//": "wall Z=3 front",
+          "flags": "A",
+          "x": 59,
+          "y": 44,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 43,
+          "height": 30,
+          "zIndex": 50,
+          "backgroundColor": 1
+        },
+        {
+          "id": "Q",
+          "//": "wall Z=3 right (front)",
+          "flags": "A",
+          "x": 101,
+          "y": 44,
+          "graphicsX": 0,
+          "graphicsY": 114,
+          "graphicsWidth": 62,
+          "graphicsHeight": 44,
+          "width": 43,
+          "height": 30,
+          "zIndex": 50,
+          "backgroundColor": 1
+        },
+
+        {
+          "//": "key decoration",
+          "id": "1",
+          "flags": "AC",
+          "zIndex": 100,
+          "graphicsX": 75,
+          "graphicsY": 215,
+          "graphicsWidth": 16,
+          "graphicsHeight": 8,
+          "backgroundColor": 0
+        },
+
+        {
+          "//": "map decoration",
+          "id": "3",
+          "flags": "AC",
+          "zIndex": 100,
+          "graphicsX": 107,
+          "graphicsY": 215,
+          "graphicsWidth": 16,
+          "graphicsHeight": 8,
+          "backgroundColor": 0
+        },
+        {
+          "//": "orb decoration",
+          "id": "4",
+          "flags": "AC",
+          "zIndex": 100,
+          "graphicsX": 91,
+          "graphicsY": 215,
+          "graphicsWidth": 16,
+          "graphicsHeight": 8,
+          "backgroundColor": 0
+        },
+
+        {
+          "//": "Wall : Locked door",
+          "id": "5",
+          "flags": "AC",
+          "zIndex": 100,
+          "graphicsX": 152,
+          "graphicsY": 114,
+          "graphicsWidth": 48,
+          "graphicsHeight": 44,
+          "backgroundColor": 1
+        },
+        {
+          "//": "Wall : portal",
+          "id": "7",
+          "flags": "AC",
+          "zIndex": 100,
+          "graphicsX": 200,
+          "graphicsY": 171,
+          "graphicsWidth": 48,
+          "graphicsHeight": 44,
+          "backgroundColor": 1
+        },
+        {
+          "//": "Wall : Stairs",
+          "id": "9",
+          "flags": "AC",
+          "zIndex": 100,
+          "graphicsX": 248,
+          "graphicsY": 114,
+          "graphicsWidth": 48,
+          "graphicsHeight": 44,
+          "backgroundColor": 1
+        },
+        {
+          "//": "Special wall: side (F)",
+          "id": "?",
+          "flags": "AC",
+          "zIndex": 81,
+          "x": 18,
+          "y": 28,
+          "width": 30,
+          "height": 88,
+          "graphicsX": 123,
+          "graphicsY": 114,
+          "graphicsWidth": 16,
+          "graphicsHeight": 44,
+          "backgroundColor": 1
+        },
+        {
+          "//": "Special wall: side (G)",
+          "id": "!",
+          "flags": "AC",
+          "zIndex": 81,
+          "x": 112,
+          "y": 28,
+          "width": 30,
+          "height": 88,
+          "graphicsX": 123,
+          "graphicsY": 114,
+          "graphicsWidth": 16,
+          "graphicsHeight": 44,
+          "backgroundColor": 1,
+          "flipX":true
+        },
+        {
+          "//": "Special wall: side (K)",
+          "id": ";",
+          "flags": "AC",
+          "zIndex": 61,
+          "x": 48,
+          "y": 40,
+          "width": 11,
+          "height": 44,
+          "graphicsX": 139,
+          "graphicsY": 114,
+          "graphicsWidth": 12,
+          "graphicsHeight": 23,
+          "backgroundColor": 1
+        },
+        {
+          "//": "Special wall: side (L)",
+          "id": ":",
+          "flags": "AC",
+          "zIndex": 61,
+          "x": 101,
+          "y": 40,
+          "width": 11,
+          "height": 44,
+          "graphicsX": 139,
+          "graphicsY": 114,
+          "graphicsWidth": 12,
+          "graphicsHeight": 23,
+          "backgroundColor": 1,
+          "flipX":true
+        },
+        {
+          "//": "Player token",
+          "id": "X",
+          "flags": "B",
+          "width": 4,
+          "height": 4,
+          "zIndex": 120,
+          "backgroundColor": 1
+        },
+        {
+          "//": "Empty square; Y flag for passable",
+          "id": "Y",
+          "flags": "BY",
+          "width": 4,
+          "height": 4,
+          "zIndex": 110,
+          "backgroundColor": 5
+        },
+        {
+          "//": "Empty square with key",
+          "id": "T",
+          "flags": "BYT",
+          "width": 4,
+          "height": 4,
+          "zIndex": 111,
+          "backgroundColor": 1,
+          "graphicsX": 71,
+          "graphicsY": 220,
+          "graphicsWidth": 4,
+          "graphicsHeight": 4
+        },
+        {
+          "//": "Empty square with orb",
+          "id": "S",
+          "flags": "BYT",
+          "width": 4,
+          "height": 4,
+          "zIndex": 111,
+          "backgroundColor": 5,
+          "graphicsX": 71,
+          "graphicsY": 220,
+          "graphicsWidth": 4,
+          "graphicsHeight": 4
+        },
+        {
+          "//": "Empty square with map",
+          "id": "R",
+          "flags": "BYT",
+          "width": 4,
+          "height": 4,
+          "zIndex": 111,
+          "backgroundColor": 1,
+          "graphicsX": 71,
+          "graphicsY": 220,
+          "graphicsWidth": 4,
+          "graphicsHeight": 4
+        },
+        {
+          "//": "Square with door",
+          "id": "6",
+          "flags": "BTW",
+          "width": 4,
+          "height": 4,
+          "zIndex": 111,
+          "backgroundColor": 2,
+          "graphicsX": 71,
+          "graphicsY": 106,
+          "graphicsWidth": 4,
+          "graphicsHeight": 4
+        },
+        {
+          "//": "Square : wall with decoration",
+          "id": "M",
+          "flags": "BTW",
+          "width": 4,
+          "height": 4,
+          "zIndex": 110,
+          "backgroundColor": 2
+        },
+        {
+          "//": "Wall : Decorated",
+          "id": "2",
+          "flags": "AC",
+          "backgroundColor": 0,
+          "graphicsX": 98,
+          "graphicsY": 114,
+          "graphicsWidth": 25,
+          "graphicsHeight": 25
+        },
+        {
+          "//": "Square with portal",
+          "id": "8",
+          "flags": "BTW",
+          "width": 4,
+          "height": 4,
+          "zIndex": 111,
+          "backgroundColor": 3,
+          "graphicsX": 71,
+          "graphicsY": 106,
+          "graphicsWidth": 4,
+          "graphicsHeight": 4
+        },
+        {
+          "//": "Square with stairs",
+          "id": "0",
+          "flags": "BTW",
+          "width": 4,
+          "height": 4,
+          "zIndex": 111,
+          "backgroundColor": 3,
+          "graphicsX": 71,
+          "graphicsY": 106,
+          "graphicsWidth": 4,
+          "graphicsHeight": 4
+        },
+        {
+          "//": "Wall square; W flag for impassable",
+          "id": "W",
+          "flags": "BW",
+          "width": 4,
+          "height": 4,
+          "zIndex": 110,
+          "backgroundColor": 2
+        },
+
+        {
+          "//": "Background",
+          "id": "U",
+          "width": 160,
+          "height": 144,
+          "x": 0,
+          "y": 0,
+          "graphic": "graphics1",
+          "graphicsX": 0,
+          "graphicsY": 72,
+          "graphicsWidth": 80,
+          "graphicsHeight": 72,
+          "zIndex": 2,
+          "backgroundColor": 3
+        },
+        {
+          "//": "Compass",
+          "id": "V",
+          "width": 28,
+          "height": 9,
+          "x": 68,
+          "y": 2,
+          "graphicsX": 152,
+          "graphicsY": 158,
+          "graphicsWidth": 28,
+          "graphicsHeight": 9,
+          "backgroundColor": 1,
+          "zIndex": 120
+        },
+        {
+          "//": "Orbs counter display",
+          "id": "Z",
+          "width": 50,
+          "height": 20,
+          "x": 20,
+          "y": 4,
+          "zIndex": 115,
+          "textColor": 1
+        },
+        {
+          "//": "Dungeon level display",
+          "id": "@",
+          "width": 50,
+          "height": 20,
+          "x": 85,
+          "y": 19,
+          "zIndex": 115,
+          "textColor": 4,
+          "text": "1"
+        }
+
+      ],
+      "tilemaps": [
+        {
+          "map": [
+            "A","B",
+            "C","D","E","F","G",
+            "H","I","J","K","L",
+            "O","P","Q","2",
+            "Z","V","U","@",
+            "1","3","5","7","9",
+            "?","!",";",":"
+          ]
+        },
+        {
+          "x": 100,
+          "y": 0,
+          "tileWidth": 4,
+          "tileHeight": 4,
+          "map": [
+            "W WWWWWWWWWWWWW",
+            "WYW WWYYYWYY WW",
+            "WYWYWSYWYYYWWSW",
+            "WYWYWWYWYWYYWYW",
+            "WSWYWWYWSWWYYYW",
+            "WYYYYYYSWSYYWYW",
+            "WWWWWWWWWWYWWSW",
+            "WSWSY YYYYYYWYW",
+            "WYYSYWWYWYWYYYW",
+            "WWWWWWW WWWWWWW"
+          ]
+        }
+      ],
+      "code": [
+        {
+          "//": "Init (timer == 0) spawn Player (X) and unique items",
+          "when":[{"as":"scene","if":[{"itsAttribute":"timer","is":"==","_":0}]}],
+          "then": [
+            {"spawn":[{"ids":[{"_":"X"}],"at":[{"list":[128,32]}]}], "set":[{"value0":[{"_":0}]},{"visible":[{"_":1}]}]},
+            {"//": "orb counter", "as":"scene","set":[{"value1":[{"_":0}]}]},
+            {"//": "Front square ","as":"game","set":[{"value0":[{"_":0}]},{"value1":[{"_":0}]}]},
+            {"spawn":[{"ids":[{"_":"T"}],"at":[{"list":[148,4]}]}], "set":[{"value0":[{"id":"3"}]},{"value1":[{"_":3}]}]},
+            {"spawn":[{"ids":[{"_":"6"}],"at":[{"list":[120,28]}]}], "set":[{"value0":[{"id":"5"}]},{"value1":[{"_":5}]}]},
+            {"spawn":[{"ids":[{"_":"8"}],"at":[{"list":[104,12]}]}], "set":[{"value0":[{"id":"7"}]},{"value1":[{"_":7}]}]},
+            {"spawn":[{"ids":[{"_":"0"}],"at":[{"list":[104,0]}]}], "set":[{"value0":[{"id":"9"}]},{"value1":[{"_":9}]}]},
+            {"spawn":[{"ids":[{"_":"M"}],"at":[{"list":[128,36]}]}], "set":[{"value0":[{"id":"2"}]},{"value1":[{"_":2}]}]},
+            {"spawn":[{"ids":[{"_":"T"}],"at":[{"list":[112,4]}]}], "set":[{"value0":[{"id":"1"}]},{"value1":[{"_":1}]}]},
+            {"spawn":[{"ids":[{"_":"Y"}],"at":[{"ids":"ST6"}]}]},
+            {"flags": "A","set":[{"visible":[{"_":0}]}]},
+            {"flags": "B","set":[{"visible":[{"_":0}]}]},
+            {"flags": "A","sum":[{"y":[{"_":20}]}], "//": "Shift 3D view down by 20 px"}
+          ]
+        },
+        {
+          "when":[{"as":"keyboard","attribute":"right","if":[{"is":"hit"}]}],
+          "then": [
+            {"id":"X","sum":[{"value0":[{"_":1}]}],"module":[{"value0":[{"_":4}]}]}
+          ]
+        },
+        {
+          "when":[{"as":"keyboard","attribute":"left","if":[{"is":"hit"}]}],
+          "then": [
+            {"id":"X","subtract":[{"value0":[{"_":1}]}]},
+            {"code":[
+              { "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"<","_":0}]}],
+                "then": [{"id":"X","set":[{"value0":[{"_":3}]}]}]
+              }
+            ]}
+          ]
+        },
+        {
+          "when":[{"as":"keyboard","attribute":"up","if":[{"is":"hit"}]},{"id": "X"}],
+          "then": [
+            {
+              "code":[
+                { "//": "Facing UP",
+                  "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"==","_":0}]}],
+                  "then": [
+                    {"id":"X","subtract":[{"y":[{"_":4}]}]},
+                    {"code":[
+                      { "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W"}]}],
+                        "then": [
+                          {"id":"X","sum":[{"y":[{"_":4}]}]}
+                        ]
+                      }
+                    ]}
+                  ]
+                },
+                { "//": "Facing RIGHT",
+                  "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"==","_":1}]}],
+                  "then": [
+                    {"id":"X","sum":[{"x":[{"_":4}]}]},
+                    {"code":[
+                      { "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W"}]}],
+                        "then": [
+                          {"id":"X","subtract":[{"x":[{"_":4}]}]}
+                        ]
+                      }
+                    ]}
+                  ]
+                },
+                { "//": "Facing DOWN",
+                  "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"==","_":2}]}],
+                  "then": [
+                    {"id":"X","sum":[{"y":[{"_":4}]}]},
+                    {"code":[
+                      { "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W"}]}],
+                        "then": [
+                          {"id":"X","subtract":[{"y":[{"_":4}]}]}
+                        ]
+                      }
+                    ]}
+                  ]
+                },
+                { "//": "Facing LEFT",
+                  "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"==","_":3}]}],
+                  "then": [
+                    {"id":"X","subtract":[{"x":[{"_":4}]}]},
+                    {"code":[
+                      { "when": [{"id":"X","if":[{"is":"collidingWith","flags":"W"}]}],
+                        "then": [
+                          {"id":"X","sum":[{"x":[{"_":4}]}]}
+                        ]
+                      }
+                    ]}
+                  ]
+                }
+              ]
+            }]
+        },
+        {
+          "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"hit"}]}],
+          "then": [
+            {"code":[
+              {
+                "when":[{"id":"X","if":[{"is":"collidingWith","id":"T"}]}],
+                "then":[
+                  { "as": "that",
+                    "code": [
+                      {
+                        "//": "Picking up key",
+                        "when": [
+                          {"as":"scene","if":[{"itsAttribute":"value2","is":"==","smallNumber":0}]},
+                          {"if":[{"itsAttribute":"value1","is":"==","smallNumber":1}]}
+                        ],
+                        "then":[
+                          {"remove":true},
+                          {"id":"1","set":[
+                            {"visible":[{"_":1}]},
+                            {"width":[{"_":32}]},
+                            {"height":[{"_":16}]},
+                            {"x":[{"_":4}]},
+                            {"y":[{"_":20}]},
+                            {"graphicsY": [{"_":101}]},
+                            {"zIndex":[{"_":121}]},
+                            {"flags": [{"_":""}]}
+                          ]},
+                          {"as": "scene","set":[{
+                            "value2": [{"_": 1}]
+                          }]}
+                        ]
+                      },
+                      {
+                        "//": "Picking up map",
+                        "when": [{"if":[{"itsAttribute":"value1","is":"==","smallNumber":3}]}],
+                        "then":[
+                          {"remove":true},
+                          {"id":"3","set":[
+                            {"visible":[{"_":1}]},
+                            {"width":[{"_":32}]},
+                            {"height":[{"_":16}]},
+                            {"x":[{"_":30}]},
+                            {"y":[{"_":20}]},
+                            {"graphicsY": [{"_":101}]},
+                            {"zIndex":[{"_":121}]},
+                            {"flags": [{"_":""}]}
+                          ]},
+                          {"as": "scene","set":[{
+                            "value3": [{"_": 1}]
+                          }]}
+                        ]
+                      }
+                ]}]
+              },
+              {
+                "//": "Unlocking door",
+                "when":[
+                  {"as":"scene","if":[{"itsAttribute":"value2","is":"==","smallNumber":1}]},
+                  {"id":"X","if": [{
+                  "is":"collidingWith","id":"6",
+                  "deltaX":[{"as":"game","attribute":"value0"}],
+                  "deltaY":[{"as":"game","attribute":"value1"}]
+                }]}],
+                "then":[
+                  {"as": "that","remove":true},
+                  {"as": "scene","set":[{
+                    "value2": [{"_": 0}]
+                  }]},
+                  {
+                    "id": "1",
+                    "set": [{"graphicsY":[{"_": 196}]},{"visible": [{"_": 0}]},{"flags": [{"_":"AC" }]}]
+                  }
+                ]
+              },
+              {
+                "//": "Using magic portal",
+                "when":[
+                  {"as":"scene","if":[{"itsAttribute":"value1","is":">=","_":10}]},
+                  {"id":"X","if": [{
+                    "is":"collidingWith","id":"8",
+                    "deltaX":[{"as":"game","attribute":"value0"}],
+                    "deltaY":[{"as":"game","attribute":"value1"}]
+                  }]}],
+                "then":[
+                  {"id": "2", "set": [
+                    {"backgroundColor": [{"_": 1}]}
+                  ]},
+                  {"as": "scene","subtract":[{
+                    "value1": [{"_": 10}]
+                  }]},
+                  {"id": "8","remove":true}
+                ]
+              },
+              {
+                "//": "Using stairs",
+                "when":[
+                  {"id":"X","if": [{
+                    "is":"collidingWith","id":"0",
+                    "deltaX":[{"as":"game","attribute":"value0"}],
+                    "deltaY":[{"as":"game","attribute":"value1"}]
+                  }]}],
+                "then":[
+                  {"//":"Winner !!!", "runScene":[{"_":"E"}]}
+                ]
+              }
+            ]}
+
+          ]
+        },
+        {
+          "//": "Collision with orbs (auto-pickup)",
+          "when":[{"id":"X","if":[{"is":"collidingWith","id":"S"}]}],
+            "then":[
+              {"as":"that","remove":true},
+              {"as":"scene","sum":[{"value1":[{"_":1}]}]}
+            ]
+        },
+        {
+        "then": [
+          {
+            "code":[
+              {"//": "clean up 3D view",
+                "then": [{"flags":"A","set":[{"visible":[{"_":0}]}]}]
+              },
+              {
+                "then":[{"//": "Purge existing rendering objects for orbs",
+                  "id": "4","remove": true}]
+              },
+              { "//": "UP",
+                "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"==","_":0}]}],
+                "then": [
+                  {"//": "Compass ","id":"V","set":[{"graphicsX":[{"_":152}]}]},
+                  {"//": "Front square ","as":"game","set":[{"value0":[{"_":0}]},{"value1":[{"_":-4}]}]},
+                  {
+                    "_file":"gameplay/dungeon-renderer.json",
+                    "_replace":{
+                      "xA":[{"_":-4}],"yA":[{"_":0}],                                    "xB":[{"_":4}],"yB":[{"_":0}],
+                      "xD":[{"_":-4}],"yD":[{"_":-4}], "xC":[{"_":0}],"yC":[{"_":-4}],   "xE":[{"_":4}],"yE":[{"_":-4}],
+                      "xI":[{"_":-4}],"yI":[{"_":-8}], "xH":[{"_":0}],"yH":[{"_":-8}],   "xJ":[{"_":4}],"yJ":[{"_":-8}],
+                      "xP":[{"_":-4}],"yP":[{"_":-12}], "xO":[{"_":0}],"yO":[{"_":-12}], "xQ":[{"_":4}],"yQ":[{"_":-12}]
+                    }
+                  }
+                ]
+              },
+              { "//": "RIGHT",
+                "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"==","_":1}]}],
+                "then": [
+                  {"//": "Compass ","id":"V","set":[{"graphicsX":[{"_":166}]}]},
+                  {"//": "Front square ","as":"game","set":[{"value0":[{"_":4}],"value1":[{"_":0}]}]},
+                  {
+                    "_file":"gameplay/dungeon-renderer.json",
+                    "_replace":{
+                      "xA":[{"_":0}],"yA":[{"_":-4}],                                   "xB":[{"_":0}],"yB":[{"_":4}],
+                      "xD":[{"_":4}],"yD":[{"_":-4}],  "xC":[{"_":4}],"yC":[{"_":0}],   "xE":[{"_":4}],"yE":[{"_":4}],
+                      "xI":[{"_":8}],"yI":[{"_":-4}],  "xH":[{"_":8}],"yH":[{"_":0}],   "xJ":[{"_":8}],"yJ":[{"_":4}],
+                      "xP":[{"_":12}],"yP":[{"_":-4}], "xO":[{"_":12}],"yO":[{"_":0}],  "xQ":[{"_":12}],"yQ":[{"_":4}]
+                    }
+                  }
+                ]
+              },
+              { "//": "DOWN",
+                "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"==","_":2}]}],
+                "then": [
+                  {"//": "Compass ","id":"V","set":[{"graphicsX":[{"_":180}]}]},
+                  {"//": "Front square ","as":"game","set":[{"value0":[{"_":0}],"value1":[{"_":4}]}]},
+                  {
+                    "_file":"gameplay/dungeon-renderer.json",
+                    "_replace":{
+                      "xA":[{"_":4}],"yA":[{"_":0}],                                   "xB":[{"_":-4}],"yB":[{"_":0}],
+                      "xD":[{"_":4}],"yD":[{"_":4}],  "xC":[{"_":0}],"yC":[{"_":4}],   "xE":[{"_":-4}],"yE":[{"_":4}],
+                      "xI":[{"_":4}],"yI":[{"_":8}],  "xH":[{"_":0}],"yH":[{"_":8}],   "xJ":[{"_":-4}],"yJ":[{"_":8}],
+                      "xP":[{"_":4}],"yP":[{"_":12}], "xO":[{"_":0}],"yO":[{"_":12}],  "xQ":[{"_":-4}],"yQ":[{"_":12}]
+                    }
+                  }
+                ]
+              },
+              { "//": "LEFT",
+                "when": [{"id":"X","if":[{"itsAttribute":"value0","is":"==","_":3}]}],
+                "then": [
+                  {"//": "Compass ","id":"V","set":[{"graphicsX":[{"_":194}]}]},
+                  {"//": "Front square ","as":"game","set":[{"value0":[{"_":-4}],"value1":[{"_":0}]}]},
+                  {
+                    "_file":"gameplay/dungeon-renderer.json",
+                    "_replace":{
+                      "xA":[{"_":0}],"yA":[{"_":4}],                                     "xB":[{"_":0}],"yB":[{"_":-4}],
+                      "xD":[{"_":-4}],"yD":[{"_":4}],  "xC":[{"_":-4}],"yC":[{"_":0}],   "xE":[{"_":-4}],"yE":[{"_":-4}],
+                      "xI":[{"_":-8}],"yI":[{"_":4}],  "xH":[{"_":-8}],"yH":[{"_":0}],   "xJ":[{"_":-8}],"yJ":[{"_":-4}],
+                      "xP":[{"_":-12}],"yP":[{"_":4}], "xO":[{"_":-12}],"yO":[{"_":0}],  "xQ":[{"_":-12}],"yQ":[{"_":-4}]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+
+        ]},
+        {
+          "//": "Reveal minimap : hide if map not found",
+          "when": [
+            {"as": "scene", "if":[{"itsAttribute":"value3","is":"==","_":0}]}
+          ],
+          "then": [
+            {
+              "flags": "B", "set":[{"visible":[{"_":0}]}]
+            }
+          ]
+        },
+        {
+          "//": "Reveal minimap : set area start in G2/G3",
+          "then": [
+            {"as":"game","set":[{"value2":[{"id":"X","attribute":"x"}]}],"subtract":[{"value2":[{"_":1}]}]},
+            {"as":"game","set":[{"value3":[{"id":"X","attribute":"y"}]}],"subtract":[{"value3":[{"_":1}]}]},
+            {
+              "//": "Revealing in area (G2,G3) (6,6)",
+              "flags":"B","inArea":[{
+              "x":[{"as":"game","attribute":"value2"}],
+              "y":[{"as":"game","attribute":"value3"}],
+              "width":[{"_":6}],
+              "height":[{"_":6}]
+            }],"set":[{"visible":[{"_":1}]}]
+            }
+          ]
+        },
+        {
+          "//": "Update orb counter",
+          "then": [
+            {"id": "Z", "set":[{"text":[{"as":"scene", "attribute": "value1"}]}]}
+          ]
+        }
+      ]
+    },
+    {
+      "//": "Endgame screen",
+      "id": "E",
+      "sounds":[{"id":"F","wave":"breaker","attack":2,"sustain":86,"decay":35,"release":68,"frequency":68}
+      ],
+      "music":[
+        {
+          "id":"R",
+          "notes":[
+            ["A3-","B3-","C4-","A3-","E4-","---","---","E4-","---","---","D4-"]
+          ],"instruments":"F"
+        }
+      ],
+      "songs":[{"id":"R","music":"R","tempo":2}],
+      "tilemaps":[
+        {"map":["AB"],"song":"R"}
+      ],
+      "sprites":[
+        {"id":"A","text":"~~VICTORY","x":30,"y":30,"width":100,"height":40,"textColor":5,"backgroundColor":2,"textAlignment":"center","zIndex":10,
+          "visible": true
+        },
+        {"id":"B","text":"YOU ESCAPED FROM~THE DUNGEON.~~...ALIVE!!!","x":30,"y":90,"width":100,"height":50,"textColor":3,"backgroundColor":1,"textAlignment":"center","zIndex":10,
+          "visible": true
+        }
+      ],"code":[]
+    }
+  ]
+}
