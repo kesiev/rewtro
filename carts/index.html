@@ -288,7 +288,7 @@ function selected(option,file,isclick) {
 		}
 		case "controllers":{
 			document.body.innerHTML=header()+"<div class='filerow'>System controllers</div>";			
-			system.DEFAULTS.CONTROLLER.forEach((buttons,id)=>{
+			system.DEFAULTS.CONTROLLER.forEach((controller,id)=>{
 				var box=document.createElement("div");
 				box.className="filerow";
 				document.body.appendChild(box);
@@ -297,7 +297,8 @@ function selected(option,file,isclick) {
 				label.className="code";
 				box.appendChild(label);
 				var example=document.createElement("div");
-				buttons.forEach(button=>example.innerHTML+="<div class='controller button'>"+button+"</div>");
+				example.innerHTML="<b>Type:</b> "+controller.type+" - <b>Buttons</b>: ";
+				controller.buttons.forEach(button=>example.innerHTML+="<div class='controller button'>"+button+"</div>");
 				box.appendChild(example);
 			})
 			break;

@@ -3,7 +3,7 @@ function ModuleCredits(label) {
 		id:"credits",
 		label:label[0],
 		url:"https://github.com/kesiev/rewtro",
-		year:"2019-2020",
+		year:"2019-2021",
 		by:{
 			name:"KesieV",
 			url:"https://www.kesiev.com"
@@ -22,6 +22,7 @@ function ModuleCredits(label) {
 			{name:"Frulla",url:"https://www.instagram.com/mogliagiovanni/"},
 			{name:"Stefano Caroli"},
 			{name:"Rosy/Damiano"},
+			{name:"Preuk"},
 			{name:"All Rewtro contributors",url:"https://github.com/kesiev/rewtro/graphs/contributors"}
 		],
 		onSelect: function ($,gameConsole) {

@@ -385,11 +385,15 @@ System.versions["0.1"]={
 				"ICAAAIAD0yPP8_.0xG672GZM2G6Pny.H8_ni2Gnc2_OB8y68pyPPvu6Hm3PAAAAAAAGAB75MAyB7AaEABmGB7mEABiAABinc2MZMB7n87GpGDkvi2Gni2MGM2GnkvcDamun7mymGDGnM2_HEIAAAAmMDAAMGD7DAuAJDn9oB7mGFQQ2AAAni2AncDAmMZZBj87.l2Gni2GmB0GnjWyJBpGGAuZ2PpADOTGn8mCAAAAMDB76B873Am3AHvQWM7I3AmuECQoAM2ymMWy.Mx_GA2mZPx_ni2GpdmZnkx_ODmun87yPMmG.B8u67mZ37ByAAAAmAAMZD7MOAAaOA8mEHAMEHnI67D_niDGZMDGn87G_GDXti2ytl7GGMWy.dmZ3MZZ5A2_BiZmd7ZuEJIZ6AAAMGByGGA3DHAA68QQo7BmDD7QAEmAniWcpGDAWiZZnjn7nixGmMp3n80GOGpkGOBaGODGDM2GMIZMAACSGAAmMDAmADB7D7p7ACRuJiQAMB8UEAAAAM2yPP8_mDxG6dpO6i2G6MBwpdmZ6BBEn80_OHx_6Any6DBy5D7m6A7AMDAQGAB75AZymHmaEEWwAB7mEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuMAAQAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA"
 			],
 			CONTROLLER:[
-				["up","down","left","right","buttonA"], // Basic 1-button controller
-				["up","down","left","right","buttonA","buttonB"], // 2 buttons controller
-				["up","down","left","right","buttonA","buttonB","buttonC"], // 3 buttons controller
-				["up","down","left","right","buttonA","buttonB","buttonC","buttonD"], // 4 buttons controller
-				["buttonA"] // Single button controller
+				{type:"drag",buttons:["up","down","left","right","buttonA"]}, // Drag mode, Basic 1-button controller
+				{type:"drag",buttons:["up","down","left","right","buttonA","buttonB"]}, // Drag mode, 2 buttons controller
+				{type:"drag",buttons:["up","down","left","right","buttonA","buttonB","buttonC"]}, // Drag mode, 3 buttons controller
+				{type:"drag",buttons:["up","down","left","right","buttonA","buttonB","buttonC","buttonD"]}, // Drag mode, 4 buttons controller
+				{type:"drag",buttons:["up","down","left","right","buttonA"]}, // Drag mode, Single button controller
+				{type:"keys",buttons:["up","down","left","right","buttonA"]}, // Keyboard mode, 1 action button
+				{type:"keys",buttons:["up","down","left","right","buttonA","buttonB"]}, // Keyboard mode, 2 action buttons
+				{type:"keys",buttons:["up","down","left","right","buttonA","buttonB","buttonC"]}, // Keyboard mode, 3 action buttons
+				{type:"keys",buttons:["up","down","left","right","buttonA","buttonB","buttonC","buttonD"]}, // Keyboard mode, 4 action buttons
 			],
 			RESOLUTION:[
 				{ screenWidth:160, screenHeight:144, renderWidth:160, renderHeight:144 }, // Gameboy inspired
