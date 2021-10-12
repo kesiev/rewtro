@@ -12,7 +12,7 @@
 
 ---
 
-**Rewtro** is a weird retro game engine inspired by fantasy consoles and [code golfing](https://en.wikipedia.org/wiki/Code_golf) that runs games encoded in a very small amount of data (2kb/3kb). This way is possible to share games using exoteric and usually data inefficient ways: i.e. sticking some PWA magic and a QR-Code reader to [the engine](https://www.kesiev.com/rewtro/) I've made a fake gaming console for mobile devices...
+**Rewtro** is a weird retro game engine inspired by fantasy consoles and [code golfing](https://en.wikipedia.org/wiki/Code_golf) that runs games encoded in a very small amount of data (2kB/3kB). This way is possible to share games using exoteric and usually data inefficient ways: i.e. sticking some PWA magic and a QR-Code reader to [the engine](https://www.kesiev.com/rewtro/) I've made a fake gaming console for mobile devices...
 
 <div align="center" style="margin:60px 0">
     <p><img src="markdown/rewtro-console.png"></p>
