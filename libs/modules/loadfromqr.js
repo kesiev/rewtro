@@ -238,7 +238,7 @@ ModuleLoadFromQR.instascanng={
 		}
 		var query;
 		if (scanner.iOS) query={ video: { facingMode: "environment" } };
-		else query={ video: { 'deviceId': camera }] };
+		else query={ video: { 'deviceId': camera } };
 		navigator.mediaDevices.getUserMedia(query).then(function(stream) {
 			scanner.stream=stream;
 			scanner.videoElement.srcObject = stream;
