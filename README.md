@@ -142,12 +142,12 @@ I use [Twitter](https://twitter.com/kesiev) as my main social. It's probably the
 
 Rewtro exists thanks to these techs:
 
-  * [Font Awesome]("https://fontawesome.com/)
+  * [Font Awesome](https://fontawesome.com/)
   * [Jost Font](https://indestructibletype.com/Jost.html)
   * [JSZip](https://stuk.github.io/jszip/)
   * [LZMA-JS](https://github.com/LZMA-JS/LZMA-JS/)
   * [Instascan](https://github.com/schmich/instascan)
-  * [QR-Code generator]("https://github.com/kazuhikoarase/qrcode-generator)
+  * [QR-Code generator](https://github.com/kazuhikoarase/qrcode-generator)
   * [Gif.js](https://github.com/jnordberg/gif.js)
   * [Color Hunt](https://colorhunt.co/palette/276)
 
