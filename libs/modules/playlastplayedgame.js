@@ -7,6 +7,11 @@ function ModulePlayLastPlayedGame(label) {
 				gameConsole.hideIcon("lastplayed_play");
 				gameConsole.hideIcon("lastplayed_discard");
 				gameConsole.hideIcon("datasette");
+			} else {
+				if (gameConsole.hasStorage("AUTORUN")) {
+					gameConsole.removeStorage("AUTORUN");
+					gameConsole.run(gameConsole.getStorage("LASTGAME"));
+				}
 			}
 		},
 		onRun: function ($,gameConsole,data) {
