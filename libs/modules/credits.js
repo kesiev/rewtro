@@ -3,7 +3,7 @@ function ModuleCredits(label) {
 		id:"credits",
 		label:label[0],
 		url:"https://github.com/kesiev/rewtro",
-		year:"2019-2021",
+		year:"2019-2024",
 		by:{
 			name:"KesieV",
 			url:"https://www.kesiev.com"
