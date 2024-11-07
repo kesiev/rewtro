@@ -12,6 +12,7 @@ function ModuleCredits(label) {
 			{name:"Font Awesome", url:"https://fontawesome.com/"},
 			{name:"Jost font",url:"https://indestructibletype.com/Jost.html"},
 			{name:"JSZip", url:"https://stuk.github.io/jszip/"},
+			{name:"LZMA-JS", url:"https://github.com/LZMA-JS/LZMA-JS/"},
 			{name:"Instascan",url:"https://github.com/schmich/instascan"},
 			{name:"QR-Code generator",url:"https://github.com/kazuhikoarase/qrcode-generator"},
 			{name:"Gif.js",url:"https://github.com/jnordberg/gif.js"},

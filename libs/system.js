@@ -3,7 +3,6 @@ var System={
 	SYMBOLS:" ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?!@,-.:;<=>[\\]/_#$%&'()*+\"~",	         
 	versions:{},
 	COMPRESSMETHODS:[
-		// Best first
 
 		{label:"Sequence packed",SEQUENCERECTANGLE:false,SEQUENCEPACKER:true,BINARYPACKER:"none"},
 		{label:"Sequence packed, zipped",SEQUENCERECTANGLE:false,SEQUENCEPACKER:true,BINARYPACKER:"zip"},
@@ -12,12 +11,20 @@ var System={
 		{label:"Unchanged, zipped",SEQUENCERECTANGLE:false,SEQUENCEPACKER:false,BINARYPACKER:"zip"},
 
 		// Rectangled can help zip comprssion but can create bad data...		
+
 		{label:"Sequence rectangled and packed",SEQUENCERECTANGLE:true,SEQUENCEPACKER:true,BINARYPACKER:"none"},
 		{label:"Sequence rectangled and packed, zipped",SEQUENCERECTANGLE:true,SEQUENCEPACKER:true,BINARYPACKER:"zip"},
 
 		{label:"Sequence rectangled",SEQUENCERECTANGLE:true,SEQUENCEPACKER:false,BINARYPACKER:"none"},
-		{label:"Sequence rectangled, zipped",SEQUENCERECTANGLE:true,SEQUENCEPACKER:false,BINARYPACKER:"zip"}
-		
+		{label:"Sequence rectangled, zipped",SEQUENCERECTANGLE:true,SEQUENCEPACKER:false,BINARYPACKER:"zip"},
+
+		// LZMA
+
+		{label:"Sequence packed, lzma'ed",SEQUENCERECTANGLE:false,SEQUENCEPACKER:true,BINARYPACKER:"lzma"},
+		{label:"Unchanged, lzma'ed",SEQUENCERECTANGLE:false,SEQUENCEPACKER:false,BINARYPACKER:"lzma"},
+		{label:"Sequence rectangled and packed, lzma'ed",SEQUENCERECTANGLE:true,SEQUENCEPACKER:true,BINARYPACKER:"lzma"},
+		{label:"Sequence rectangled, lzma'ed",SEQUENCERECTANGLE:true,SEQUENCEPACKER:false,BINARYPACKER:"lzma"},
+
 	],
 	pack:function(cart,root,cb,cycle,result,metadata) {
 
@@ -29,7 +36,7 @@ var System={
 		};
 
 		if (!cycle.assembled) {
-			console.log("PACK: First assembling the cartige...");
+			console.log("PACK: First assembling the cartridge...");
 			this.assemble(cart,root,assembled=>{
 				cycle.assembled=true;
 				this.pack(assembled,root,cb,cycle,result)
@@ -38,8 +45,8 @@ var System={
 
 			if (result!==undefined) {
 				result=String.fromCharCode(cycle.method)+result;
-				console.log("PACK: Method "+cycle.method+": "+result.length+" byte(s)");
-				if ((cycle.best==-1)||(cycle.data.length>result.length)) {
+				console.log("PACK: Method "+cycle.method+": "+result.length+" byte(s) - "+this.COMPRESSMETHODS[cycle.method].label);
+				if ((cycle.best===-1)||(cycle.data.length>result.length)) {
 					cycle.bestMethod=this.COMPRESSMETHODS[cycle.method];
 					cycle.best=cycle.method;
 					cycle.data=result;
@@ -64,6 +71,14 @@ var System={
 								for (var i = 2; i < compressed.length; ++i) out+=String.fromCharCode(compressed[i]);
 								System.pack(cart,root,cb,cycle,out,metadata);
 							})
+							break;
+						}
+						case "lzma":{
+							LZMA.compress(binary, 9, function on_finish(compressed){
+								var out="";
+								for (var i = 0; i < compressed.length; ++i) out+=String.fromCharCode(compressed[i]);
+								System.pack(cart,root,cb,cycle,out,metadata);
+							});
 							break;
 						}
 						default:{
@@ -97,6 +112,17 @@ var System={
 				})
 				break;
 			}
+			case "lzma":{
+				let that=this;
+				var out=[];
+				for (var i = 0; i < data.length; ++i) out.push(data[i].charCodeAt(0));
+				LZMA.decompress(out, function on_decompress_complete(unpacked) {
+					that.decompile(unpacked,method,function(cart) {
+						cb(cart);
+					});
+				});
+				break;
+			}
 			default:{
 				this.decompile(Decode.string.bitStream([0,data],Stream.BYTEENCODER),method,function(cart) {
 					cb(cart);							
@@ -105,6 +131,13 @@ var System={
 			}
 		}
 	},
+
+	/**
+	 * Build a System object with console version specifics and tweaks
+	 * @param version Target system version
+	 * @param debug true for extra debug information
+	 * @returns {*} System object for requested version
+	 */
 	constructSystem:function(version,debug) {
 		return this.versions[version].constructor(debug,version);
 	},
@@ -124,6 +157,14 @@ var System={
 			}
 		});
 	},
+
+	/**
+	 * Decompile binary cart data to JSON
+	 * @param data Compiled game cart to be loaded
+	 * @param compileConfig compilation config (packing method + compression method)
+	 * @param onready callback with fully decompiled cart and cart system configuration as parameters
+	 * @param debug true for extra debug information
+	 */
 	decompile:function(data,compileConfig,onready,debug) {
 		var cart={};
 		var stream=Decode.binary.string([0,data],this.SYMBOLS);
@@ -146,6 +187,15 @@ var System={
 			onready();
 		}
 	},
+	/**
+	 * Cart compilation (binary encoding and checking.)
+	 *
+	 * @param cart game cart to be compiled
+	 * @param compileConfig compilation config (packing method + compression method)
+	 * @param onready callback with fully compiled and checked cart and cart metadata as parameters
+	 * @param root unused ; base http path for file inclusion/transclusion
+	 * @param debug true for extra debug information
+	 */
 	compile:function(cart,compileConfig,onready,root,debug) {
 		var metadata=cart.metadata;
 		delete cart.metadata;
@@ -168,9 +218,23 @@ var System={
 		}
 	},
 	// ---
+	/**
+	 * Check if `range[0]` <= `value` <=  `range[1]` (inclusive bounds)
+	 * @param value value to test
+	 * @param range inclusive range(with `range[0]` <= [range[1]`)
+	 * @returns {boolean} true if `range[0]` <= `value` <=  `range[1]`
+	 */
 	inRange:function(value,range){
 		return (value>=range[0])&&(value<=range[1]);
 	},
+	/**
+	 * Checks decompiled cart against original cart recursively.
+	 * @param a original element
+	 * @param b decompiled element
+	 * @param h parent element (any false-y value for top level cart)
+	 * @param debug true for extra debug output
+	 * @private
+	 */
 	_check:function(a,b,h,debug) {
 		if (!h) h="";
 		if (typeof a == "object") {
@@ -189,7 +253,7 @@ var System={
 					this._check(a[k],b[k],h+"."+k,debug)
 				}
 		} else {
-			if (a!=b) {
+			if (a!==b) {
 				console.error("CHECK:",h,":","["+a+"]","vs","["+b+"]");
 			}
 		}
@@ -287,27 +351,64 @@ var System={
 		}
 		return model;
 	},
-	clone:function(a) { return JSON.parse(JSON.stringify(a)); },
-	patch:function(patch,org){
-		if (patch) patch.forEach(getter=>org.push(getter));
-		return org
+	/**
+	 * Deep clone an object
+	 * @param a object to be cloned
+	 * @returns {any} a clone of `a`
+	 */
+	clone: function (a) {
+		return JSON.parse(JSON.stringify(a));
 	},
+	/**
+	 * Add elements from `patch` to `org` collection
+	 *
+	 * Used by rewtro version compatibility system
+	 *
+	 * @param patch elements to be added to `org`
+	 * @param org collection to be patched
+	 * @returns {*} patched `org`
+	 */
+	patch: function (patch, org) {
+		if (patch) {
+			patch.forEach(getter => org.push(getter));
+		}
+		return org;
+	},
+	/**
+	 * Resolves nested and recursive data definitions. Recursively calls itself for each nested element.
+	 *
+	 * @param struct data definition to be processed
+	 * @param map references to be replaced by data definition blocks
+	 * @param done used to keep track of already processed items during recursive calls
+	 * @returns {*} update `struct` data definition
+	 */
 	solveReferences:function(struct,map,done) {
 		if (!done) done=[]
-		if (done.indexOf(struct)==-1) {
+		if (done.indexOf(struct)===-1) {
 			done.push(struct);
 			if (typeof struct=="object") {
+				// replace values by content from `map` if available
 				if (map[struct.values]) struct.values=map[struct.values];
-				else for (var k in struct) this.solveReferences(struct[k],map,done)
+				// else call recursively for each child element
+				else for (let k in struct) this.solveReferences(struct[k],map,done)
 			}
 		}
 		return struct;
 	},
+	/**
+	 * Appends enough "UNUSED-*" elements to `set` data definitions to reach `qty` length.
+	 *
+	 * @param debug true for debug output
+	 * @param label context to be used in debug output
+	 * @param qty power of 2, target number of elements in set
+	 * @param set set of elements to be padded
+	 * @returns {*} padded set
+	 */
 	padWithUnused:function(debug,label,qty,set) {		
 		if (set.length>qty) {
 			if (debug) console.error("MODEL: The set [",label,"] is too large by",set.length-qty,". (",qty,")");
 		} else {
-			var id=0;
+			let id = 0;
 			while (set.length<qty) {
 				set.push({key:"UNUSED-"+id, unused:true});
 				id++;
@@ -321,6 +422,9 @@ var System={
 	}
 };
 
+/*
+ * System versions. Each one in based on 0.1 with "quirks" and "getters" flagging incompatibilities with base version.
+ */
 
 System.versions["0.3"]={
 	constructor:function(debug,version) {
@@ -333,7 +437,8 @@ System.versions["0.3"]={
 				{ key:"round", flag:true }
 			],
 			QUIRKS:{
-				unshift:true
+				unshift:true,
+				bigGraphicsY:true
 			}
 		});
 	}
@@ -664,7 +769,7 @@ System.versions["0.1"]={
 			{ key:"width",integer:RANGES.SIZE, defaultValue:8 },
 			{ key:"height",integer:RANGES.SIZE, defaultValue:8 },
 			{ key:"graphicsX",integer:RANGES.SIZE },
-			{ key:"graphicsY",integer:RANGES.SIZE },
+			{ key:"graphicsY",integer:(mods.QUIRKS.bigGraphicsY?RANGES.LARGENUMBER:RANGES.SIZE) },
 			{ key:"graphicsWidth",integer:RANGES.SIZE },
 			{ key:"graphicsHeight",integer:RANGES.SIZE },
 

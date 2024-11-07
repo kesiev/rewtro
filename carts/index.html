@@ -4,6 +4,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<script src="../libs/external/qrcode.min.js"></script>
 	<script src="../libs/external/jszip.js"></script>
+	<script src="../libs/external/lzma_worker-min.js"></script>
 	<script src="../libs/external/gif.js"></script>
 	<script src="../libs/system.js"></script>
 	<script src="../libs/binary.js"></script>
@@ -98,6 +99,19 @@
 		color:#f99;
 		text-decoration: underline;
 	}
+
+	.tooltip {
+		display: inline-block;
+		position: absolute;
+		z-index: 1;
+		transform: translateX(0%) translateY(90%);
+		background-color: black;
+		padding: 5px;
+		color: #fff;
+		text-align: center;
+		font-size: 50%;
+		border-radius: 6px;
+	}
 	</style>
 </head><body onload="onl()"></body><script>
 
@@ -108,10 +122,37 @@ system.configure();
 var listing,engine;
 function onl() {
 	selected(window.localStorage["_REWTRODEV_OPTION"], window.localStorage["_REWTRODEV_FILE"]);
+
+	function initTooltip() {
+		// Create the tooltip element we will be reusing
+		let tooltip = document.createElement('div');
+		tooltip.className = 'tooltip';
+
+		// Prepare the mouseout event handler
+		let mouseoutHandler = (event) => {
+			event.target.removeChild(tooltip);
+		};
+
+		// Set the mouseover event handler
+		window.addEventListener('mouseover', event => {
+			if (!event.target.dataset.tooltip) return true;
+
+			tooltip.textContent = event.target.dataset.tooltip;
+
+			event.target.appendChild(tooltip);
+			event.target.addEventListener(
+					'mouseout',
+					mouseoutHandler,
+					{once: true}
+			);
+		});
+	}
+
+	initTooltip();
 }
 
 function header() {
-	return "<div class='header'><div class='button' onclick=\"selected('home',0,true)\"><i class='fas fa-home'></i></div><img src='qrcart/logo.png'> "+system.VERSION+" - Dev console</div>";
+	return "<div class=\'header\'><img src=\'qrcart/logo.png\'> "+system.VERSION+" - Dev console</div>\n<div class=\'buttonbar\'>\n  <div class=\'button\' onclick=\"selected(\'home\',0,true)\"><i class=\'fas fa-home\'></i></div>\n  <a href=\'../\'><div class=\'button\'><i class=\'fas fa-play-circle\'></i></div></a>\n  <div class=\'button\' onclick=\"selected(\'fonts\',0,true)\"><i class=\'fas fa-font\'></i></div>\n  <div class=\'button\' onclick=\"selected(\'palette\',0,true)\"><i class=\'fas fa-palette\'></i></div>\n  <div class=\'button\' onclick=\"selected(\'resolutions\',0,true)\"><i class=\'fas fa-expand\'></i></div>\n  <div class=\'button\' onclick=\"selected(\'controllers\',0,true)\"><i class=\'fas fa-gamepad\'></i></div>\n  <div class=\'button\' onclick=\"selected(\'settings\',0,true)\"><i class=\'fas fa-cogs\'></i></div>\n  <div class=\'button\' onclick=\"selected(\'noisemaker\',0,true)\"><i class=\'fas fa-music\'></i></div>\n</div>";
 }
 
 function selected(option,file,isclick) {
@@ -138,13 +179,13 @@ function selected(option,file,isclick) {
 				var lastdebug,qrmode=qrcart.getQrConfiguration(printModes[printMode].config,compressed.data);
 				System.unpack(compressed.data,cart=>{
 					document.getElementById('stats').innerHTML=
-							"<i class='fas fa-cog'></i> "+compressed.metadata.title+" (Rewtro "+cart.system.VERSION+" using "+cart.system.ENGINE+")<br>"+
+							"<i class='fas fa-cog' data-tooltip='Game and engine info'></i> "+compressed.metadata.title+" (Rewtro "+cart.system.VERSION+" using "+cart.system.ENGINE+")<br>"+
 							(cart.system.WARNING?"<i class='fas fa-exclamation-circle'></i> <span class='error'>"+cart.system.WARNING+"</span><br>":"")+
-							"<i class='fas fa-expand'></i> "+cart.system.RESOLUTION.screenWidth+" &times; "+cart.system.RESOLUTION.screenHeight+" ("+cart.system.RESOLUTION.renderWidth+" &times; "+cart.system.RESOLUTION.renderHeight+") @ "+cart.system.FPS+"fps. "+cart.system.PALETTE.length+" colors.<br>"+
-							"<i class='fas fa-qrcode'></i> "+printModes[printMode].name+"<br>"+
-							"<i class='fas fa-qrcode'></i> <span class='"+(qrmode.carts>=qrmode.cartsWarning?"error":"")+"'>&times;"+qrmode.carts+"/"+qrmode.cartsLimit+"</span> <span class='"+(qrmode.type>=qrmode.typeWarning?"error":"")+"'>Lv."+qrmode.type+"/"+qrmode.typeLimit+"</span> Correction: "+qrmode.correctionLevel+"<br>"+
-							"<i class='fas fa-compress'></i> "+compressed.bestMethod.label+": "+compressed.data.length+" byte(s)<br>"+
-							"<i class='fas fa-save'></i> "+qrmode.occupied+"/"+qrmode.fullSpace+" byte(s) - "+qrmode.free+"/"+qrmode.chunkSize+" bytes free ("+Math.floor((qrmode.free/qrmode.chunkSize)*100)+"%)";
+							"<i class='fas fa-expand' data-tooltip='Screen size, render size, refresh rate and palette size'></i> "+cart.system.RESOLUTION.screenWidth+" &times; "+cart.system.RESOLUTION.screenHeight+" ("+cart.system.RESOLUTION.renderWidth+" &times; "+cart.system.RESOLUTION.renderHeight+") @ "+cart.system.FPS+"fps. "+cart.system.PALETTE.length+" colors.<br>"+
+							"<i class='fas fa-qrcode' data-tooltip='Current QR-Cart print configuration'></i> "+printModes[printMode].name+"<br>"+
+							"<i class='fas fa-qrcode' data-tooltip='QR-Code specs for current QR-Cart configuration'></i> <span class='"+(qrmode.carts>=qrmode.cartsWarning?"error":"")+"'>&times;"+qrmode.carts+"/"+qrmode.cartsLimit+"</span> <span class='"+(qrmode.type>=qrmode.typeWarning?"error":"")+"'>Lv."+qrmode.type+"/"+qrmode.typeLimit+"</span> Correction: "+qrmode.correctionLevel+"<br>"+
+							"<i class='fas fa-compress' data-tooltip='Compression/packing method and final game size'></i> "+compressed.bestMethod.label+": "+compressed.data.length+" byte(s)<br>"+
+							"<i class='fas fa-save' data-tooltip='Free/available data for QR-Cart - and details for last QR-Code'></i> "+qrmode.occupied+"/"+qrmode.fullSpace+" byte(s) - "+qrmode.free+"/"+qrmode.chunkSize+" bytes free ("+Math.floor((qrmode.free/qrmode.chunkSize)*100)+"%)";
 					if (cart.cart&&cart.cart.data) {
 						cart.cart.data.forEach(block=>{
 							if (block.images) {
@@ -153,7 +194,18 @@ function selected(option,file,isclick) {
 									box.className="filerow debug";
 									document.body.appendChild(box);
 									var label=document.createElement("div");
-									label.innerHTML="<i class='fas fa-image'></i> "+image.id+" ("+image.image.data.width+"&times;"+image.image.data.height+") <i class='fas fa-compress'></i> "+image.image.format+"<br><br>";
+									let sourcedim="";
+									let incrementY = "";
+									if (image.image.format === 'monocolor') {
+										let originalY = ((image.image.data.height / cart.system.PALETTE.length) * 1000) / 1000;
+										sourcedim+=" [" + image.image.data.width + "&times;" + originalY+ "]";
+										incrementY += "Base graphicsY : "
+										for (let j=0;j < image.image.data.height ; j+=originalY) {
+											incrementY+=" "+j;
+										}
+									}
+
+									label.innerHTML="<i class='fas fa-image' data-tooltip='Graphic resource id and size'></i> "+image.id+" ("+image.image.data.width+"&times;"+image.image.data.height+sourcedim+") <i class='fas fa-compress' data-tooltip='Graphic resource color mode'></i> "+image.image.format+" (Datablock "+block.id+")<br>"+incrementY+"<br>";
 									box.appendChild(label);
 									box.appendChild(image.image.data);
 								})
@@ -166,15 +218,15 @@ function selected(option,file,isclick) {
 						scale:1,
 						debugger:function(sprites,songrow,lastblocks,lastsong,scene,game) {
 							var debug="";
-							debug+="<i class='fas fa-save'></i> <i class='fas fa-cog'></i> "+lastblocks+" <i class='fas fa-music'></i> "+lastsong+"<br>";
-							debug+="<i class='fas fa-image'></i> &times;"+sprites.length+"<br>";
-							debug+="<i class='fas fa-cog'></i> @ "+Math.floor(scene.x*1000)/1000+","+Math.floor(scene.y*1000)/1000+" | ";
+							debug+="<i class='fas fa-save'></i> <i class='fas fa-cog' data-tooltip='Latest Datablock loaded' ></i> "+lastblocks+" <i class='fas fa-music' data-tooltip='Latest Song played'></i> "+lastsong+"<br>";
+							debug+="<i class='fas fa-image' data-tooltip='Number of sprites'></i> &times;"+sprites.length+"<br>";
+							debug+="<i class='fas fa-cog' data-tooltip='Current Scene coordinates and values'></i> @ "+Math.floor(scene.x*1000)/1000+","+Math.floor(scene.y*1000)/1000+" | ";
 							for (var i=0;i<10;i++) debug+="V"+i+"="+scene["value"+i]+" | ";
 							debug+="<br>";
-							debug+="<i class='fas fa-cog'></i> ";
+							debug+="<i class='fas fa-cog' data-tooltip='Global values'></i> ";
 							for (var i=0;i<10;i++) debug+="G"+i+"="+game["value"+i]+" | ";
 							debug+="<br>";
-							debug+="<i class='fas fa-music'></i> ";
+							debug+="<i class='fas fa-music' data-tooltip='Current note played on music tracks'></i> ";
 							for (var i=0;i<5;i++) {
 								var note=songrow["M"+i]||"";
 								while (note.length<4) note+=" ";
@@ -217,7 +269,10 @@ function selected(option,file,isclick) {
 			document.body.innerHTML=header()+"Sending to Rewtro console...";
 			compile(file,compressed=>{
 				window.localStorage["_CRT_LASTGAME"]=compressed.data;
-				selected();
+				window.localStorage["_CRT_AUTORUN"]=true;
+				window.localStorage["_CRT_DEVMODE"]=true;
+				window.localStorage["_REWTRODEV_OPTION"]='home';
+				window.location = "../";
 			});
 			break;
 		}
@@ -235,10 +290,18 @@ function selected(option,file,isclick) {
 				canvas.style.border="1px dashed black";
 				canvas.width=200;
 				canvas.height=palette.length*20;
+				let table=document.createElement("table");
+				table.style.float = 'left';
+				table.style.fontSize = '10px';
+				table.style.fontFamily = 'Monospace';
 				var ctx=canvas.getContext("2d");
 				ctx.textBaseline = "middle";
-	            ctx.font = "10px Helvetica";	            
+	            ctx.font = "10px Monospace";
 				palette.forEach((color,row)=>{
+					let colorHexcode = "#";
+					for (let i=0; i < 4 ; i++) {
+						colorHexcode += (("0"+color[i].toString(16)).slice(-2));
+					}
 					ctx.fillStyle="rgb("+color[0]+","+color[1]+","+color[2]+","+color[3]+")";
 					ctx.fillRect(0,row*20,200,20);
 					ctx.fillStyle="#000000";
@@ -247,8 +310,17 @@ function selected(option,file,isclick) {
 					ctx.fillStyle="#ffffff";
 		            ctx.textAlign = "right";
 					ctx.fillText(row, 190,row*20+10);
+					let tRow = table.insertRow();
+					tRow.style.lineHeight='18px';
+					let cell1 = tRow.insertCell(-1);
+					cell1.innerHTML = row;
+					cell1.style.padding='0 5px 0 0';
+					let cell2 = tRow.insertCell(-1);
+					cell2.innerHTML = colorHexcode;
+					cell2.style.padding='0 5px 0 0';
 				});
-				box.appendChild(canvas);				
+				box.appendChild(canvas);
+				box.appendChild(table);
 			});
 			break;
 		}
@@ -360,16 +432,7 @@ function cartSelector() {
 	document.body.innerHTML=header()+"Wait...";
 	getListing(list=>{
 		var html=header();
-		html+="<div class='buttonbar'>";
-		html+="<a href='../'><div class='button'><i class='fas fa-play-circle'></i></div></a>";
-		html+="<div class='button' onclick=\"selected('fonts',0,true)\"><i class='fas fa-font'></i></div>";
-		html+="<div class='button' onclick=\"selected('palette',0,true)\"><i class='fas fa-palette'></i></div>";
-		html+="<div class='button' onclick=\"selected('resolutions',0,true)\"><i class='fas fa-expand'></i></div>";
-		html+="<div class='button' onclick=\"selected('controllers',0,true)\"><i class='fas fa-gamepad'></i></div>";
-		html+="&nbsp;";
-		html+="<div class='button' onclick=\"selected('settings',0,true)\"><i class='fas fa-cogs'></i></div>";
-		html+="<div class='button' onclick=\"selected('noisemaker',0,true)\"><i class='fas fa-music'></i></div>";
-		html+="</div><div class='filerow'>";
+		html+="<div class='filerow'>";
 		html+="<i class='fas fa-print'></i>";
 		html+=" <select id='printmode'>";
 		printModes.forEach((mode,id)=>html+="<option "+(window.localStorage["_REWTRODEV_PRINTMODE"]==id?"selected":"")+" value='"+id+"'>"+mode.name+"</option>");
