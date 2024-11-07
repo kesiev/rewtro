@@ -7,7 +7,7 @@
 ---
 
 <div align="center">
-    <a href="markdown/game-k001-stetris.pdf">Print the launch title cartridge</a> | <a href="https://www.kesiev.com/rewtro/">Load the game using your mobile</a> |  <a href="manual/README.md">Manual</a>
+    <a href="markdown/game-k001-stetris.pdf">Print the launch title cartridge</a> | <a href="https://www.kesiev.com/rewtro/">Load the game using your mobile</a> |  <a href="manual/README.md">Manual</a> | <a href="https://discord.gg/TeAWvnuGku">Discord</a>
 </div>
 
 ---
