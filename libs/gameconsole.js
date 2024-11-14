@@ -96,7 +96,7 @@ function GameConsole(parent,CFG) {
 
 	// --- MENU
 
-	var optionsEnabled,options=[];
+	var optionsEnabled,options=[],services={};
 	var iconsPanel=$("div",{set:{className:"iconsPanel"}},configPanel);
 	CFG.options.forEach(optionset=>{
 		optionset.forEach(option=>{
@@ -117,7 +117,9 @@ function GameConsole(parent,CFG) {
 					},500);
 				}
 			}
-			options.push({icon:icon,option:option});	
+			options.push({icon:icon,option:option});
+			if (option.serviceId)
+				services[option.serviceId] = option;
 		})
 	});
 	
@@ -289,6 +291,7 @@ function GameConsole(parent,CFG) {
 	// Game running
 
 	var lastGame;
+	this.services=services;
 	this.run=function(binary) {
 		if (lastGame) {
 			lastGame.stop();

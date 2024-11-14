@@ -1,14 +1,12 @@
 function ModuleLoadFromQR(label,mode,qrcart) {
-	return [{
-		id:"loadqr_"+mode,
-		label:label[0],
-		onSelect: function ($,gameConsole) {
-			var dialog=gameConsole.getDialog();
 
-			// --- Prepare UI
+	function runReader(loadcart,$,gameConsole,prefix,cb) {
 
-			var help=$("div",{ set:{className:"bottomoverlay"} },dialog);
-			
+		var dialog;
+		
+		if (loadcart) {
+			dialog = gameConsole.getDialog();
+
 			function stopReader(endoption) {
 				ModuleLoadFromQR[mode].stop(scanner,dialog);
 				dialog.close();
@@ -26,132 +24,181 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 				]);
 			}
 
-			var readingSignature,partsloaded=0,partstoload=0,qrcartparts=[],lastqrcartpart=0;
-
-			function updateProgress() {
-				if (partstoload) {
-					var html=LOC._("loadqr_scanning",partstoload);
-					for (var i=0;i<partstoload;i++) {
-						html+="<span class='";
-						if (i==lastqrcartpart) html+="qrcode-last";
-						else if (qrcartparts[i]) html+="qrcode-ready";
-						else html+="qrcode-missing";
-						html+="'><i class='fas fa-camera'></i></span>&nbsp;";
-					}
-					html+=LOC._("loadqr_progress",partstoload-partsloaded);
-				} else html=LOC._("loadqr_tutorial");
-				help.innerHTML=html;
+			function closeReader() {
+				stopReader(true);
 			}
-			updateProgress();
 
-			function addButton(label,top,id,onclick) {
-				var button=gameConsole.createButton(label,dialog,onclick);
-				var div=$(button,{
+		} else {
+
+			var configpanel = $("div",{set:{className:"configpanel"}});
+			dialog = $("div",{set:{className:"dialog"}});
+			gameConsole.node.appendChild(configpanel);
+			configpanel.appendChild(dialog);
+
+			function stopReader(content) {
+				ModuleLoadFromQR[mode].stop(scanner,dialog);
+				gameConsole.node.removeChild(configpanel);
+				clearInterval(resizeInterval);
+				cb(content);
+			}
+
+			function abort() {
+				stopReader(0);
+			}
+
+			function closeReader() {
+				abort();
+			}
+
+		}
+
+		// --- Prepare UI
+
+		var help=$("div",{ set:{className:"bottomoverlay"} },dialog);
+		
+		var readingSignature,partsloaded=0,partstoload=0,qrcartparts=[],lastqrcartpart=0;
+
+		function updateProgress() {
+			if (partstoload) {
+				var html=LOC._("loadqr_scanning",partstoload);
+				for (var i=0;i<partstoload;i++) {
+					html+="<span class='";
+					if (i==lastqrcartpart) html+="qrcode-last";
+					else if (qrcartparts[i]) html+="qrcode-ready";
+					else html+="qrcode-missing";
+					html+="'><i class='fas fa-camera'></i></span>&nbsp;";
+				}
+				html+=LOC._("loadqr_progress",partstoload-partsloaded);
+			} else html= LOC._(loadcart ? "loadqr_tutorial" : "scanqr_tutorial");
+			help.innerHTML=html;
+		}
+		updateProgress();
+
+		function addButton(label,top,id,onclick) {
+			var button=gameConsole.createButton(label,dialog,onclick);
+			var div=$(button,{
+				css:{
+					position:"absolute",
+					left:"10px",
+					top:top+"px",
+				},
+				set:{
+					_id:id,
+				}
+			},dialog);
+			return div;
+		}
+
+		// --- Prepare camera and resize
+
+		addButton(LOC._("button_close"),10,0,function(){ closeReader(); })
+
+		// --- Prepare scanner
+
+		var view,preview=0;
+		if (!ModuleLoadFromQR[mode].previewClassName)
+			$("video",{set:{"playsinline":true,id:"preview"}},dialog);
+		var scanner = ModuleLoadFromQR[mode].create();
+		resizeInterval=setInterval(function(){
+			if (ModuleLoadFromQR[mode].previewClassName) view=document.getElementsByClassName(ModuleLoadFromQR[mode].previewClassName)[0];
+			else view=preview;
+			if (view) {
+				$(view,{
 					css:{
 						position:"absolute",
-						left:"10px",
-						top:top+"px",
-					},
-					set:{
-						_id:id,
-					}
-				},dialog);
-				return div;
-			}
+						transformOrigin:"0 0",
+						zIndex:5,
+						left:0,
+						top:0
+					}}
+				);
+				if (view) {					
+					var
+						width=view.clientWidth,
+						height=view.clientHeight,
+						dialogWidth=dialog.clientWidth,
+						dialogHeight=dialog.clientHeight,
+						scalex=dialogWidth/width,
+						scaley=dialogHeight/height,
+						scale;
 
-			// --- Prepare camera and resize
-
-			addButton(LOC._("button_close"),10,0,function(){ stopReader(true); })
-
-			// --- Prepare scanner
-
-			var view,preview=0;
-			if (!ModuleLoadFromQR[mode].previewClassName)
-				$("video",{set:{"playsinline":true,id:"preview"}},dialog);
-			var scanner = ModuleLoadFromQR[mode].create();
-			resizeInterval=setInterval(function(){
-				if (ModuleLoadFromQR[mode].previewClassName) view=document.getElementsByClassName(ModuleLoadFromQR[mode].previewClassName)[0];
-				else view=preview;
-				if (view) {
+					if (scalex*height<dialogHeight) scale=scalex;
+					else scale=scaley;
 					$(view,{
 						css:{
-							position:"absolute",
-							transformOrigin:"0 0",
-							zIndex:5,
-							left:0,
-							top:0
+							display:"block",
+							transform:"translate("+((dialogWidth-(scale*width))/2)+"px,"+((dialogHeight-(scale*height))/2)+"px) scale("+scale+")"
 						}}
 					);
-					if (view) {					
-						var
-							width=view.clientWidth,
-							height=view.clientHeight,
-							dialogWidth=dialog.clientWidth,
-							dialogHeight=dialog.clientHeight,
-							scalex=dialogWidth/width,
-							scaley=dialogHeight/height,
-							scale;
-
-						if (scalex*height<dialogHeight) scale=scalex;
-						else scale=scaley;
-						$(view,{
-							css:{
-								display:"block",
-								transform:"translate("+((dialogWidth-(scale*width))/2)+"px,"+((dialogHeight-(scale*height))/2)+"px) scale("+scale+")"
-							}}
-						);
-					}
 				}
-			},500);
-
-			ModuleLoadFromQR[mode].registerOnScan(scanner,abort,function(content){
-
-				// Read only QR-Cart
-				if (content.substr(0,3)=="CRT") {
-					var qrcartdata =qrcart.decodeQRCartPart(content);
-
-			        // If it's the first cart that is reading...
-					if (!partsloaded) {
-						partstoload=qrcartdata.total;
-						readingSignature=qrcartdata.signature;
-					}
-					// Read only the carts coming from the first set
-					if (readingSignature==readingSignature) {
-			        	lastqrcartpart=qrcartdata.id;
-				        if (!qrcartparts[qrcartdata.id]) {				        	
-				        	qrcartparts[qrcartdata.id]=qrcartdata;
-				        	partsloaded++;
-				        	if (partsloaded==partstoload) {
-				        		stopReader(true);
-								qrcart.readQRCartParts(qrcartparts,binary=>{gameConsole.run(binary); });
-				        	} else gameConsole.playAudio("shutter");
-				        }
-			        	updateProgress();
-			        }
-			    }
-			});
-
-			ModuleLoadFromQR[mode].waitForCameras(scanner,abort,(id,total,camera)=>{
-				addButton(LOC._("button_cameraid",id+1),10+(id+1)*40,{camera:camera,position:id},function(){
-					if (preview) preview.style.display="none";
-					gameConsole.setStorage("CAM_"+mode,this._id.position);
-					ModuleLoadFromQR[mode].start(scanner,abort,this._id.camera,dialog);
-				});
-				if (
-					(gameConsole.setStorage("CAM_"+mode)&&(gameConsole.getStorage("CAM_"+mode)==id))
-					||
-					(!gameConsole.setStorage("CAM_"+mode)&&(id==total-1))
-				) ModuleLoadFromQR[mode].start(scanner,abort,camera,dialog);
-			});
-
-			// -- Prepare torch
-
-			if (ModuleLoadFromQR[mode].toggleTorch) {
-				var torchState=true;
-				var torchbutton=addButton(LOC._("button_lightonoff"),10,0,function(){ ModuleLoadFromQR[mode].toggleTorch(scanner,torchState,function(){torchState=!torchState}); })
-				$(torchbutton,{css:{left:"auto",right:"10px"}});
 			}
+		},500);
 
+		ModuleLoadFromQR[mode].registerOnScan(scanner,abort,function(content){
+			
+				if (content.substr(0,prefix.length)==prefix) {
+
+					if (loadcart) {
+
+						// Read only QR-Cart
+						var qrcartdata =qrcart.decodeQRCartPart(content);
+
+						// If it's the first cart that is reading...
+						if (!partsloaded) {
+							partstoload=qrcartdata.total;
+							readingSignature=qrcartdata.signature;
+						}
+						// Read only the carts coming from the first set
+						if (readingSignature==readingSignature) {
+							lastqrcartpart=qrcartdata.id;
+							if (!qrcartparts[qrcartdata.id]) {				        	
+								qrcartparts[qrcartdata.id]=qrcartdata;
+								partsloaded++;
+								if (partsloaded==partstoload) {
+									stopReader(true);
+									qrcart.readQRCartParts(qrcartparts,binary=>{gameConsole.run(binary); });
+								} else gameConsole.playAudio("shutter");
+							}
+							updateProgress();
+						}
+					} else
+						stopReader(content.substr(prefix.length));
+				}
+				
+		});
+
+		ModuleLoadFromQR[mode].waitForCameras(scanner,abort,(id,total,camera)=>{
+			addButton(LOC._("button_cameraid",id+1),10+(id+1)*40,{camera:camera,position:id},function(){
+				if (preview) preview.style.display="none";
+				gameConsole.setStorage("CAM_"+mode,this._id.position);
+				ModuleLoadFromQR[mode].start(scanner,abort,this._id.camera,dialog);
+			});
+			if (
+				(gameConsole.setStorage("CAM_"+mode)&&(gameConsole.getStorage("CAM_"+mode)==id))
+				||
+				(!gameConsole.setStorage("CAM_"+mode)&&(id==total-1))
+			) ModuleLoadFromQR[mode].start(scanner,abort,camera,dialog);
+		});
+
+		// -- Prepare torch
+
+		if (ModuleLoadFromQR[mode].toggleTorch) {
+			var torchState=true;
+			var torchbutton=addButton(LOC._("button_lightonoff"),10,0,function(){ ModuleLoadFromQR[mode].toggleTorch(scanner,torchState,function(){torchState=!torchState}); })
+			$(torchbutton,{css:{left:"auto",right:"10px"}});
+		}
+
+	}
+
+	return [{
+		id:"loadqr_"+mode,
+		serviceId:"scanCode",
+		label:label[0],
+		onSelect: function ($,gameConsole) {
+			runReader(true,$,gameConsole,"CRT");
+		},
+		onRead:function($,gameConsole,prefix,cb) {
+			runReader(false,$,gameConsole,prefix,cb);
 		}
 	}]
 }

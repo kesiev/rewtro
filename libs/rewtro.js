@@ -1088,6 +1088,7 @@ function RewtroEngine(parent,CFG) {
 					}
 
 					if (line.break) isBreaking=true;
+					if (line.scanCode) isBreaking = { id:1, prefix:line.scanCode, value:0 };
 
 					// --- Subcode --- KEEP AT VERY LAST
 					
@@ -1104,7 +1105,7 @@ function RewtroEngine(parent,CFG) {
 
 	function executeCode(code,subject,event,oldx,oldy,size,coord,speed,restitution,restitutionSpeed) {
 		
-		var times,codeThat,codeThis,randomNumber,allcollisions={},run,isBreaking=false;
+		var times,codeThat,codeThis,randomNumber,allcollisions={},result={ collisions:allcollisions },run,isBreaking=false;
 
 		code.forEach(statement=>{
 
@@ -1132,14 +1133,14 @@ function RewtroEngine(parent,CFG) {
 					// Execute code
 					for (var t=0;t<times;t++) {
 						randomNumber=Math.random();
-						isBreaking=executeInstructions(run,subject,codeThat,codeThis,speed,restitution,restitutionSpeed,randomNumber);
+						result.interrupt = isBreaking = executeInstructions(run,subject,codeThat,codeThis,speed,restitution,restitutionSpeed,randomNumber);
 						if (isBreaking) break;
 					}
 			}
 			
 		});
 		
-		return allcollisions;
+		return result;
 	}
 
 	// --- PHYSICS
@@ -1151,7 +1152,9 @@ function RewtroEngine(parent,CFG) {
 			var side,otherdelta,oldx=sprite.x,oldy=sprite.y,delta=sprite[size]*(oldspeed>0);
 			sprite[coord]+=oldspeed;
 
-			var collisions=executeCode(memory.code,sprite,"hitWall",oldx,oldy,size,coord,speed,restitution,restitutionSpeed);
+			var
+				result=executeCode(memory.code,sprite,"hitWall",oldx,oldy,size,coord,speed,restitution,restitutionSpeed),
+				collisions=result.collisions;
 
 			sprite[touchDown]=[];
 			sprite[touchUp]=[];
@@ -1185,7 +1188,17 @@ function RewtroEngine(parent,CFG) {
 
 	HW.setMainLoop(
 		// --- LOGIC LOOP
-		function(){
+		function(hardware,interrupt){
+
+			if (interrupt) {
+				switch (interrupt.id) {
+					case 1:{
+						game.value9 = interrupt.value;
+						break;
+					}
+				}
+				interrupt = 0;
+			}
 
 			if (CFG.onReady) {
 				CFG.onReady();
@@ -1206,13 +1219,14 @@ function RewtroEngine(parent,CFG) {
 					nextBlocks=0;
 				}
 
-				var sprite,lastSprite=sprites.length;
+				var result,sprite,lastSprite=sprites.length;
 
 				// Play song
 				runSongPlayer();
 
 				// Apply game logic
-				executeCode(memory.code);
+				result = executeCode(memory.code);
+				if (result) interrupt = result.interrupt;
 
 				// Apply logic/physics
 				for (var i=0;i<lastSprite;i++) {
@@ -1285,6 +1299,8 @@ function RewtroEngine(parent,CFG) {
 			}
 
 			if (DEBUGGER) DEBUGGER(sprites,songRow,lastBlocks,lastSong,scene,game);
+
+			return interrupt;
 		},
 		// --- RENDER LOOP
 		function() {

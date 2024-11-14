@@ -1114,7 +1114,8 @@ System.versions["0.1"]={
 									{ key:"load", values:GETTERS }, // Keep scene and overwrite memory
 
 									// Code flow
-									{ key:"break", flag:true }
+									{ key:"break", flag:true },
+									{ key:"scanCode", string:SYMBOLS }
 
 								]))
 							},

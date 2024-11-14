@@ -689,7 +689,7 @@ var  Hardware=function(parent,CFG) {
 
 	// --- MAIN LOOP
 
-	var timeout,logicLoop,renderLoop,frameDone=1,playing=true;
+	var timeout,logicLoop,renderLoop,frameDone=1,interrupt,playing=true;
 
 	window.requestAnimFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || 0;
 
@@ -698,13 +698,13 @@ var  Hardware=function(parent,CFG) {
  		MODE_benchmark=1;
     }
 
-    function pause() {
+    function pause(back) {
     	playing=false;
     	hideSymbolsLayer();
     	disableControls();
     	resetControls();
     	AudioEngine.stopAudio();
-    	CFG.onPause();
+    	if (back) CFG.onPause();
     }
 
     var focusTimeout;
@@ -716,6 +716,30 @@ var  Hardware=function(parent,CFG) {
     	showInputHelp();
     	focusTimeout=setTimeout(function(){ screen.cnv.focus(); },100);
     }
+	
+	function loadQr(code) {
+		interrupt.value = code;
+		frameDone=1;
+		resume();
+		doLogicLoop();
+	}
+
+	function startInterrupt() {
+		var managed;
+		switch (interrupt.id) {
+			case 1:{
+				// Load QR from camera
+				if (window.CONSOLE && CONSOLE.services.scanCode) {
+					hideInputHelp();
+					pause();
+					CONSOLE.services.scanCode.onRead(CONSOLE.$,CONSOLE,interrupt.prefix,loadQr);
+					managed = true;
+				}
+				break;
+			}
+		}
+		return managed;
+	}
 
 	function getTimestamp() { return (new Date()).getTime(); };
 
@@ -752,10 +776,19 @@ var  Hardware=function(parent,CFG) {
 				if (rawKeyboard[keys[a]]) keyboard[a]++;
 				else keyboard[a]=0;
 
-			if (CFG.onPause&&keyboard.escape) pause();
+			if (CFG.onPause&&keyboard.escape) pause(true);
 
 			// Logic
-			if (logicLoop) logicLoop(this);
+			if (logicLoop) {
+				interrupt = logicLoop(this,interrupt);
+				if (interrupt) {
+					var managed = startInterrupt();
+					if (managed) {
+						frameDone=0;
+						return;
+					} else interrupt=0;
+				}
+			}
 
 			if (frameDone) {
 				frameDone=0;

@@ -1,0 +1,22 @@
+{
+    "systemVersion":"0.3",
+    "metadata":{
+      "title":"QR CARD LOADER"
+    },
+    "data":[{
+       "id":"A",
+       "sprites":[
+         {"id":"A","backgroundColor":2,"text":"PRESS (A) AND~SCAN A QR CONTAINING~'COD' + STRING","textColor":3,"x":0,"y":0,"textAlignment":"center","width":160,"height":24},
+         {"id":"B","textColor":8,"x":0,"y":76,"textAlignment":"center","width":160,"height":8}
+      ],
+       "tilemaps":[{"map":["ABCD"]}],
+       "code":[
+        {
+            "when":[{"as":"keyboard","attribute":"buttonA","if":[{"is":"down"}]}],
+            "then":[{"scanCode":"COD"}]
+         },{"then":[
+            { "id":"B","set":[{"text":[{"as":"game","attribute":"value9"}]}]}
+         ]}
+       ]
+    }]
+ }
