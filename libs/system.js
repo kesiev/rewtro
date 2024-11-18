@@ -429,7 +429,6 @@ var System={
 System.versions["0.3"]={
 	constructor:function(debug,version) {
 		return System.versions["0.1"].constructor(debug,version,{
-			WARNING:"This is a development version of Rewtro. Please *do not* distribute games using this version.",
 			GETTERS:[
 				{ key:"idsByName", values:"*GETTERS*" },
 				{ key:"flagsByName", values:"*GETTERS*" },
