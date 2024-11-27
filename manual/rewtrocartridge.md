@@ -412,6 +412,28 @@ You can download your cartridge SVG version from the SDK home by selecting the d
 
 If you want to learn more about Rewtro data storages have a look at [this chapter](datastorage.md).
 
+### Custom headers
+
+The Rewtro console game loader only accepts QR codes starting with the `CRT` string but you can set a 3-letters custom one for your games using the `cartPrefix` attribute.
+
+```
+{
+   "systemVersion": "0.3",
+   "metadata": {
+      "title": "RWM001 - Stampadian",
+      "cartPrefix": "RWM",
+      "cardTitle": "Stampadian",
+      "cardNumber": "001",
+      "cardNote": "Play with Rewtromon!"
+   },
+   "data": [
+      ...
+   ]
+}
+```
+
+The resulting QR codes won't be recognized by the Rewtro game loader but they can be used [by another Rewtro game](qrreader.md) to load extra stages, musics, data, etc.
+
 ## Data blocks
 
 Here we are! Data blocks are the data content of your cartridge, which includes graphics, sounds, music, and code.

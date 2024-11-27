@@ -149,6 +149,55 @@ You will need a pair of scissors. This papercraft is a pretty common one and the
   * Press the two sides together until the sheet is cross-shaped.
   * In one of the sectors of the cross, you should see the booklet cover and back. Wrap all of the pages around and give a good crease to the edges.
 
+## QR-Card
+
+The QR-Card is a poker card sized sheet containing 2 QR-Codes. While it has been tought for sharing [game expansions](qrreader.md), it may be used to share games too - if it's small enough.
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/datastorage-qrcard.png"></p>
+</div>
+
+It needs a pair of scissors and some glue to be built. The SDK builds a single card at a time but you can use a vector graphic editor such as [Inkscape](https://inkscape.org/) to [merge up to 4 cards](../carts/graphics/sources/001-004-rewtromon.svg) on a single A4 sheet.
+
+### Customization
+
+You can customize a QR-Cart print layout setting these keys to your `metadata` object:
+
+  * `cardTitle` prints your card title.
+  * `cardNumber` prints a card number on the card top-left.
+  * `cardNote` prints a note near the Rewtro logo. You may use it to explain how to use the card.
+
+```
+{
+   "systemVersion":"0.3",
+   "metadata":{
+      "title":"My first game",
+      "cardTitle": "Hello, World!",
+      "cardNumber": "001",
+      "cardNote": "Play with Rewtro!"
+   },
+   "data":[{
+      "id":"A",
+      "sprites":[{"id":"A","text":"HELLO,~WORLD!","textColor":3,"backgroundColor":2,"width":50,"height":16}],
+      "tilemaps":[{"map":["A"]}]
+   }]
+}
+```
+
+<div align="center" style="margin:60px 0">
+    <p><img src="images/helloworld-qrcard.png"></p>
+</div>
+
+### How to fold
+
+You will need a pair of scissors, and some glue.
+
+  * Doodle the card illustration part as you want.
+  * Cut out the QR-Card border with the scissors.
+  * Fold the QR-Card in two so the back and the front of the card are both visible.
+  * Unfold the QR-Card and put glue on the back. I suggest to use a glue stick and draw a rectangle following one of the two card sides borders.
+  * Fold the QR-Card back and press the card hard.
+
 ## Animated GIF
 
 Animated GIFs can be used to share a Rewtro game on websites, videos, and other digital or animated media. It's an animated GIF streaming any number of QR-Codes ranging from version 1 to 19 and low correction level.

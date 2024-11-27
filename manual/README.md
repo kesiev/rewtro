@@ -26,6 +26,7 @@ I'm a little verbose, sorry, but I also love examples-filled documentation too. 
         * [Statements](codestatements.md): ...do that.
     * [Special objects](specialobjects.md): Move the virtual camera, save data across your game scenes and more!
   * [Special symbols](specialsymbols.md): Make your game modular and write code a little faster!
+  * [QR Reader](qrreader.md): Read QR codes text and extra data from Rewtro games!
   * Extras: A collection of in-depth articles.
     * [Lists and iterators](listiterators.md): You can make most of your games without knowing how these works but one day you'll want _more_...
     * [Advanced Rewtro](advanced.md): Know Rewtro even better and learn some development tricks.
