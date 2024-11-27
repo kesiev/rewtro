@@ -1,0 +1,234 @@
+{
+    "systemVersion": "0.3",
+    "metadata": {
+        "title": "RWM004 - DATAMAPS-I",
+        "cartPrefix": "RWM",
+        "cardTitle": "DATAMAPS-I",
+        "cardNumber": "004",
+        "cardNote": "Play with Rewtromon!"
+    },
+    "data": [
+        {
+            "id": "A",
+            "sounds": [
+                {
+                    "id": "1",
+                    "wave": "square",
+                    "attack": 12,
+                    "sustain": 158,
+                    "decay": 132,
+                    "release": 53,
+                    "pitch": 31,
+                    "frequencyJump1onset": 102,
+                    "frequencyJump1amount": 153
+                },
+                {
+                    "id": "3",
+                    "wave": "whitenoise",
+                    "attack": 127,
+                    "sustain": 127,
+                    "decay": 127,
+                    "release": 127,
+                    "pitch": 159
+                },
+                {
+                    "id": "4",
+                    "wave": "whitenoise",
+                    "attack": 28,
+                    "sustain": 127,
+                    "decay": 127,
+                    "release": 127,
+                    "frequency": 239,
+                    "pitch": 159
+                },
+                {
+                    "id": "5",
+                    "wave": "breaker",
+                    "attack": 150,
+                    "sustain": 147,
+                    "decay": 142,
+                    "release": 127,
+                    "frequency": 226,
+                    "pitch": 159,
+                    "frequencyJump1onset": 140,
+                    "frequencyJump1amount": 15,
+                    "frequencyJump2onset": 56,
+                    "frequencyJump2amount": 25
+                },
+                {
+                    "id": "6",
+                    "wave": "whistle",
+                    "attack": 226,
+                    "sustain": 232,
+                    "decay": 234,
+                    "release": 226,
+                    "frequency": 51,
+                    "tremoloFrequency": 155,
+                    "tremoloDepth": 214,
+                    "frequencyJump1onset": 43,
+                    "frequencyJump1amount": 76,
+                    "frequencyJump2onset": 94,
+                    "frequencyJump2amount": 175,
+                    "bitCrush": 47,
+                    "bitCrushSweep": 159
+                }
+            ],
+            "images": [
+                {
+                    "id": "graphics",
+                    "image": {
+                        "data": {
+                            "_file": "graphics/rewtromon/004-datamapsi.png"
+                        },
+                        "format": "monocolor"
+                    }
+                }
+            ],
+            "sprites": [
+                {
+                    "id": "A",
+                    "textColor": 1,
+                    "text": "DATAMAPS-I",
+                    "x": 0,
+                    "y": 0,
+                    "width": 160
+                },
+                {
+                    "id": "1",
+                    "textColor": 1,
+                    "text": "DATAMAPS-I",
+                    "x": 80,
+                    "y": 64,
+                    "width": 160
+                },
+                {
+                    "id": "B",
+                    "graphicsX": 0,
+                    "graphicsY": 60,
+                    "x": 104,
+                    "y": 16,
+                    "width": 32,
+                    "height": 20,
+                    "scale": 2,
+                    "value0": 2,
+                    "value1": 4
+                },
+                {
+                    "id": "2",
+                    "graphicsX": 0,
+                    "graphicsY": 40,
+                    "x": 24,
+                    "y": 74,
+                    "width": 32,
+                    "height": 20,
+                    "scale": 2,
+                    "value0": 4,
+                    "value1": 4
+                },
+                {
+                    "id": "3",
+                    "graphicsX": 32,
+                    "graphicsY": 200,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4
+                            ],
+                            "speed": 2,
+                            "mode": "once"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -10,
+                    "value3": 1,
+                    "value4": -15,
+                    "value5": "TELL A~BURNING LIE!"
+                },
+                {
+                    "id": "4",
+                    "graphicsX": 32,
+                    "graphicsY": 248,
+                    "width": 8,
+                    "height": 8,
+                    "speedY": -0.5,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4
+                            ],
+                            "speed": 4,
+                            "mode": "once"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -10,
+                    "value3": 3,
+                    "value4": -5,
+                    "value5": "BURN A~PROOF!"
+                },
+                {
+                    "id": "5",
+                    "graphicsX": 32,
+                    "graphicsY": 216,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ],
+                            "speed": 2,
+                            "mode": "once"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -15,
+                    "value5": "TELL A~FALSE TRUTH!"
+                },
+                {
+                    "id": "6",
+                    "graphicsX": 32,
+                    "graphicsY": 104,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ],
+                            "speed": 4,
+                            "mode": "bounce"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 5,
+                    "value5": "IS PLANNING~SOMETHING!"
+                }
+            ]
+        }
+    ]
+}

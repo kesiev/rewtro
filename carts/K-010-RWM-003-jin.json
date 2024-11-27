@@ -1,0 +1,229 @@
+{
+    "systemVersion": "0.3",
+    "metadata": {
+        "title": "RWM003 - Jin",
+        "cartPrefix": "RWM",
+        "cardTitle": "Jin",
+        "cardNumber": "003",
+        "cardNote": "Play with Rewtromon!"
+    },
+    "data": [
+        {
+            "id": "A",
+            "sounds": [
+                {
+                    "id": "1",
+                    "wave": "sine",
+                    "attack": 198,
+                    "sustain": 206,
+                    "decay": 204,
+                    "release": 127,
+                    "frequency": 137,
+                    "tremoloDepth": 89,
+                    "pitch": 140,
+                    "frequencyJump1onset": 71,
+                    "frequencyJump1amount": 86,
+                    "frequencyJump2onset": 150,
+                    "frequencyJump2amount": 109
+                },
+                {
+                    "id": "3",
+                    "wave": "whitenoise",
+                    "attack": 22,
+                    "sustain": 127,
+                    "decay": 96,
+                    "release": 170,
+                    "frequency": 242,
+                    "pitch": 114
+                },
+                {
+                    "id": "4",
+                    "wave": "whitenoise",
+                    "attack": 204,
+                    "sustain": 127,
+                    "decay": 186,
+                    "release": 127,
+                    "frequency": 242
+                },
+                {
+                    "id": "5",
+                    "wave": "triangle",
+                    "attack": 5,
+                    "sustain": 127,
+                    "decay": 96,
+                    "release": 170,
+                    "frequency": 68,
+                    "tremoloFrequency": 53,
+                    "tremoloDepth": 168,
+                    "pitch": 165
+                },
+                {
+                    "id": "6",
+                    "wave": "whistle",
+                    "attack": 5,
+                    "sustain": 201,
+                    "decay": 173,
+                    "release": 181,
+                    "frequency": 73,
+                    "tremoloFrequency": 53,
+                    "tremoloDepth": 168,
+                    "pitch": 95
+                }
+            ],
+            "images": [
+                {
+                    "id": "graphics",
+                    "image": {
+                        "data": {
+                            "_file": "graphics/rewtromon/003-jin.png"
+                        },
+                        "format": "monocolor"
+                    }
+                }
+            ],
+            "sprites": [
+                {
+                    "id": "A",
+                    "textColor": 1,
+                    "text": "JIN",
+                    "x": 0,
+                    "y": 0,
+                    "width": 160
+                },
+                {
+                    "id": "1",
+                    "textColor": 1,
+                    "text": "JIN",
+                    "x": 80,
+                    "y": 64,
+                    "width": 160
+                },
+                {
+                    "id": "B",
+                    "graphicsX": 0,
+                    "graphicsY": 60,
+                    "x": 104,
+                    "y": 16,
+                    "width": 32,
+                    "height": 20,
+                    "scale": 2,
+                    "value0": 2,
+                    "value1": 3
+                },
+                {
+                    "id": "2",
+                    "graphicsX": 0,
+                    "graphicsY": 40,
+                    "x": 24,
+                    "y": 74,
+                    "width": 32,
+                    "height": 20,
+                    "scale": 2,
+                    "value0": 4,
+                    "value1": 3
+                },
+                {
+                    "id": "3",
+                    "graphicsX": 32,
+                    "graphicsY": 80,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4
+                            ],
+                            "speed": 2,
+                            "mode": "once"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -10,
+                    "value3": 4,
+                    "value4": -15,
+                    "value5": "SPLASH SOME~SALTY WATER!"
+                },
+                {
+                    "id": "4",
+                    "graphicsX": 32,
+                    "graphicsY": 88,
+                    "width": 8,
+                    "height": 8,
+                    "speedX": 0.5,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4
+                            ],
+                            "speed": 4,
+                            "mode": "once"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -10,
+                    "value3": 2,
+                    "value4": -5,
+                    "value5": "SUMMON A~WAVE!"
+                },
+                {
+                    "id": "5",
+                    "graphicsX": 32,
+                    "graphicsY": 256,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ],
+                            "speed": 2,
+                            "mode": "once"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -15,
+                    "value5": "THROW A~SQUID FRIEND!"
+                },
+                {
+                    "id": "6",
+                    "graphicsX": 32,
+                    "graphicsY": 104,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1
+                            ],
+                            "speed": 10,
+                            "mode": "loop"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 1,
+                    "value1": 24,
+                    "value2": 0,
+                    "value5": "IS~SAD!"
+                }
+            ]
+        }
+    ]
+}

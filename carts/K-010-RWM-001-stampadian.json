@@ -1,0 +1,226 @@
+{
+    "systemVersion": "0.3",
+    "metadata": {
+        "title": "RWM001 - Stampadian",
+        "cartPrefix": "RWM",
+        "cardTitle": "Stampadian",
+        "cardNumber": "001",
+        "cardNote": "Play with Rewtromon!"
+    },
+    "data": [
+        {
+            "id": "A",
+            "sounds": [
+                {
+                    "id": "1",
+                    "wave": "breaker",
+                    "attack": 43,
+                    "sustain": 127,
+                    "decay": 127,
+                    "release": 127,
+                    "frequencyJump1onset": 76,
+                    "frequencyJump1amount": 155,
+                    "frequencyJump2onset": 209,
+                    "frequencyJump2amount": 104
+                },
+                {
+                    "id": "3",
+                    "wave": "whitenoise",
+                    "attack": 10,
+                    "sustain": 73,
+                    "decay": 5,
+                    "release": 81,
+                    "frequency": 252,
+                    "pitch": 242
+                },
+                {
+                    "id": "4",
+                    "wave": "whitenoise",
+                    "attack": 15,
+                    "sustain": 255,
+                    "decay": 127,
+                    "release": 255,
+                    "frequency": 249,
+                    "frequencyJump1onset": 99,
+                    "frequencyJump1amount": 150
+                },
+                {
+                    "id": "5",
+                    "wave": "whitenoise",
+                    "attack": 15,
+                    "sustain": 255,
+                    "decay": 127,
+                    "release": 255,
+                    "frequency": 145,
+                    "tremoloFrequency": 17,
+                    "tremoloDepth": 178
+                },
+                {
+                    "id": "6",
+                    "wave": "sine",
+                    "attack": 2,
+                    "sustain": 255,
+                    "decay": 255,
+                    "release": 255,
+                    "frequency": 10,
+                    "tremoloFrequency": 20,
+                    "tremoloDepth": 201
+                }
+            ],
+            "images": [
+                {
+                    "id": "graphics",
+                    "image": {
+                        "data": {
+                            "_file": "graphics/rewtromon/001-stampadian.png"
+                        },
+                        "format": "monocolor"
+                    }
+                }
+            ],
+            "sprites": [
+                {
+                    "id": "A",
+                    "textColor": 1,
+                    "text": "STAMPADIAN",
+                    "x": 0,
+                    "y": 0,
+                    "width": 160
+                },
+                {
+                    "id": "1",
+                    "textColor": 1,
+                    "text": "STAMPADIAN",
+                    "x": 80,
+                    "y": 64,
+                    "width": 160
+                },
+                {
+                    "id": "B",
+                    "graphicsX": 0,
+                    "graphicsY": 60,
+                    "x": 104,
+                    "y": 16,
+                    "width": 32,
+                    "height": 20,
+                    "scale": 2,
+                    "value0": 2,
+                    "value1": 1
+                },
+                {
+                    "id": "2",
+                    "graphicsX": 0,
+                    "graphicsY": 40,
+                    "x": 24,
+                    "y": 74,
+                    "width": 32,
+                    "height": 20,
+                    "scale": 2,
+                    "value0": 4,
+                    "value1": 1
+                },
+                {
+                    "id": "3",
+                    "graphicsX": 32,
+                    "graphicsY": 240,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4
+                            ],
+                            "speed": 2,
+                            "mode": "once"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -10,
+                    "value3": 2,
+                    "value4": -15,
+                    "value5": "ATTACKS WITH~TREE SLICE!"
+                },
+                {
+                    "id": "4",
+                    "graphicsX": 32,
+                    "graphicsY": 208,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ],
+                            "speed": 6,
+                            "mode": "once"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -10,
+                    "value3": 4,
+                    "value4": -5,
+                    "value5": "CROSS OUT~THE ENEMY!"
+                },
+                {
+                    "id": "5",
+                    "graphicsX": 32,
+                    "graphicsY": 96,
+                    "width": 8,
+                    "height": 8,
+                    "speedX": 0.5,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2
+                            ],
+                            "speed": 2,
+                            "mode": "bounce"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 0,
+                    "value1": 5,
+                    "value2": -10,
+                    "value5": "USE~ERASER!"
+                },
+                {
+                    "id": "6",
+                    "graphicsX": 32,
+                    "graphicsY": 144,
+                    "width": 8,
+                    "height": 8,
+                    "animations": [
+                        {
+                            "frames": [
+                                0,
+                                1,
+                                2,
+                                3
+                            ],
+                            "speed": 2,
+                            "mode": "bounce"
+                        }
+                    ],
+                    "animation": 0,
+                    "value0": 1,
+                    "value1": 0,
+                    "value2": 5,
+                    "value5": "REROLL FOR~BETTER RESULTS!"
+                }
+            ]
+        }
+    ]
+}
