@@ -39,15 +39,15 @@
 				{"id":"A","_file":"songs/stetris-song.json","_replace":{"tempo":5}}
 			],
 			"sprites":[
-			{
+				{
 
-				"id":"A",
-				"width":43,"height":8,
-				"graphicsX":64,"graphicsY":16,"scale":2,
-				"x":58,
-				"y":36
-			},
-			{
+					"id":"A",
+					"width":43,"height":8,
+					"graphicsX":64,"graphicsY":16,"scale":2,
+					"x":58,
+					"y":36
+				},
+				{
 					"id":"B",
 					"x":76,"y":20,
 					"textColor":2,"textAlignment":"center"
