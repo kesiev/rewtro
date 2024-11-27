@@ -9,7 +9,7 @@ header("Pragma: no-cache");
 
 ?>
 
-var CACHE = 'rewtro-cache-v1.1';
+var CACHE = 'rewtro-cache-v1.2';
 var precacheFiles =
 
 <?php

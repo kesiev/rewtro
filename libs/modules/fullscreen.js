@@ -10,7 +10,7 @@ function ModuleFullscreen(label) {
 				(window.matchMedia('(display-mode: standalone)').matches) ||
 				(window.navigator.standalone) ||
 				document.referrer.includes('android-app://') ||
-				(document.location.href.indexOf("user_mode=app")!=-1)
+				(document.location.hash == "#user_mode=app")
 			)) {
 				if (div.requestFullscreen) this.fullScreen={request:"requestFullscreen",exit:"exitFullscreen",is:"fullscreen",on:"fullscreenchange",error:"fullscreenerror"};
 				else if (div.webkitRequestFullscreen) this.fullScreen={request:"webkitRequestFullScreen",exit:"webkitExitFullscreen",is:"webkitIsFullScreen",on:"webkitfullscreenchange",error:"webkitfullscreenerror"};

@@ -2,7 +2,7 @@
     "name": "Rewtro",
     "short_name": "Rewtro",
     "lang": "en",
-    "start_url": "index.html?user_mode=app",
+    "start_url": "index.html#user_mode=app",
     "display": "fullscreen",
     "theme_color": "#222831",
     "background_color": "#eeeeee",
