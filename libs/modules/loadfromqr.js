@@ -1,10 +1,33 @@
 function ModuleLoadFromQR(label,mode,qrcart) {
 
-	function runReader(loadcart,$,gameConsole,prefix,cb) {
+	function runReader($,gameConsole,prefix,interrupt,cb) {
 
-		var dialog;
+		var dialog, loadData = !interrupt || interrupt.map;
 		
-		if (loadcart) {
+		if (interrupt) {
+
+			var configpanel = $("div",{set:{className:"configpanel"}});
+			dialog = $("div",{set:{className:"dialog"}});
+			gameConsole.node.appendChild(configpanel);
+			configpanel.appendChild(dialog);
+
+			function stopReader(content) {
+				ModuleLoadFromQR[mode].stop(scanner,dialog);
+				gameConsole.node.removeChild(configpanel);
+				clearInterval(resizeInterval);
+				cb(content);
+			}
+
+			function abort() {
+				stopReader(0);
+			}
+
+			function closeReader() {
+				abort();
+			}
+			
+		} else {
+
 			dialog = gameConsole.getDialog();
 
 			function stopReader(endoption) {
@@ -28,28 +51,6 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 				stopReader(true);
 			}
 
-		} else {
-
-			var configpanel = $("div",{set:{className:"configpanel"}});
-			dialog = $("div",{set:{className:"dialog"}});
-			gameConsole.node.appendChild(configpanel);
-			configpanel.appendChild(dialog);
-
-			function stopReader(content) {
-				ModuleLoadFromQR[mode].stop(scanner,dialog);
-				gameConsole.node.removeChild(configpanel);
-				clearInterval(resizeInterval);
-				cb(content);
-			}
-
-			function abort() {
-				stopReader(0);
-			}
-
-			function closeReader() {
-				abort();
-			}
-
 		}
 
 		// --- Prepare UI
@@ -60,7 +61,7 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 
 		function updateProgress() {
 			if (partstoload) {
-				var html=LOC._("loadqr_scanning",partstoload);
+				var html=LOC._(interrupt ? "scanqr_scanning" : "loadqr_scanning",partstoload);
 				for (var i=0;i<partstoload;i++) {
 					html+="<span class='";
 					if (i==lastqrcartpart) html+="qrcode-last";
@@ -68,8 +69,8 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 					else html+="qrcode-missing";
 					html+="'><i class='fas fa-camera'></i></span>&nbsp;";
 				}
-				html+=LOC._("loadqr_progress",partstoload-partsloaded);
-			} else html= LOC._(loadcart ? "loadqr_tutorial" : "scanqr_tutorial");
+				html+=LOC._(interrupt ? "scanqr_progress" : "loadqr_progress",partstoload-partsloaded);
+			} else html= LOC._(interrupt ? "scanqr_tutorial" : "loadqr_tutorial");
 			help.innerHTML=html;
 		}
 		updateProgress();
@@ -138,7 +139,7 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 			
 				if (content.substr(0,prefix.length)==prefix) {
 
-					if (loadcart) {
+					if (loadData) {
 
 						// Read only QR-Cart
 						var qrcartdata =qrcart.decodeQRCartPart(content);
@@ -155,8 +156,20 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 								qrcartparts[qrcartdata.id]=qrcartdata;
 								partsloaded++;
 								if (partsloaded==partstoload) {
-									stopReader(true);
-									qrcart.readQRCartParts(qrcartparts,binary=>{gameConsole.run(binary); });
+									if (interrupt) {
+										qrcart.readQRCartParts(qrcartparts,binary=>{
+											try {
+												System.unpack(binary,model=>{
+													stopReader(model);
+												});
+											} catch (e) {
+												stopReader(0);
+											}
+										});
+									} else {
+										stopReader(true);
+										qrcart.readQRCartParts(qrcartparts,binary=>{gameConsole.run(binary); });
+									}
 								} else gameConsole.playAudio("shutter");
 							}
 							updateProgress();
@@ -195,10 +208,10 @@ function ModuleLoadFromQR(label,mode,qrcart) {
 		serviceId:"scanCode",
 		label:label[0],
 		onSelect: function ($,gameConsole) {
-			runReader(true,$,gameConsole,"CRT");
+			runReader($,gameConsole,"CRT");
 		},
-		onRead:function($,gameConsole,prefix,cb) {
-			runReader(false,$,gameConsole,prefix,cb);
+		onRead:function($,gameConsole,interrupt,cb) {
+			runReader($,gameConsole,interrupt.prefix,interrupt,cb);
 		}
 	}]
 }

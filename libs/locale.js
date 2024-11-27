@@ -72,7 +72,9 @@ LocaleManager.languages.EN={
 	loadqr_tutorial:"Point the camera at a <i class='fas fa-qrcode'></i> QR-Cart to load it.",
 	scanqr_tutorial:"Point the camera at a <i class='fas fa-qrcode'></i> QR-Code to scan it.",
 	loadqr_progress:"<br>Scan <b>{1}</b> QR-Carts to go!",
+	scanqr_progress:"<br>Scan <b>{1}</b> QR Codes to go!",
 	loadqr_scanning:"Scanning a <b>{1}</b> QR-Cart game.<br>",
+	scanqr_scanning:"Scanning a <b>{1}</b> QR Rewtro data.<br>",
 	loadqr_permissions:"Hey! It looks like Rewtro can't access your camera. Make sure you've given the right permissions from your web browser and try selecting <i class='fas fa-camera'></i> Load QR-Cart again.",
 	// --- Installer
 	installer_install:"Install Rewtro",
@@ -132,7 +134,9 @@ LocaleManager.languages.IT={
 	loadqr_tutorial:"Inquadra una <i class='fas fa-qrcode'></i> QR-Cart per caricarla.",
 	scanqr_tutorial:"Inquadra un <i class='fas fa-qrcode'></i> QR-Code per scansionarlo.",
 	loadqr_progress:"<br>Ancora <b>{1}</b> QR-Cart da scansionare!",
+	scanqr_progress:"<br>Ancora <b>{1}</b> QR Code da scansionare!",
 	loadqr_scanning:"Stai caricando un gioco da <b>{1}</b> QR-Cart.<br>",
+	scanqr_scanning:"Stai caricando dati Rewtro da <b>{1}</b> QR Code.<br>",
 	loadqr_permissions:"Hey! Sembra che Rewtro non riesca ad accedere alla telecamera. Assicurati di aver dato i giusti permessi dal tuo browser web e prova a selezionare <i class='fas fa-camera'></i> Carica QR-Cart di nuovo.",
 	// --- Installer
 	installer_install:"Installa Rewtro",
@@ -192,7 +196,9 @@ LocaleManager.languages.FR={
 	loadqr_tutorial:"Pointer la camera vers le <i class='fas fa-qrcode'></i> QR-Cart pour le charger.",
 	scanqr_tutorial:"Pointer la camera vers le <i class='fas fa-qrcode'></i> QR-Code pour le scanner.",
 	loadqr_progress:"<br>Encore <b>{1}</b> QR-Carts à charger !",
+	scanqr_progress:"<br>Encore <b>{1}</b> QR Code à charger !",
 	loadqr_scanning:"Scan d'un jeu de <b>{1}</b> QR-Carts.<br>",
+	scanqr_scanning:"Scan des données Rewtro de <b>{1}</b> QR Code.<br>",
 	loadqr_permissions:"Hey! Il semble que Rewtro ne puisse pas acc&eacute;der &agrave; votre appareil photo. Assurez-vous que vous avez donn&eacute; les bonnes autorisations &agrave; partir de votre navigateur Web et essayez &agrave; nouveau de s&eacute;lectionner <i class='fas fa-camera'></i> Charger QR-Cart.",
 	// --- Installer
 	installer_install:"Installer Rewtro",
@@ -252,7 +258,9 @@ LocaleManager.languages.ES={
 	loadqr_tutorial:"Apunte la c&aacute;mara a un <i class='fas fa-qrcode'></i> QR-Cart para descargar.",
 	scanqr_tutorial:"Apunte la cc&aacute;mara a un <i class='fas fa-qrcode'></i> QR-Code para escanearlo.",
 	loadqr_progress:"<br>Exploraci&oacute;n <b>{1}</b> QR-Carts restante!",
+	scanqr_progress:"<br>Exploraci&oacute;n <b>{1}</b> QR Code restante!",
 	loadqr_scanning:"Escaniando <b>{1}</b> juegos QR-Cart.<br>",
+	scanqr_scanning:"Escaniando <b>{1}</b> datos de Rewtro QR Code.<br>",
 	loadqr_permissions:"&iexcl;Oye! Parece que Rewtro no puede acceder a su c&aacute;mara. Aseg&uacute;rese de haber otorgado los permisos correctos desde su navegador web e intente seleccionar <i class='fas fa-camera'></i> Cargar QR-Cart nuevamente.",
 	// --- Installer
 	installer_install:"Instalar Rewtro",

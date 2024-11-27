@@ -732,7 +732,7 @@ var  Hardware=function(parent,CFG) {
 				if (window.CONSOLE && CONSOLE.services.scanCode) {
 					hideInputHelp();
 					pause();
-					CONSOLE.services.scanCode.onRead(CONSOLE.$,CONSOLE,interrupt.prefix,loadQr);
+					CONSOLE.services.scanCode.onRead(CONSOLE.$,CONSOLE,interrupt,loadQr);
 					managed = true;
 				}
 				break;

@@ -22,11 +22,16 @@ function RewtroEngine(parent,CFG) {
 		OPACITYRANGE=CFG.model.system.OPACITYRANGE,
 		DEBUGGER=CFG.debugger,
 		AUDIOENABLED=CFG.audioEnabled,
-		ANGLETOLLERANCE=45;
+		ANGLETOLLERANCE=45,
+		SPRITEATTRIBUTESMAP={};
 
 	var
 		DEGTORAD=3.14/180;
 		HTMLPALETTE=PALETTE.map(color=>getHtmlColor(color));
+
+	SPRITEATTRIBUTES.forEach(attribute=>{
+		SPRITEATTRIBUTESMAP[attribute.key] = attribute.defaultValue;
+	})
 
 	// --- HELPERS
 
@@ -218,28 +223,63 @@ function RewtroEngine(parent,CFG) {
 			font.tileHeight=font.image.data.height/PALETTE.length;
 		}
 	}
+
 	// Prerender system font
 	prepareFont(DEFAULTFONT);
 
 	// Media prerendering and data indexing (audio, images)
 	var sounds={},effectsChannels={},tapeIndex={},autoChannel=0;
+
+	function loadAudio(audio,toid) {
+		var channel,data={wave:audio.wave};
+		if (audio.channelId) channel=audio.channelId;
+		else {					
+			channel="_"+autoChannel;
+			autoChannel++;
+		}
+		for (var k in NOISERANGES)
+			if (audio[k]===undefined) data[k]=NOISEDEFAULTS[k];
+			else data[k]=NOISERANGES[k][0]+((audio[k]/AUDIORANGE[1])*(NOISERANGES[k][1]-NOISERANGES[k][0]));
+		sounds[toid]={channel:channel,data:generateNoise(data),config:data};
+		effectsChannels[channel]=1;
+	}
+
+	function loadImage(image) {
+		prepareFont(image);
+	}
+
+	function loadMusic(music) {
+		var note,channelId,sequencer=[];
+		for (var k=0;k<music.notes[0].length;k++) {
+			var row={};
+			for (var ch=0;ch<music.notes.length;ch++) {
+				newnote=note=music.notes[ch][k];
+				channelId="M"+ch;
+				songChannels[channelId]=1;
+				if (note!=NOTENOOP) {
+					if (NOTES[note]) {
+						var instrument=sounds[music.instruments[ch]];
+						var newnote=music.instruments[ch]+note;
+						if (!sounds[newnote])
+							sounds[newnote]={
+								data:generateNoise(instrument.config,NOTES[note])
+							}
+					}
+					row[channelId]=newnote;
+				}							
+			}
+			sequencer.push(row);
+		}
+		musics[music.id]=sequencer;
+	}
+
 	CART.data.forEach(line=>{
 		if (line.id) tapeIndex[line.id]=line;
 		if (line.sounds) line.sounds.forEach(audio=>{
-			var data={wave:audio.wave};
-			if (audio.channelId) channel=audio.channelId;
-			else {					
-				channel="_"+autoChannel;
-				autoChannel++;
-			}
-			for (var k in NOISERANGES)
-				if (audio[k]===undefined) data[k]=NOISEDEFAULTS[k];
-				else data[k]=NOISERANGES[k][0]+((audio[k]/AUDIORANGE[1])*(NOISERANGES[k][1]-NOISERANGES[k][0]));
-			sounds[audio.id]={channel:channel,data:generateNoise(data),config:data};
-			effectsChannels[channel]=1;
+			loadAudio(audio,audio.id);
 		});
 		if (line.images)
-			line.images.forEach(image=>{ prepareFont(image); });
+			line.images.forEach(image=>{ loadImage(image); });
 	});
 
 	// Music preparation
@@ -247,29 +287,8 @@ function RewtroEngine(parent,CFG) {
 	CART.data.forEach(line=>{
 		if (line.music) 
 			line.music.forEach(line=>{
-				var note,channelId,sequencer=[];
-				for (var k=0;k<line.notes[0].length;k++) {
-					var row={};
-					for (var ch=0;ch<line.notes.length;ch++) {
-						newnote=note=line.notes[ch][k];
-						channelId="M"+ch;
-						songChannels[channelId]=1;
-						if (note!=NOTENOOP) {
-							if (NOTES[note]) {
-								var instrument=sounds[line.instruments[ch]];
-								var newnote=line.instruments[ch]+note;
-								if (!sounds[newnote])
-									sounds[newnote]={
-										data:generateNoise(instrument.config,NOTES[note])
-									}
-							}
-							row[channelId]=newnote;
-						}							
-					}
-					sequencer.push(row);
-				}
-				musics[line.id]=sequencer;
-			});		
+				loadMusic(line);
+			});
 	});
 
 	// --- AUDIO WRAPPERS
@@ -326,7 +345,7 @@ function RewtroEngine(parent,CFG) {
 	function loadSong(newsong) {
 		lastSong=newsong;
 		song=memory.songs[newsong];
-		songTempo=song.tempo;
+		songTempo=song ? song.tempo : 0;
 		stopSong();
 	}
 
@@ -1088,7 +1107,7 @@ function RewtroEngine(parent,CFG) {
 					}
 
 					if (line.break) isBreaking=true;
-					if (line.scanCode) isBreaking = { id:1, prefix:line.scanCode, value:0 };
+					if (line.scanCode) isBreaking = { id:1, prefix:line.scanCode, map:line.scanCodeMap, value:0 };
 
 					// --- Subcode --- KEEP AT VERY LAST
 					
@@ -1178,6 +1197,18 @@ function RewtroEngine(parent,CFG) {
 		return collided;
 	}
 
+	// --- SUB-DATA LOADER
+
+	function removeId(set,id) {
+		var found;
+		set.forEach((element,eid)=>{
+			if (element.id == id)
+				found=eid;
+		})
+		if (found !== undefined)
+			set.splice(found,1);
+	}
+
 	// --- MAIN LOOP
 
 	// Load the first block
@@ -1193,7 +1224,154 @@ function RewtroEngine(parent,CFG) {
 			if (interrupt) {
 				switch (interrupt.id) {
 					case 1:{
-						game.value9 = interrupt.value;
+						if (interrupt.map) {
+							if (interrupt.value && interrupt.value.cart) {
+								interrupt.map.forEach(map=>{
+									var fromScene,toScene = tapeIndex[map.toScene];
+									interrupt.value.cart.data.forEach(scene=>{
+										if (scene.id == map.fromScene)
+											fromScene = scene;
+									})
+									if (fromScene && toScene) {
+										var imagemap={},soundsmap={},spritesmap={},musicmap={},songsmap={};
+
+										if (map.images) {
+											map.images.forEach(map=>{
+												fromScene.images.forEach(image=>{
+													var
+														id = image.id;
+													if (id == map.from) {
+														imagemap[map.from] = map.to;
+														removeId(toScene.images,map.to);
+														image.id = map.to;
+														loadImage(image);
+														toScene.images.push(image);
+													}
+												})
+											})
+										}
+
+										if (map.sounds) {
+											var maps = Math.floor(map.sounds.length/2);
+											for (let i=0;i<maps;i++) {
+												var
+													fromId = map.sounds[i*2],
+													toId = map.sounds[i*2+1];
+												fromScene.sounds.forEach(audio=>{
+													if (audio.id == fromId) {
+														soundsmap[audio.id]=toId;
+														loadAudio(audio,toId);
+													}
+												})
+											}
+										}
+
+										if (map.sprites) {
+											var maps = Math.floor(map.sprites.length/2);
+											for (let i=0;i<maps;i++) {
+												var
+													fromId = map.sprites[i*2],
+													toId = map.sprites[i*2+1];
+												fromScene.sprites.forEach(sprite=>{
+													if (sprite.id == fromId) {
+														var
+															graphic = sprite.graphic || SPRITEATTRIBUTESMAP.graphic,
+															font = sprite.font || SPRITEATTRIBUTESMAP.font;
+														spritesmap[sprite.id] = toId;
+														removeId(toScene.sprites,toId);
+														sprite.id = toId;
+														if (imagemap[graphic])
+															sprite.graphic = imagemap[graphic];
+														if (imagemap[font])
+															sprite.font = imagemap[font];
+														toScene.sprites.push(sprite);
+													}
+												})
+											}
+										}
+										
+										if (map.music) {
+											var maps = Math.floor(map.music.length/2);
+											for (let i=0;i<maps;i++) {
+												var
+													fromId = map.music[i*2],
+													toId = map.music[i*2+1];
+												fromScene.music.forEach(music=>{
+													if (music.id == fromId) {
+														musicmap[music.id] = toId;
+														removeId(toScene.music,toId);
+														music.id = toId;
+														if (music.instruments) {
+															var instruments = "";
+															for (let i=0;i<music.instruments.length;i++)
+																if (soundsmap[music.instruments[i]])
+																	instruments+=soundsmap[music.instruments[i]];
+																else
+																	instruments+=music.instruments[i];
+															music.instruments=instruments;
+														}
+														toScene.music.push(music);
+														loadMusic(music);
+													}
+												})
+											}
+										}
+
+										if (map.songs) {
+											var maps = Math.floor(map.songs.length/2);
+											for (let i=0;i<maps;i++) {
+												var
+													fromId = map.songs[i*2],
+													toId = map.songs[i*2+1];
+												fromScene.songs.forEach(song=>{
+													if (song.id == fromId) {
+														songsmap[song.id] = toId;
+														removeId(toScene.songs,toId);
+														song.id = toId;
+														if (song.music) {
+															var music = "";
+															for (let i=0;i<song.music.length;i++)
+																if (musicmap[song.music[i]])
+																	music+=musicmap[song.music[i]];
+																else
+																	music+=song.music[i];
+															song.music=music;
+														}
+														toScene.songs.push(song);
+													}
+												})
+											}
+										}
+
+										if (map.tilemaps) {
+											map.tilemaps.forEach(map=>{
+												if (fromScene.tilemaps[map.from]) {
+													var fromMap = fromScene.tilemaps[map.from];
+													if (soundsmap[fromMap.playAudio])
+														fromMap.playAudio = soundsmap[fromMap.playAudio];
+													if (songsmap[fromMap.song])
+														fromMap.song = songsmap[fromMap.song];
+													if (fromMap.map)
+														fromMap.map = fromMap.map.map(line=>{
+															let newline = "";
+															for (let i=0;i<line.length;i++)
+																if (spritesmap[line[i]] !== undefined)
+																	newline+=spritesmap[line[i]];
+																else
+																	newline+=line[i];
+															return newline;
+														});
+													toScene.tilemaps[map.to] = fromMap;
+												}
+											})
+										}
+										
+									}
+								});
+								scene.value9 = 1;
+							} else scene.value9 = 0;
+						} else
+							scene.value9 = interrupt.value;
 						break;
 					}
 				}
@@ -1324,7 +1502,7 @@ function RewtroEngine(parent,CFG) {
 								sprite.noCamera?sprite.y:sprite.y-scene.y,
 								sprite.width,sprite.height
 							);
-						if (memory.images.graphics&&(sprite.graphicsX!==undefined))
+						if (memory.images[sprite.graphic]&&(sprite.graphicsX!==undefined))
 							HW.blit(
 								memory.images[sprite.graphic].image.data,
 								sprite.flipX,sprite.flipY,sprite.rotate,sprite.opacity/OPACITYRANGE[1],sprite.scale,								

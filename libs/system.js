@@ -426,10 +426,27 @@ var System={
  * System versions. Each one in based on 0.1 with "quirks" and "getters" flagging incompatibilities with base version.
  */
 
-System.versions["0.3"]={
+System.versions["0.4"]={
 	constructor:function(debug,version) {
 		return System.versions["0.1"].constructor(debug,version,{
 			WARNING:"This is a development version of Rewtro. Please *do not* distribute games using this version.",
+			GETTERS:[
+				{ key:"idsByName", values:"*GETTERS*" },
+				{ key:"flagsByName", values:"*GETTERS*" },
+				{ key:"ceil", flag:true },
+				{ key:"round", flag:true }
+			],
+			QUIRKS:{
+				unshift:true,
+				bigGraphicsY:true
+			}
+		});
+	}
+};
+
+System.versions["0.3"]={
+	constructor:function(debug,version) {
+		return System.versions["0.1"].constructor(debug,version,{
 			GETTERS:[
 				{ key:"idsByName", values:"*GETTERS*" },
 				{ key:"flagsByName", values:"*GETTERS*" },
@@ -1115,7 +1132,27 @@ System.versions["0.1"]={
 
 									// Code flow
 									{ key:"break", flag:true },
-									{ key:"scanCode", string:SYMBOLS }
+									{ key:"scanCode", string:SYMBOLS },
+									{
+										key:"scanCodeMap",
+										values:System.padWithUnused(debug,"scanCodeMap",16,[
+											{ key:"fromScene", character:SYMBOLS },
+											{ key:"toScene", character:SYMBOLS },
+											{ key:"images", values:System.padWithUnused(debug,"images",2,[
+												{ key:"from", value:GRAPHICS, defaultValue:GRAPHICS[0] },
+												{ key:"to", value:GRAPHICS, defaultValue:GRAPHICS[2] }
+											]) },
+											{ key:"tilemaps", values:System.padWithUnused(debug,"tilemaps",2,[
+												{ key:"from", integer:RANGES.SMALLINTEGER },
+												{ key:"to", integer:RANGES.SMALLINTEGER }
+											]) },
+											{ key:"sprites", string:SYMBOLS },
+											{ key:"sounds", string:SYMBOLS },
+											{ key:"songs", string:SYMBOLS },
+											{ key:"music", string:SYMBOLS },
+											// TODO code?
+										])
+									}
 
 								]))
 							},
