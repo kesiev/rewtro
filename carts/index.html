@@ -115,7 +115,7 @@
 	</style>
 </head><body onload="onl()"></body><script>
 
-var SYSTEMVERSION="0.3";
+var SYSTEMVERSION="0.4";
 system=System.constructSystem(SYSTEMVERSION);
 system.configure();
 
@@ -425,7 +425,8 @@ var printModes=[
 	{name:"Animated GIF: 2px per cell",config:{model:"gif",cellSize:2}},
 	{name:"Animated GIF: 3px per cell",config:{model:"gif",cellSize:3}},
 	{name:"Animated GIF: 4px per cell",config:{model:"gif",cellSize:4}},
-	{name:"QR-Booklet: Default",config:{model:"qrbooklet"}}
+	{name:"QR-Booklet: Default",config:{model:"qrbooklet"}},
+	{name:"QR-Card: Default",config:{model:"qrcard"}}
 ]
 
 function cartSelector() {

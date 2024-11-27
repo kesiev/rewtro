@@ -25,6 +25,7 @@ var QRCart=function(cfg){
     CACHEFILES=[
       {id:"svg-qrcart",url:cfg.ASSETROOT+"qrcart.svg",type:"text"},
       {id:"svg-qrbooklet",url:cfg.ASSETROOT+"qrbooklet.svg",type:"text"},
+      {id:"svg-qrcard",url:cfg.ASSETROOT+"qrcard.svg",type:"text"},
       {id:"logo",url: cfg.ASSETROOT +"logo.png",type:"image"}
     ],
     MODELS={
@@ -100,6 +101,24 @@ var QRCart=function(cfg){
           typeWarning:17,
           typeThreshold:19
         }
+      },
+      qrcard:{
+        type:"print",
+        template:"svg-qrcard",
+        extension:"svg",
+        qr:{
+          suggestedCount:2,
+          typeWarning:17,
+          typeThreshold:19
+        },
+        qrslots:["qr-1","qr-2"],
+        layers:[
+        ],
+        replaces:[
+          {replace:/>CardTitle</g,using:"cardTitle"},
+          {replace:/>001</g,using:"cardNumber"},
+          {replace:/>CardNote</g,using:"cardNote"}
+        ]
       },
       screen:{
         type:"screen",
@@ -220,7 +239,7 @@ var QRCart=function(cfg){
     // GIF Generator
 
     function createGIF(qrs,gencfg,model,cb){
-      getCache(cache=>{        
+      getCache(cache=>{
           var cellSize=gencfg.cellSize||model.cellSize;
           var label=gencfg.title;
           var margin=cellSize*4;
@@ -243,16 +262,16 @@ var QRCart=function(cfg){
                      var canvas=document.createElement("canvas");
                       canvas.width=size;
                     canvas.height = size + model.footerSize + model.notesSize;
-                      var context=canvas.getContext("2d");
-                    var logoy = 
-                      context.fillStyle = 'white';
-                      context.fillRect(0,0,canvas.width,canvas.height);
-                      context.fillStyle = '#00adb5';
-                      context.strokeStyle = '#00adb5';
-                      context.beginPath();
-                      context.moveTo(margin, size+0.5);
-                      context.lineTo(canvas.width-margin, size+0.5);
-                      context.stroke();
+                    var context=canvas.getContext("2d");
+                    context.fillStyle = 'white';
+                    context.fillRect(0,0,canvas.width,canvas.height);
+                    context.fillStyle = '#00adb5';
+                    context.strokeStyle = '#00adb5';
+                    context.beginPath();
+                    context.moveTo(margin, size+0.5);
+                    context.lineTo(canvas.width-margin, size+0.5);
+                    context.stroke();
+                    if (model.footerSize) {
                       context.fillRect(0,size+model.footerSize,canvas.width,canvas.height);
                       context.drawImage(
                         cache.logo,
@@ -260,25 +279,42 @@ var QRCart=function(cfg){
                         margin, size + ((model.footerSize - model.logoSize ) / 2),
                         cache.logo.width*(model.logoSize/cache.logo.height),model.logoSize
                       );
-                    context.textBaseline = "middle";
-                      context.textAlign = "right";
-                      context.font = "10px Helvetica";
-                    context.fillText(label, canvas.width - margin, size + (model.footerSize/2));
-                    context.textAlign = "center";
-                    context.fillStyle = 'white';
-                    context.fillText(model.notes, canvas.width / 2, size + model.footerSize + (model.notesSize / 2));
+                      context.textBaseline = "middle";
+                        context.textAlign = "right";
+                        context.font = "10px Helvetica";
+                      context.fillText(label, canvas.width - margin, size + (model.footerSize/2));
+                      context.textAlign = "center";
+                      context.fillStyle = 'white';
+                      context.fillText(model.notes, canvas.width / 2, size + model.footerSize + (model.notesSize / 2));
+                      }
                       context.drawImage(img,0,0);
                       gif.addFrame(canvas,{delay: cfg.QRCARTSPEED});
-                  });
+                    });
                   gif.on('finished', function(blob) { cb(blob) });
                   gif.render();
                 }
               }
           });
-
-          
-          
       });
+    }
+
+    // PNG Generator
+
+    function createPNG(qrs,gencfg,model,cb) {
+      var 
+          cellSize=gencfg.cellSize||model.cellSize,
+          margin=cellSize*4,
+          frame = qrs[0],
+          size=frame.getModuleCount() * cellSize + margin * 2,
+          canvas=document.createElement("canvas"),
+          context=canvas.getContext("2d");
+
+        canvas.width=size;
+        canvas.height =size;
+        frame.renderTo2dContext(context,cellSize);
+        canvas.toBlob((blob) => {
+          cb(blob);
+        });
     }
 
     // General
@@ -329,14 +365,14 @@ var QRCart=function(cfg){
       return suggestConfiguration(compressed,model.qr);
     }
 
-  	function generateQR(data,config) {
+  	function generateQR(data,config,cartconfig) {
   		var chunks=Math.ceil(data.length/config.chunkSize);
   		var checkSum=Stream.fletcher16(data);
   		var qrs=[];
   		for (var i=0;i<chunks;i++) {
   			var qr = qrcode(config.type, config.correctionLevel);
   			qr.addData(
-  				"CRT"+
+  				(cartconfig.cartPrefix || "CRT")+
   				String.fromCharCode(Math.floor(checkSum/256))+
   				String.fromCharCode(checkSum%256)+
   				pad(i,2)+
@@ -354,13 +390,12 @@ var QRCart=function(cfg){
     this.createQRCart=function(gencfg,compressed,cb) {
         var file;
         var model=MODELS[gencfg.model]||MODELS.qrcart;
-        
         var config=suggestConfiguration(compressed,model.qr);
         var file=gencfg.title+"."+model.extension;
 
         console.log("COMPILE: Generating QRs...")
         console.log("COMPILE:",config);
-        var qrs=generateQR(compressed,config);
+        var qrs=generateQR(compressed,config,gencfg);
         // Create a QR-Cart object
         cb({
           createDataURL:function(id) { return qrs[id].createDataURL(); },
