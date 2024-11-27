@@ -90,6 +90,10 @@ In the <tt>carts/</tt> folder, you'll find the SDK and all the games I've develo
 
 Remember that a QR-Cart contains _the whole game code, music, graphics, AND customizations_ so, once the game is printed, you can't change _anything_. If you want to update your game, fixing a bug or a typo, you've to _print the cartridge again_. The previous one will be a _rare bugged version_ of your game to be collected jealously. Welcome to the 80s!
 
+### Rewtromon
+
+The **Rewtromon** game loads 2 creatures QR-Cards and let them auto-battle! You can learn more on how to create Rewtromon QR-Cards cards [here](REWTROMON.md).
+
 ## Why?
 
 It's Christmas time, I needed some greeting cards and decided to make some original ones this year. I liked the idea of hiding the actual greetings at the end of a customized videogame but implementing a browser game lacked the _perishability_ of a greeting card: you want to keep them because it contains _the whole experience_, that is the stock message _and_ the handwritten message. Moreover, the game itself _is part of the message_ so why keeping that _outside the greeting card_?
