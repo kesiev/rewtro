@@ -179,7 +179,7 @@ function selected(option,file,isclick) {
 				var lastdebug,qrmode=qrcart.getQrConfiguration(printModes[printMode].config,compressed.data);
 				System.unpack(compressed.data,cart=>{
 					document.getElementById('stats').innerHTML=
-							"<i class='fas fa-cog' data-tooltip='Game and engine info'></i> "+compressed.metadata.title+" (Rewtro "+cart.system.VERSION+" using "+cart.system.ENGINE+")<br>"+
+							"<i class='fas fa-cog' data-tooltip='Game and engine info'></i> "+compressed.metadata.title+" (Rewtro "+cart.system.VERSION+" using "+cart.system.ENGINE+") cartName: ["+cart.system.CARTNAME+"]<br>"+
 							(cart.system.WARNING?"<i class='fas fa-exclamation-circle'></i> <span class='error'>"+cart.system.WARNING+"</span><br>":"")+
 							"<i class='fas fa-expand' data-tooltip='Screen size, render size, refresh rate and palette size'></i> "+cart.system.RESOLUTION.screenWidth+" &times; "+cart.system.RESOLUTION.screenHeight+" ("+cart.system.RESOLUTION.renderWidth+" &times; "+cart.system.RESOLUTION.renderHeight+") @ "+cart.system.FPS+"fps. "+cart.system.PALETTE.length+" colors.<br>"+
 							"<i class='fas fa-qrcode' data-tooltip='Current QR-Cart print configuration'></i> "+printModes[printMode].name+"<br>"+
@@ -645,7 +645,7 @@ function play(note) {
 var notesBook;
 
 function niceround(a,base,value,defaultvalue,isint) {
-	var ret= Math.round((base+(a/100*(value-base)))*10000)/10000;
+	var ret= Math.round((base+(a/256*(value-base)))*10000)/10000;
 	if (isint) ret=Math.floor(ret);
 	if (ret==defaultvalue) return undefined; else return ret;
 }
@@ -688,87 +688,314 @@ function drawBuffer(buf) {
 	}
 }
 
+function lockAllSliders(locked) {
+    document.getElementById("lockwave").checked = locked;
+    document.getElementById("lockattack").checked = locked;
+    document.getElementById("locksustain").checked = locked;
+    document.getElementById("locklimit").checked = locked;
+    document.getElementById("lockdecay").checked = locked;
+    document.getElementById("lockrelease").checked = locked;
+    document.getElementById("lockfrequency").checked = locked;
+    document.getElementById("locktremolof").checked = locked;
+    document.getElementById("locktremolod").checked = locked;
+    document.getElementById("lockpitch").checked = locked;
+    document.getElementById("lockjump1onset").checked = locked;
+    document.getElementById("lockjump1amount").checked = locked;
+    document.getElementById("lockjump2onset").checked = locked;
+    document.getElementById("lockjump2amount").checked = locked;
+    document.getElementById("lockbitcrush").checked = locked;
+    document.getElementById("lockbitcrushsweep").checked = locked;
+}
+
 function random() {
-	if (!document.getElementById("lockwave").checked) document.getElementById("wave").selectedIndex=Math.floor(Math.random()*8);
-	if (!document.getElementById("lockattack").checked) document.getElementById("attack").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("locksustain").checked) document.getElementById("sustain").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("locklimit").checked) document.getElementById("limit").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockdecay").checked) document.getElementById("decay").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockrelease").checked) document.getElementById("release").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockfrequency").checked) document.getElementById("frequency").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("locktremolof").checked) document.getElementById("tremoloFrequency").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("locktremolod").checked) document.getElementById("tremoloDepth").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockpitch").checked) document.getElementById("pitch").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockjump1onset").checked) document.getElementById("jump1onset").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockjump1amount").checked) document.getElementById("jump1amount").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockjump2onset").checked) document.getElementById("jump2onset").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockjump2amount").checked) document.getElementById("jump2amount").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockbitcrush").checked) document.getElementById("bitcrush").value=Math.floor(Math.random()*100);
-	if (!document.getElementById("lockbitcrushsweep").checked) document.getElementById("bitcrushsweep").value=Math.floor(Math.random()*100);
-	play();
+    if (!document.getElementById("lockwave").checked) document.getElementById("wave").selectedIndex = Math.floor(Math.random() * 8);
+    if (!document.getElementById("lockattack").checked) document.getElementById("attack").value = Math.floor(Math.random() * document.getElementById("attack").max);
+    if (!document.getElementById("locksustain").checked) document.getElementById("sustain").value = Math.floor(Math.random() * document.getElementById("sustain").max);
+    if (!document.getElementById("locklimit").checked) document.getElementById("limit").value = Math.floor(Math.random() * document.getElementById("limit").max);
+    if (!document.getElementById("lockdecay").checked) document.getElementById("decay").value = Math.floor(Math.random() * document.getElementById("decay").max);
+    if (!document.getElementById("lockrelease").checked) document.getElementById("release").value = Math.floor(Math.random() * document.getElementById("release").max);
+    if (!document.getElementById("lockfrequency").checked) document.getElementById("frequency").value = Math.floor(Math.random() * document.getElementById("frequency").max);
+    if (!document.getElementById("locktremolof").checked) document.getElementById("tremoloFrequency").value = Math.floor(Math.random() * document.getElementById("tremoloFrequency").max);
+    if (!document.getElementById("locktremolod").checked) document.getElementById("tremoloDepth").value = Math.floor(Math.random() * document.getElementById("tremoloDepth").max);
+    if (!document.getElementById("lockpitch").checked) document.getElementById("pitch").value = Math.floor(Math.random() * document.getElementById("pitch").max);
+    if (!document.getElementById("lockjump1onset").checked) document.getElementById("jump1onset").value = Math.floor(Math.random() * document.getElementById("jump1onset").max);
+    if (!document.getElementById("lockjump1amount").checked) document.getElementById("jump1amount").value = Math.floor(Math.random() * document.getElementById("jump1amount").max);
+    if (!document.getElementById("lockjump2onset").checked) document.getElementById("jump2onset").value = Math.floor(Math.random() * document.getElementById("jump2onset").max);
+    if (!document.getElementById("lockjump2amount").checked) document.getElementById("jump2amount").value = Math.floor(Math.random() * document.getElementById("jump2amount").max);
+    if (!document.getElementById("lockbitcrush").checked) document.getElementById("bitcrush").value = Math.floor(Math.random() * document.getElementById("bitcrush").max);
+    if (!document.getElementById("lockbitcrushsweep").checked) document.getElementById("bitcrushsweep").value = Math.floor(Math.random() * document.getElementById("bitcrushsweep").max);
+    play();
+}
+
+function loadSlidersFrom(json) {
+    let data=JSON.parse(json);
+    console.log(data);
+    for (let k in _DOMTOVALUE) {
+        console.log(
+            k,
+            _DOMTOVALUE[k].key,
+            _DOMTOVALUE[k].node,
+            data[_DOMTOVALUE[k].key],
+            document.getElementById(_DOMTOVALUE[k].node).value
+        );
+        if (data[_DOMTOVALUE[k].key]!==undefined) {
+            document.getElementById(_DOMTOVALUE[k].node).value=Number(data[_DOMTOVALUE[k].key]+1);
+        }
+    }
+    play();
 }
 
 function noiseMaker() {
 
 	if (!pianoChannel) pianoChannel=AudioEngine.createAudioChannel(0.9);
 
-	var html=header();	
-	html+='<div class="filerow"><table><tr><td><input id="lockwave" type="checkbox"> Wave</td><td><select id="wave" onchange="play()">';
-	html+='<option value="sine">Sine</option>';
-	html+='<option value="saw">Saw</option>';
-	html+='<option value="square">Square</option>';
-	html+='<option value="triangle">Triangle</option>';
-	html+='<option value="tangent">Tangent</option>';
-	html+='<option value="whistle">Whistle</option>';
-	html+='<option value="breaker">Breaker</option>';
-	html+='<option value="whitenoise">White noise</option>';
-	html+='</select></td></tr><tr><td colspan=2><canvas id="wavedraw" width=300 height=40 style="border:1px solid #fefefe"></canvas></td></tr>';
-	html+='<tr><td><input id="lockattack" type="checkbox"> Attack time</td>';
-	html+='<td><input type="range" min="0" max="100" id="attack" style="width:300px" onchange="play()"></td></tr>';
-	html+='<tr><td><input id="lockdecay" type="checkbox"> Decay time</td>';
-	html+='<td><input type="range" min="0" max="100" id="decay" style="width:300px" onchange="play()"></td></tr>';
-	html+='<tr><td><input id="locksustain" type="checkbox"> Sustain time</td>';
-	html+='<td><input type="range" min="0" max="100" id="sustain" style="width:300px" onchange="play()"></td></tr>';
-	html+='<tr><td><input id="lockrelease" type="checkbox"> Release time</td>';
-	html+='<td><input type="range" min="0" max="100" id="release" style="width:300px" onchange="play()"></td></tr>';
-	html+='<tr><td><input id="lockfrequency" type="checkbox"> Frequency</td>';
-	html+='<td><input type="range" min="0" max="100" id="frequency" style="width:300px" onchange="play()"></td></tr>';
-	html+='<tr><td><input id="locklimit" type="checkbox" checked> Limit</td>';
-	html+='<td><input type="range" min="0" max="100" value="100" id="limit" style="width:300px" onchange="play()"></td></tr>';
-	html+='<tr><td><input id="locktremolof" type="checkbox" checked> Tremolo frequency</td>';
-	html+='<td><input type="range" min="0" max="100" value="0" id="tremoloFrequency" style="width:300px" onchange="play()"></td></tr>';
-	html+='<tr><td><input id="locktremolod" type="checkbox" checked> Tremolo depth</td>';
-	html+='<td><input type="range" min="0" max="100"  value="0" id="tremoloDepth" style="width:300px" onchange="play()"></td></tr>';
-	html+='<tr><td><input id="lockpitch" type="checkbox" checked> Pitch</td>';
-	html+='<td><input type="range" min="0" max="100" id="pitch" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'pitch\').value=50;play()" value="Reset"></td></tr>';
-	html+='<tr><td><input id="lockjump1onset" type="checkbox" checked> Jump 1 onset</td>';
-	html+='<td><input type="range" min="0" max="100" value="0" id="jump1onset" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'jump1onset\').value=0;play()" value="Reset"></td></tr>';
-	html+='<tr><td><input id="lockjump1amount" type="checkbox" checked> Jump 1 amount</td>';
-	html+='<td><input type="range" min="0" max="100" id="jump1amount" style="width:300px" onchange="play()"><td><input type="button" onclick="document.getElementById(\'jump1amount\').value=50;play()" value="Reset"></td></td></tr>';
-	html+='<tr><td><input id="lockjump2onset" type="checkbox" checked> Jump 2 onset</td>';
-	html+='<td><input type="range" min="0" max="100" value="0" id="jump2onset" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'jump2onset\').value=0;play()" value="Reset"></td></tr>';
-	html+='<tr><td><input id="lockjump2amount" type="checkbox" checked> Jump 2 amount</td>';
-	html+='<td><input type="range" min="0" max="100" id="jump2amount" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'jump2amount\').value=50;play()" value="Reset"></td></tr>';
-	html+='<tr><td><input id="lockbitcrush" type="checkbox" checked> Bitcrush</td>';
-	html+='<td><input type="range" min="0" max="100" id="bitcrush" style="width:300px" onchange="play()" value="0"></td><td><input type="button" onclick="document.getElementById(\'bitcrush\').value=0;play()" value="Reset"></td></tr>';
-	html+='<tr><td><input id="lockbitcrushsweep" type="checkbox" checked> Bitcrush sweep</td>';
-	html+='<td><input type="range" min="0" max="100" id="bitcrushsweep" style="width:300px" onchange="play()"></td><td><input type="button" onclick="document.getElementById(\'bitcrushsweep\').value=50;play()" value="Reset"></td></tr>';
-	html+='</table>';
-	html+='</div><div class="filerow">';
-	html+='<input type="button" value="Play" onclick="play()"> | <input type="button" value="Play Note C4" onclick="play(\'C4-\')"> | <input type="button" value="Randomize" onclick="random()"></div>';
-	html+='</div><div class="filerow">';
-	html+='Piano: <input type="text" id="piano" style="width:50px"> Octave: <input type="button" onclick="setOctave(-1)" value="-"> <span id="currentOctave"></span> <input type="button" onclick="setOctave(1)" value="+"><br>Notes book:<br>';
-	html+='<textarea type="text" id="notesBook" style="font-family:monospace" cols=80 rows=4></textarea>';
-	html+='</div><div class="filerow">';
-	html+='<canvas id="outwav" width=600 height=80 style="border:1px solid #fefefe"></canvas><br>';
-	html+='</div><div class="filerow">';
-	html+='Paste this in your resource loader:<br>';
-	html+='<textarea type="text" id="file" style="font-family:monospace" cols=80 rows=4></textarea>';
-	html+='</div><div class="filerow">';
-	html+='Paste this in code:<br>';
-	html+='<textarea type="text" id="fileraw" style="font-family:monospace" cols=80 rows=4></textarea>';
-	html+="</div>"
-
+	var html=header() + `<div class="filerow">
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="lockAllSliders(true)" value="Lock all" /> / <input type="button" onclick="lockAllSliders(false)" value="Unlock all" /></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><input id="lockwave" type="checkbox"> Wave</td>
+            <td><select id="wave" onchange="play()">
+                <option value="sine">Sine</option>
+                <option value="saw">Saw</option>
+                <option value="square">Square</option>
+                <option value="triangle">Triangle</option>
+                <option value="tangent">Tangent</option>
+                <option value="whistle">Whistle</option>
+                <option value="breaker">Breaker</option>
+                <option value="whitenoise">White noise</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td colspan=2>
+                <canvas id="wavedraw" width=300 height=40 style="border:1px solid #fefefe"></canvas>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="lockattack" type="checkbox"> Attack time</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('attack').value=Number(document.getElementById('attack').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" id="attack" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('attack').value=Number(document.getElementById('attack').value)+5;play()"
+                       value="+"/>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="lockdecay" type="checkbox"> Decay time</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('decay').value=Number(document.getElementById('decay').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" id="decay" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('decay').value=Number(document.getElementById('decay').value)+5;play()"
+                       value="+"/>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="locksustain" type="checkbox"> Sustain time</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('sustain').value=Number(document.getElementById('sustain').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" id="sustain" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('sustain').value=Number(document.getElementById('sustain').value)+5;play()"
+                       value="+"/>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="lockrelease" type="checkbox"> Release time</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('release').value=Number(document.getElementById('release').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" id="release" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('release').value=Number(document.getElementById('release').value)+5;play()"
+                       value="+"/>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="lockfrequency" type="checkbox"> Frequency</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('frequency').value=Number(document.getElementById('frequency').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" id="frequency" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('frequency').value=Number(document.getElementById('frequency').value)+5;play()"
+                       value="+"/>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="locklimit" type="checkbox" checked> Limit</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('limit').value=Number(document.getElementById('limit').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" value="100" id="limit" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('limit').value=Number(document.getElementById('limit').value)+5;play()"
+                       value="+"/>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="locktremolof" type="checkbox" checked> Tremolo frequency</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('tremoloFrequency').value=Number(document.getElementById('tremoloFrequency').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" value="0" id="tremoloFrequency" style="width:300px"
+                       onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('tremoloFrequency').value=Number(document.getElementById('tremoloFrequency').value)+5;play()"
+                       value="+"/>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="locktremolod" type="checkbox" checked> Tremolo depth</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('tremoloDepth').value=Number(document.getElementById('tremoloDepth').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" value="0" id="tremoloDepth" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('tremoloDepth').value=Number(document.getElementById('tremoloDepth').value)+5;play()"
+                       value="+"/>
+            </td>
+        </tr>
+        <tr>
+            <td><input id="lockpitch" type="checkbox" checked> Pitch</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('pitch').value=Number(document.getElementById('pitch').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" id="pitch" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('pitch').value=Number(document.getElementById('pitch').value)+5;play()"
+                       value="+"/>
+            </td>
+            <td><input type="button" onclick="document.getElementById('pitch').value=50;play()" value="Reset"></td>
+        </tr>
+        <tr>
+            <td><input id="lockjump1onset" type="checkbox" checked> Jump 1 onset</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('jump1onset').value=Number(document.getElementById('jump1onset').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" value="0" id="jump1onset" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('jump1onset').value=Number(document.getElementById('jump1onset').value)+5;play()"
+                       value="+"/>
+            </td>
+            <td><input type="button" onclick="document.getElementById('jump1onset').value=0;play()" value="Reset"></td>
+        </tr>
+        <tr>
+            <td><input id="lockjump1amount" type="checkbox" checked> Jump 1 amount</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('jump1amount').value=Number(document.getElementById('jump1amount').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" id="jump1amount" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('jump1amount').value=Number(document.getElementById('jump1amount').value)+5;play()"
+                       value="+"/>
+            </td>
+            <td><input type="button" onclick="document.getElementById('jump1amount').value=50;play()" value="Reset">
+            </td>
+        </tr>
+        <tr>
+            <td><input id="lockjump2onset" type="checkbox" checked> Jump 1 onset</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('jump2onset').value=Number(document.getElementById('jump2onset').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" value="0" id="jump2onset" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('jump2onset').value=Number(document.getElementById('jump2onset').value)+5;play()"
+                       value="+"/>
+            </td>
+            <td><input type="button" onclick="document.getElementById('jump2onset').value=0;play()" value="Reset"></td>
+        </tr>
+        <tr>
+            <td><input id="lockjump2amount" type="checkbox" checked> Jump 1 amount</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('jump2amount').value=Number(document.getElementById('jump2amount').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" id="jump2amount" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('jump2amount').value=Number(document.getElementById('jump2amount').value)+5;play()"
+                       value="+"/>
+            </td>
+            <td><input type="button" onclick="document.getElementById('jump2amount').value=50;play()" value="Reset">
+            </td>
+        </tr>
+        <tr>
+            <td><input id="lockbitcrush" type="checkbox" checked> Bitcrush</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('bitcrush').value=Number(document.getElementById('bitcrush').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" step="16' value="0" id="bitcrush" style="width:300px" onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('bitcrush').value=Number(document.getElementById('bitcrush').value)+5;play()"
+                       value="+"/>
+            </td>
+            <td><input type="button" onclick="document.getElementById('bitcrush').value=0;play()" value="Reset"></td>
+        </tr>
+        <tr>
+            <td><input id="lockbitcrushsweep" type="checkbox" checked> Bitcrush sweep</td>
+            <td>
+                <input type="button"
+                       onclick="document.getElementById('bitcrushsweep').value=Number(document.getElementById('bitcrushsweep').value)-5;play()"
+                       value="-"/>
+                <input type="range" min="0" max="256" step="16' value="0" id="bitcrushsweep" style="width:300px"
+                       onchange="play()">
+                <input type="button"
+                       onclick="document.getElementById('bitcrushsweep').value=Number(document.getElementById('bitcrushsweep').value)+5;play()"
+                       value="+"/>
+            </td>
+            <td><input type="button" onclick="document.getElementById('bitcrushsweep').value=50;play()" value="Reset">
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="filerow">
+    <input type="button" value="Play" onclick="play()"> | <input type="button" value="Play Note C4"
+                                                                 onclick="play('C4-')"> | <input type="button"
+                                                                                                 value="Randomize"
+                                                                                                 onclick="random()">
+</div>
+</div>
+<div class="filerow">
+    Piano: <input type="text" id="piano" style="width:50px"> Octave: <input type="button" onclick="setOctave(-1)"
+                                                                            value="-"> <span id="currentOctave"></span>
+    <input type="button" onclick="setOctave(1)" value="+"><br>Notes book:<br>
+    <textarea type="text" id="notesBook" style="font-family:monospace" cols=80 rows=4></textarea>
+</div>
+<div class="filerow">
+    <canvas id="outwav" width=600 height=80 style="border:1px solid #fefefe"></canvas>
+    <br>
+</div>
+<div class="filerow">
+    Paste this in your resource loader:<br>
+    <textarea type="text" id="file" style="font-family:monospace" cols=80 rows=4></textarea>
+    <input type="button" onclick="loadSlidersFrom(document.getElementById('file').value)" value="Load sliders from ressource" />
+</div>
+<div class="filerow">
+    Paste this in code:<br>
+    <textarea type="text" id="fileraw" style="font-family:monospace" cols=80 rows=4></textarea>
+</div>
+    `
 	document.body.innerHTML=html;
 
 	notesBook=[];
